@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ubuntu/HttpPractice/myhttp/log.h
+string
+-
+stdint.h
+-
+memory
+-
+list
+-
+sstream
+-
+fstream
+-
+iostream
+-
+vector
+-
+
+/home/ubuntu/HttpPractice/tests/test.cpp
+iostream
+-
+../myhttp/log.h
+/home/ubuntu/HttpPractice/myhttp/log.h
+

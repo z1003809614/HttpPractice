@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/ubuntu/HttpPractice/build",
+  "command": "/usr/bin/g++     -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -g   -o CMakeFiles/test.dir/tests/test.cpp.o -c /home/ubuntu/HttpPractice/tests/test.cpp",
+  "file": "/home/ubuntu/HttpPractice/tests/test.cpp"
+},
+{
+  "directory": "/home/ubuntu/HttpPractice/build",
+  "command": "/usr/bin/g++  -Dmyhttp_EXPORTS   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -g -fPIC   -o CMakeFiles/myhttp.dir/myhttp/log.cpp.o -c /home/ubuntu/HttpPractice/myhttp/log.cpp",
+  "file": "/home/ubuntu/HttpPractice/myhttp/log.cpp"
+}
+]
