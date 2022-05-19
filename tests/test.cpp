@@ -2,7 +2,8 @@
 #include"../myhttp/log.h"
 
 int main(int argc,char** argv){
-    
+    // logger : 分发event到不同的Appender中, 其输出格式 保存在 formatter中，logger内部包含了一个formatter的指针，且目前的格式存储静态存储在代码中； 
+    // 处理流程：formatter 分析 pattern -》 分解得到不同的 FormatItem ->  appender -> 执行不同FormatItem的打印行为 -> 打印数据来自event 或 logger中；    
     myhttp::Logger::ptr logger(new myhttp::Logger);
 
     logger->addAppender(myhttp::LogAppender::ptr(new myhttp::StdoutLogAppender));

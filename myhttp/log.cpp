@@ -38,7 +38,7 @@ namespace myhttp
     Logger::Logger(const std::string &name)
         : m_name(name), m_level(LogLevel::DEBUG)
     {
-        m_formatter.reset(new LogFormatter("%d [%p] <%f:%l> %m %n"));
+        m_formatter.reset(new LogFormatter("%d{%Y-%m-%d %H:%M:%S}%T%t%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));
     }
     void Logger::addAppender(LogAppender::ptr appender)
     {
@@ -268,12 +268,22 @@ namespace myhttp
         std::string m_string;
     };
 
+    class TabFormatItem : public LogFormatter::FormatItem
+    {
+    public:
+        TabFormatItem(const std::string &str = "") {}
+        void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override
+        {
+            os << "\t";
+        }
+    };
+
 
 
     // %xxx ; %xxx(xxx) ; %%
     void LogFormatter::init()
     {
-        // str , format , type
+        // str , format , type,   vec用于存储分解后的 formatItem，用于输出内容；
         std::vector<std::tuple<std::string, std::string, int>> vec;
         std::string nstr;
         for (size_t i = 0; i < m_pattern.size(); ++i)
@@ -301,31 +311,38 @@ namespace myhttp
             std::string fmt;
             while (n < m_pattern.size())
             {
-                if (!isalpha(m_pattern[n]) && m_pattern[n] != '{' && m_pattern[n] != '}')
+                if (!fmt_status && (!isalpha(m_pattern[n]) && m_pattern[n] != '{' && m_pattern[n] != '}'))
                 {
+                    str = m_pattern.substr(i+1,n-i-1);
                     break;
                 }
                 if (fmt_status == 0)
                 {
                     if (m_pattern[n] == '{')
                     {
-                        str = m_pattern.substr(i + 1, n - i);
+                        str = m_pattern.substr(i + 1, n - i - 1);
                         fmt_status = 1; // 解析格式
                         fmt_begin = n;
                         ++n;
                         continue;
                     }
                 }
-                if (fmt_status == 1)
+                else if (fmt_status == 1)
                 {
                     if (m_pattern[n] == '}')
                     {
                         fmt = m_pattern.substr(fmt_begin + 1, n - fmt_begin - 1);
-                        fmt_status = 2;
+                        fmt_status = 0;
+                        ++n;
                         break;
                     }
                 }
                 ++n;
+                if(n == m_pattern.size()){
+                    if(str.empty()){
+                        str = m_pattern.substr(i+1);
+                    }
+                }
             }
 
             if (fmt_status == 0)
@@ -335,7 +352,6 @@ namespace myhttp
                     vec.push_back(std::make_tuple(nstr, "", 0));
                     nstr.clear();
                 }
-                str = m_pattern.substr(i + 1, n - i - 1);
                 vec.push_back(std::make_tuple(str, fmt, 1));
                 i = n-1;
             }
@@ -343,16 +359,6 @@ namespace myhttp
             {
                 std::cout << "pattern parse error: " << m_pattern << " - " << m_pattern.substr(i) << std::endl;
                 vec.push_back(std::make_tuple("<<pattern_error>>", fmt, 0));
-            }
-            else if (fmt_status == 2)
-            {
-                if (!nstr.empty())
-                {
-                    vec.push_back(std::make_tuple(nstr, "", 0));
-                    nstr.clear();
-                }
-                vec.push_back(std::make_tuple(str, fmt, 1));
-                i = n-1;
             }
         }
 
@@ -372,7 +378,9 @@ namespace myhttp
             XX(n, NewLineFormatItem),
             XX(f, FilenameFormatItem),
             XX(l, LineFormatItem),
-            XX(d, DateTimeFormatItem)
+            XX(d, DateTimeFormatItem),
+            XX(T, TabFormatItem),
+            XX(F, FiberIdFormatItem)
 #undef XX
         };
 
