@@ -29,8 +29,6 @@ namespace myhttp
         const std::string getContent() const { return m_ss.str(); }
         std::stringstream& getSS() {return m_ss;}
 
-        const std::string getName() const { return "";}
-
     private:
         const char *m_file = nullptr; // 文件名
         int32_t m_line = 0;           // 行号
@@ -56,7 +54,7 @@ namespace myhttp
         static const char *ToString(LogLevel::Level Level);
     };
 
-    // 日志格式
+    // 日志格式 : 保存请求模式串(pattern)；
     class LogFormatter
     {
     public:
@@ -74,6 +72,7 @@ namespace myhttp
             virtual ~FormatItem() {}
             virtual void format(std::ostream &os, std::shared_ptr<Logger> Logger, LogLevel::Level level, LogEvent::ptr event) = 0;
         };
+        // 分析patter,拆分成元组
         void init();
 
     private:

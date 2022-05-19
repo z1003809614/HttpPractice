@@ -179,7 +179,7 @@ namespace myhttp
         NameFormatItem(const std::string &str = "") {}
         void format(std::ostream &os, std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) override
         {
-            os << event->getName();
+            os << logger->getName();
         }
     };
 
@@ -278,7 +278,7 @@ namespace myhttp
         std::string nstr;
         for (size_t i = 0; i < m_pattern.size(); ++i)
         {
-            if (m_pattern[i] == '%')
+            if (m_pattern[i] != '%')
             {
                 nstr.append(1, m_pattern[i]);
                 continue;
@@ -301,7 +301,7 @@ namespace myhttp
             std::string fmt;
             while (n < m_pattern.size())
             {
-                if (!isalpha(m_pattern[n] && m_pattern[n] != '{') && m_pattern[n] != '}')
+                if (!isalpha(m_pattern[n]) && m_pattern[n] != '{' && m_pattern[n] != '}')
                 {
                     break;
                 }
@@ -311,8 +311,8 @@ namespace myhttp
                     {
                         str = m_pattern.substr(i + 1, n - i);
                         fmt_status = 1; // 解析格式
-                        ++n;
                         fmt_begin = n;
+                        ++n;
                         continue;
                     }
                 }
@@ -337,7 +337,7 @@ namespace myhttp
                 }
                 str = m_pattern.substr(i + 1, n - i - 1);
                 vec.push_back(std::make_tuple(str, fmt, 1));
-                i = n - 1;
+                i = n-1;
             }
             else if (fmt_status == 1)
             {
@@ -352,7 +352,7 @@ namespace myhttp
                     nstr.clear();
                 }
                 vec.push_back(std::make_tuple(str, fmt, 1));
-                i = n - 1;
+                i = n-1;
             }
         }
 
@@ -371,13 +371,15 @@ namespace myhttp
             XX(t, ThreadIdFormatItem),
             XX(n, NewLineFormatItem),
             XX(f, FilenameFormatItem),
-            XX(l, LineFormatItem)
+            XX(l, LineFormatItem),
+            XX(d, DateTimeFormatItem)
 #undef XX
         };
 
         for (auto &i : vec)
         {
-            if (std::get<2>(i) == 0)
+            // get<idx>(container) == container[idx];
+            if (std::get<2>(i) == 0) 
             {
                 m_items.push_back(FormatItem::ptr(new StringFormatItem(std::get<0>(i))));
             }
