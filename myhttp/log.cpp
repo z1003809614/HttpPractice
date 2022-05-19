@@ -7,10 +7,29 @@
 namespace myhttp
 {
 
-    LogEvent::LogEvent(const char *file, int32_t line, uint32_t elapse,
+    LogEvent::LogEvent(std::shared_ptr<Logger> logger,LogLevel::Level level,const char *file, int32_t line, uint32_t elapse,
                        uint32_t thread_id, uint32_t fiber_id, uint64_t time)
-        : m_file(file), m_line(line), m_elapse(elapse), m_threadId(thread_id), m_fiberId(fiber_id), m_time(time)
+        : m_file(file)
+        , m_line(line)
+        , m_elapse(elapse)
+        , m_threadId(thread_id)
+        , m_fiberId(fiber_id)
+        , m_time(time)
+        , m_logger(logger)
+        , m_level(level)
     {
+    }
+
+    LogEventWrap::LogEventWrap(LogEvent::ptr e)
+        :m_event(e)
+    {
+    }
+    LogEventWrap::~LogEventWrap(){
+        m_event->getLogger()->log(m_event->getLevel(),m_event);
+    }
+
+    std::stringstream& LogEventWrap::getSS(){
+        return m_event->getSS();
     }
 
     // ============================================LogLevel=================================================
@@ -280,12 +299,12 @@ namespace myhttp
 
 
 
-    // %xxx ; %xxx(xxx) ; %%
+    // %xxx ; %xxx(xxx) ; %%该字符表示转义，表示需要一个%;
     void LogFormatter::init()
     {
         // str , format , type,   vec用于存储分解后的 formatItem，用于输出内容；
         std::vector<std::tuple<std::string, std::string, int>> vec;
-        std::string nstr;
+        std::string nstr;// 用于保存格式串中，非定义字母；
         for (size_t i = 0; i < m_pattern.size(); ++i)
         {
             if (m_pattern[i] != '%')

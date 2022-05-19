@@ -6,6 +6,7 @@ set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O3 -g -std=c++11 -Wall -Wno-depre
 
 set(LIB_SRC
     myhttp/log.cpp
+    myhttp/util.cpp
     )
 
 add_library(myhttp SHARED ${LIB_SRC})

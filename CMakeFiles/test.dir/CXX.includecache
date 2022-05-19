@@ -23,10 +23,26 @@ iostream
 -
 vector
 -
+thread
+-
+
+/home/ubuntu/HttpPractice/myhttp/util.h
+stdio.h
+-
+sys/types.h
+-
+pthread.h
+-
+unistd.h
+-
+sys/syscall.h
+-
 
 /home/ubuntu/HttpPractice/tests/test.cpp
 iostream
 -
 ../myhttp/log.h
 /home/ubuntu/HttpPractice/myhttp/log.h
+../myhttp/util.h
+/home/ubuntu/HttpPractice/myhttp/util.h
 

@@ -166,6 +166,33 @@ myhttp/log.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/log.cpp.s
 .PHONY : myhttp/log.cpp.s
 
+myhttp/util.o: myhttp/util.cpp.o
+
+.PHONY : myhttp/util.o
+
+# target to build an object file
+myhttp/util.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/util.cpp.o
+.PHONY : myhttp/util.cpp.o
+
+myhttp/util.i: myhttp/util.cpp.i
+
+.PHONY : myhttp/util.i
+
+# target to preprocess a source file
+myhttp/util.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/util.cpp.i
+.PHONY : myhttp/util.cpp.i
+
+myhttp/util.s: myhttp/util.cpp.s
+
+.PHONY : myhttp/util.s
+
+# target to generate assembly for a file
+myhttp/util.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/util.cpp.s
+.PHONY : myhttp/util.cpp.s
+
 tests/test.o: tests/test.cpp.o
 
 .PHONY : tests/test.o
@@ -206,6 +233,9 @@ help:
 	@echo "... myhttp/log.o"
 	@echo "... myhttp/log.i"
 	@echo "... myhttp/log.s"
+	@echo "... myhttp/util.o"
+	@echo "... myhttp/util.i"
+	@echo "... myhttp/util.s"
 	@echo "... tests/test.o"
 	@echo "... tests/test.i"
 	@echo "... tests/test.s"
