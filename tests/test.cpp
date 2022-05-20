@@ -1,6 +1,5 @@
 #include<iostream>
 #include"../myhttp/log.h"
-#include"../myhttp/util.h"
 
 int main(int argc,char** argv){
     // logger : 分发event到不同的Appender中, 其输出格式 保存在 formatter中，logger内部包含了一个formatter的指针，且 目前的格式 存储静态存储在代码中； 
@@ -32,8 +31,9 @@ int main(int argc,char** argv){
     // 如果pattern没有%m，则下面的字符串不会输出；
     MYHTTP_LOG_FMT_DEBUG(logger, " test macro fmt error %s", "aa");
 
-    // auto l = myhttp::LoggerMgr::GetInstance()->getLogger("xx");
-    // MYHTTP_LOG_INFO(l) << "xxx";
+    auto l = myhttp::LoggerMgr::GetInstance()->getLogger("xx");
+    MYHTTP_LOG_INFO(l) << "xxx";
+    MYHTTP_LOG_DEBUG(l) << " ABCD ";
 
     return 0;
 }

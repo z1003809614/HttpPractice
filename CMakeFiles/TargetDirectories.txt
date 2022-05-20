@@ -1,4 +1,5 @@
 /home/ubuntu/HttpPractice/CMakeFiles/rebuild_cache.dir
+/home/ubuntu/HttpPractice/CMakeFiles/test_config.dir
 /home/ubuntu/HttpPractice/CMakeFiles/edit_cache.dir
 /home/ubuntu/HttpPractice/CMakeFiles/test.dir
 /home/ubuntu/HttpPractice/CMakeFiles/myhttp.dir

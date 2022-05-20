@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/ubuntu/HttpPractice/myhttp/config.cpp" "/home/ubuntu/HttpPractice/build/CMakeFiles/myhttp.dir/myhttp/config.cpp.o"
   "/home/ubuntu/HttpPractice/myhttp/log.cpp" "/home/ubuntu/HttpPractice/build/CMakeFiles/myhttp.dir/myhttp/log.cpp.o"
   "/home/ubuntu/HttpPractice/myhttp/util.cpp" "/home/ubuntu/HttpPractice/build/CMakeFiles/myhttp.dir/myhttp/util.cpp.o"
   )

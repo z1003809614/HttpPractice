@@ -4,16 +4,9 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/ubuntu/HttpPractice/myhttp/config.cpp" "/home/ubuntu/HttpPractice/CMakeFiles/myhttp.dir/myhttp/config.cpp.o"
-  "/home/ubuntu/HttpPractice/myhttp/log.cpp" "/home/ubuntu/HttpPractice/CMakeFiles/myhttp.dir/myhttp/log.cpp.o"
-  "/home/ubuntu/HttpPractice/myhttp/util.cpp" "/home/ubuntu/HttpPractice/CMakeFiles/myhttp.dir/myhttp/util.cpp.o"
+  "/home/ubuntu/HttpPractice/tests/test_config.cpp" "/home/ubuntu/HttpPractice/CMakeFiles/test_config.dir/tests/test_config.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
-
-# Preprocessor definitions for this target.
-set(CMAKE_TARGET_DEFINITIONS_CXX
-  "myhttp_EXPORTS"
-  )
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
@@ -21,6 +14,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/home/ubuntu/HttpPractice/CMakeFiles/myhttp.dir/DependInfo.cmake"
   )
 
 # Fortran module output directory.

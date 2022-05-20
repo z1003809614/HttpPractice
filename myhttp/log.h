@@ -13,6 +13,7 @@
 #include <stdarg.h>
 #include <map>
 #include "singleton.h"
+#include "util.h"
 
 #define MYHTTP_LOG_LEVEL(logger, level) \
     if(logger->getLevel() <= level) \
@@ -38,6 +39,8 @@
 #define MYHTTP_LOG_FMT_WARN(logger, fmt, ...) MYHTTP_LOG_FMT_LEVEL(logger, myhttp::LogLevel::WARN, fmt, __VA_ARGS__)
 #define MYHTTP_LOG_FMT_ERROR(logger, fmt, ...) MYHTTP_LOG_FMT_LEVEL(logger, myhttp::LogLevel::ERROR, fmt, __VA_ARGS__)
 #define MYHTTP_LOG_FMT_FATAL(logger, fmt, ...) MYHTTP_LOG_FMT_LEVEL(logger, myhttp::LogLevel::FATAL, fmt, __VA_ARGS__)
+
+#define MYHTTP_LOG_ROOT() myhttp::LoggerMgr::GetInstance()->getRoot()
 
 
 namespace myhttp
@@ -222,6 +225,8 @@ namespace myhttp
         Logger::ptr getLogger(const std::string& name);
 
         void init();
+        
+        Logger::ptr getRoot() const {return m_root;}
     private:
         std::map<std::string, Logger::ptr> m_loggers;
         Logger::ptr m_root;

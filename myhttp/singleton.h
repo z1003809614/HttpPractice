@@ -10,7 +10,7 @@ namespace myhttp
                 static T v;
                 return &v;
             }
-    };
+    }; 
 
     template<class T, class X = void, int N = 0>
     class SingletonPtr{

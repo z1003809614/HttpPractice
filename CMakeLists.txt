@@ -7,6 +7,7 @@ set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O3 -g -std=c++11 -Wall -Wno-depre
 set(LIB_SRC
     myhttp/log.cpp
     myhttp/util.cpp
+    myhttp/config.cpp
     )
 
 add_library(myhttp SHARED ${LIB_SRC})
@@ -16,6 +17,10 @@ add_library(myhttp SHARED ${LIB_SRC})
 add_executable(test tests/test.cpp)
 add_dependencies(test myhttp)
 target_link_libraries(test myhttp)
+
+add_executable(test_config tests/test_config.cpp)
+add_dependencies(test_config myhttp)
+target_link_libraries(test_config myhttp)
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

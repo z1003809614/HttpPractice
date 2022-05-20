@@ -31,6 +31,8 @@ map
 -
 singleton.h
 /home/ubuntu/HttpPractice/myhttp/singleton.h
+util.h
+/home/ubuntu/HttpPractice/myhttp/util.h
 
 /home/ubuntu/HttpPractice/myhttp/singleton.h
 
@@ -51,6 +53,4 @@ iostream
 -
 ../myhttp/log.h
 /home/ubuntu/HttpPractice/myhttp/log.h
-../myhttp/util.h
-/home/ubuntu/HttpPractice/myhttp/util.h
 

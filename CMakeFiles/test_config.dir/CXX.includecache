@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/home/ubuntu/HttpPractice/myhttp/config.cpp
-config.h
-/home/ubuntu/HttpPractice/myhttp/config.h
-
 /home/ubuntu/HttpPractice/myhttp/config.h
 memory
 -
@@ -63,4 +59,10 @@ unistd.h
 -
 sys/syscall.h
 -
+
+/home/ubuntu/HttpPractice/tests/test_config.cpp
+../myhttp/config.h
+/home/ubuntu/HttpPractice/myhttp/config.h
+../myhttp/log.h
+/home/ubuntu/HttpPractice/myhttp/log.h
 
