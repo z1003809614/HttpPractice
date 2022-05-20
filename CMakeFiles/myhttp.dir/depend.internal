@@ -4,6 +4,7 @@
 CMakeFiles/myhttp.dir/myhttp/log.cpp.o
  /home/ubuntu/HttpPractice/myhttp/log.cpp
  /home/ubuntu/HttpPractice/myhttp/log.h
+ /home/ubuntu/HttpPractice/myhttp/singleton.h
 CMakeFiles/myhttp.dir/myhttp/util.cpp.o
  /home/ubuntu/HttpPractice/myhttp/util.cpp
  /home/ubuntu/HttpPractice/myhttp/util.h

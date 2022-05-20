@@ -25,6 +25,14 @@ vector
 -
 thread
 -
+stdarg.h
+-
+map
+-
+singleton.h
+/home/ubuntu/HttpPractice/myhttp/singleton.h
+
+/home/ubuntu/HttpPractice/myhttp/singleton.h
 
 /home/ubuntu/HttpPractice/myhttp/util.h
 stdio.h

@@ -9,7 +9,7 @@
 namespace myhttp
 {
     pid_t GetThreadId();
-    pid_t GetFiberID();
+    pid_t GetFiberId();
 
 } // namespace myhttp
 

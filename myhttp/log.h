@@ -10,18 +10,35 @@
 #include <iostream>
 #include <vector>
 #include <thread>
+#include <stdarg.h>
+#include <map>
+#include "singleton.h"
 
 #define MYHTTP_LOG_LEVEL(logger, level) \
     if(logger->getLevel() <= level) \
-        myhttp::LogEventWrap(myhttp::LogEvent::ptr(new myhttp::LogEvent(logger,level,__FILE__, __LINE__,\
-            0, myhttp::GetThreadId(),\
-            myhttp::GetFiberID(), time(0)))).getSS() 
+        myhttp::LogEventWrap(myhttp::LogEvent::ptr(new myhttp::LogEvent(logger,level, \
+                            __FILE__, __LINE__,0, myhttp::GetThreadId(),\
+                            myhttp::GetFiberId(), time(0)))).getSS() 
 
 #define MYHTTP_LOG_DEBUG(logger) MYHTTP_LOG_LEVEL(logger, myhttp::LogLevel::DEBUG)
 #define MYHTTP_LOG_INFO(logger) MYHTTP_LOG_LEVEL(logger, myhttp::LogLevel::INFO)
 #define MYHTTP_LOG_WARN(logger) MYHTTP_LOG_LEVEL(logger, myhttp::LogLevel::WARN)
 #define MYHTTP_LOG_ERROR(logger) MYHTTP_LOG_LEVEL(logger, myhttp::LogLevel::ERROR)
 #define MYHTTP_LOG_FATAL(logger) MYHTTP_LOG_LEVEL(logger, myhttp::LogLevel::FATAL)
+
+
+#define MYHTTP_LOG_FMT_LEVEL(logger, level, fmt, ...) \
+    if(logger->getLevel() <= level) \
+        myhttp::LogEventWrap(myhttp::LogEvent::ptr(new myhttp::LogEvent(logger, level, \
+                        __FILE__, __LINE__, 0, myhttp::GetThreadId(),\
+                        myhttp::GetFiberId(), time(0)))).getEvent()->format(fmt, __VA_ARGS__)
+
+#define MYHTTP_LOG_FMT_DEBUG(logger, fmt, ...) MYHTTP_LOG_FMT_LEVEL(logger, myhttp::LogLevel::DEBUG, fmt, __VA_ARGS__)
+#define MYHTTP_LOG_FMT_INFO(logger, fmt, ...) MYHTTP_LOG_FMT_LEVEL(logger, myhttp::LogLevel::INFO, fmt, __VA_ARGS__)
+#define MYHTTP_LOG_FMT_WARN(logger, fmt, ...) MYHTTP_LOG_FMT_LEVEL(logger, myhttp::LogLevel::WARN, fmt, __VA_ARGS__)
+#define MYHTTP_LOG_FMT_ERROR(logger, fmt, ...) MYHTTP_LOG_FMT_LEVEL(logger, myhttp::LogLevel::ERROR, fmt, __VA_ARGS__)
+#define MYHTTP_LOG_FMT_FATAL(logger, fmt, ...) MYHTTP_LOG_FMT_LEVEL(logger, myhttp::LogLevel::FATAL, fmt, __VA_ARGS__)
+
 
 namespace myhttp
 {
@@ -62,6 +79,9 @@ namespace myhttp
         std::shared_ptr<Logger> getLogger() const { return m_logger; }
         LogLevel::Level getLevel() const {return m_level;} 
 
+        void format(const char* fmt, ...);
+        void format(const char* fmt, va_list al);
+
     private:
         const char *m_file = nullptr; // 文件名
         int32_t m_line = 0;           // 行号
@@ -81,7 +101,9 @@ namespace myhttp
         LogEventWrap(LogEvent::ptr e);
         ~LogEventWrap();
 
+        LogEvent::ptr getEvent() const { return m_event; }
         std::stringstream& getSS();
+
     private:
         LogEvent::ptr m_event;
     };
@@ -128,6 +150,9 @@ namespace myhttp
 
         void setFormatter(LogFormatter::ptr val) { m_formatter = val; }
         LogFormatter::ptr getFormatter() const { return m_formatter; }
+
+        LogLevel::Level getLevel() const { return m_level; }
+        void setLevel(LogLevel::Level val) { m_level = val;}
 
         LogAppender() {}
         virtual ~LogAppender() {}
@@ -189,6 +214,20 @@ namespace myhttp
         std::string m_filename;
         std::ofstream m_filestream;
     };
+
+
+    class LoggerManager{
+    public:
+        LoggerManager();
+        Logger::ptr getLogger(const std::string& name);
+
+        void init();
+    private:
+        std::map<std::string, Logger::ptr> m_loggers;
+        Logger::ptr m_root;
+    };
+
+    typedef myhttp::Singleton<LoggerManager> LoggerMgr;
 
 }
 

@@ -9,13 +9,9 @@
 /home/ubuntu/HttpPractice/myhttp/log.cpp
 log.h
 /home/ubuntu/HttpPractice/myhttp/log.h
-map
--
 functional
 -
 time.h
--
-string
 -
 
 /home/ubuntu/HttpPractice/myhttp/log.h
@@ -37,4 +33,12 @@ vector
 -
 thread
 -
+stdarg.h
+-
+map
+-
+singleton.h
+/home/ubuntu/HttpPractice/myhttp/singleton.h
+
+/home/ubuntu/HttpPractice/myhttp/singleton.h
 

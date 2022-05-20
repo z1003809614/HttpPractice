@@ -1,8 +1,6 @@
 #include "log.h"
-#include <map>
 #include <functional>
 #include <time.h>
-#include <string>
 
 namespace myhttp
 {
@@ -20,12 +18,29 @@ namespace myhttp
     {
     }
 
+    void LogEvent::format(const char* fmt, ...){
+        va_list al;
+        va_start(al, fmt);
+        format(fmt, al);
+        va_end(al);
+    }
+
+    void LogEvent::format(const char* fmt,va_list al){
+        char* buf = nullptr;
+        int len = vasprintf(&buf, fmt, al);
+        if(len != -1){
+            m_ss << std::string(buf, len);
+            free(buf);
+        }
+    }
+
     LogEventWrap::LogEventWrap(LogEvent::ptr e)
         :m_event(e)
     {
     }
+
     LogEventWrap::~LogEventWrap(){
-        m_event->getLogger()->log(m_event->getLevel(),m_event);
+        m_event->getLogger()->log(m_event->getLevel(),m_event); // 调用该函数才开始处理 打印流程；
     }
 
     std::stringstream& LogEventWrap::getSS(){
@@ -142,6 +157,7 @@ namespace myhttp
 
     FileLogAppender::FileLogAppender(const std::string &filename) : m_filename(filename)
     {
+        reopen();
     }
 
     // =====================================LogFormatter===============================================
@@ -434,5 +450,16 @@ namespace myhttp
         // %d -- 时间
         // %f -- 文件名
         // %l -- 行号
+    }
+
+
+    LoggerManager::LoggerManager(){
+        m_root.reset(new Logger);
+        m_root->addAppender(LogAppender::ptr(new StdoutLogAppender));
+    }
+    Logger::ptr LoggerManager::getLogger(const std::string& name){
+        auto it = m_loggers.find(name);
+        return it == m_loggers.end() ? m_root : it->second;
+
     }
 }
