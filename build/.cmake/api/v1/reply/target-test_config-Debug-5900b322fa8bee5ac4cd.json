@@ -11,8 +11,10 @@
 		"commands" : 
 		[
 			"add_executable",
+			"link_directories",
 			"target_link_libraries",
-			"add_dependencies"
+			"add_dependencies",
+			"include_directories"
 		],
 		"files" : 
 		[
@@ -26,19 +28,31 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 21,
+				"line" : 40,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 23,
+				"line" : 9,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 22,
+				"line" : 42,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 41,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 8,
 				"parent" : 0
 			}
 		]
@@ -52,6 +66,13 @@
 					"fragment" : " -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -g  "
 				}
 			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 5,
+					"path" : "/home/ubuntu/HttpPractice/."
+				}
+			],
 			"language" : "CXX",
 			"sourceIndexes" : 
 			[
@@ -62,7 +83,7 @@
 	"dependencies" : 
 	[
 		{
-			"backtrace" : 3,
+			"backtrace" : 4,
 			"id" : "myhttp::@6890427a1f51a3e7e1df"
 		}
 	],
@@ -80,12 +101,21 @@
 				"role" : "flags"
 			},
 			{
-				"fragment" : "-Wl,-rpath,/home/ubuntu/HttpPractice/lib",
+				"backtrace" : 2,
+				"fragment" : "-L/usr/local/lib",
+				"role" : "libraryPath"
+			},
+			{
+				"fragment" : "-Wl,-rpath,/usr/local/lib:/home/ubuntu/HttpPractice/lib",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 2,
+				"backtrace" : 3,
 				"fragment" : "../lib/libmyhttp.so",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lyaml-cpp",
 				"role" : "libraries"
 			}
 		],

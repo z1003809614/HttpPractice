@@ -1134,6 +1134,18 @@
 			"value" : "/home/ubuntu/HttpPractice/build"
 		},
 		{
+			"name" : "myhttp_LIB_DEPENDS",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Dependencies for the target"
+				}
+			],
+			"type" : "STATIC",
+			"value" : "general;yaml-cpp;"
+		},
+		{
 			"name" : "myhttp_SOURCE_DIR",
 			"properties" : 
 			[

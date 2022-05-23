@@ -211,6 +211,9 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 //Value Computed by CMake
 myhttp_BINARY_DIR:STATIC=/home/ubuntu/HttpPractice/build
 
+//Dependencies for the target
+myhttp_LIB_DEPENDS:STATIC=general;yaml-cpp;
+
 //Value Computed by CMake
 myhttp_SOURCE_DIR:STATIC=/home/ubuntu/HttpPractice
 
