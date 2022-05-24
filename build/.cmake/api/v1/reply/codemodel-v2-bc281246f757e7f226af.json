@@ -42,21 +42,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "myhttp::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-myhttp-Debug-ce2b6f3a036bdcf629ab.json",
+					"jsonFile" : "target-myhttp-Debug-92a30101203d8cf44701.json",
 					"name" : "myhttp",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "test::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-test-Debug-51532a4c493fb849ca67.json",
+					"jsonFile" : "target-test-Debug-97d4e43f27526d144de5.json",
 					"name" : "test",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "test_config::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-test_config-Debug-5900b322fa8bee5ac4cd.json",
+					"jsonFile" : "target-test_config-Debug-fcf7a4c4e7ff6d9e13a9.json",
 					"name" : "test_config",
 					"projectIndex" : 0
 				}

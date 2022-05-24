@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O3 -g -std=c++11 -Wall -Wno-depre
 
 # 头文件搜索路径；
 include_directories(.)
-link_directories(/usr/local/lib)
+
 
  # 设置 变量 LIB_SRC
 set(LIB_SRC

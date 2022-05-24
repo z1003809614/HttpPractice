@@ -1,6 +1,4 @@
 #include "../myhttp/config.h"
-#include "../myhttp/log.h"
-#include <yaml-cpp/yaml.h>
 
 // 全局变量 g_int_value_config;
 myhttp::ConfigVar<int>::ptr g_int_value_config = 

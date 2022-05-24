@@ -3,9 +3,10 @@
 namespace myhttp{
 
     // 由于是静态资源，在test_config中，调用静态函数，该函数内部操作 静态成员变量，静态成员变量必须要显式的声明，才会初始化，否则无法进行操作；故这里需要声明；
-    Config::ConfigVarMap Config::s_datas;
+    // 在这里初始化静态资源，如果使用静态库链接，会出现段错误，放到test_config.cpp中进行初始化就没问题；现在将其转移到.h文件中进行初始化 -- 2022/5/24
+    // Config::ConfigVarMap Config::s_datas;
 
-    ConfigVarBase::ptr Config::LookupBase(const std::string& name){
+    /* ConfigVarBase::ptr Config::LookupBase(const std::string& name){
         auto it = s_datas.find(name);
         return it == s_datas.end() ? nullptr : it->second;
     }
@@ -49,6 +50,6 @@ namespace myhttp{
                 }
             }
         }
-    }
+    } */
 
 }

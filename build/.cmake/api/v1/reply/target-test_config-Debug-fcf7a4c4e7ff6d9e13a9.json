@@ -11,7 +11,6 @@
 		"commands" : 
 		[
 			"add_executable",
-			"link_directories",
 			"target_link_libraries",
 			"add_dependencies",
 			"include_directories"
@@ -34,23 +33,17 @@
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 9,
+				"line" : 42,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 42,
-				"parent" : 0
-			},
-			{
-				"command" : 3,
-				"file" : 0,
 				"line" : 41,
 				"parent" : 0
 			},
 			{
-				"command" : 4,
+				"command" : 3,
 				"file" : 0,
 				"line" : 8,
 				"parent" : 0
@@ -69,7 +62,7 @@
 			"includes" : 
 			[
 				{
-					"backtrace" : 5,
+					"backtrace" : 4,
 					"path" : "/home/ubuntu/HttpPractice/."
 				}
 			],
@@ -83,7 +76,7 @@
 	"dependencies" : 
 	[
 		{
-			"backtrace" : 4,
+			"backtrace" : 3,
 			"id" : "myhttp::@6890427a1f51a3e7e1df"
 		}
 	],
@@ -101,16 +94,11 @@
 				"role" : "flags"
 			},
 			{
-				"backtrace" : 2,
-				"fragment" : "-L/usr/local/lib",
-				"role" : "libraryPath"
-			},
-			{
-				"fragment" : "-Wl,-rpath,/usr/local/lib:/home/ubuntu/HttpPractice/lib",
+				"fragment" : "-Wl,-rpath,/home/ubuntu/HttpPractice/lib",
 				"role" : "libraries"
 			},
 			{
-				"backtrace" : 3,
+				"backtrace" : 2,
 				"fragment" : "../lib/libmyhttp.so",
 				"role" : "libraries"
 			},
