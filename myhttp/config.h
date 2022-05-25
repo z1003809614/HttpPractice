@@ -34,7 +34,53 @@ namespace myhttp{
             std::string m_description;
     };
 
+
+    // F from_type, T to_type
+    // 目前该模板只能支持基础类型的互相转换 -- 5/25；
+    template<class F,class T>
+    class LexicalCast{
+        public:
+            T operator()(const F& v){
+                return boost::lexical_cast<T>(v);
+            }
+    };
+
+    // 模板偏特化；
     template<class T>
+    class LexicalCast<std::string, std::vector<T> >{
+        public:
+            std::vector<T> operator()(const std::string& v){
+                YAML::Node node = YAML::Load(v);
+                std::vector<T> vec;
+                std::stringstream ss;
+                for(size_t i = 0; i< node.size(); ++i){
+                    ss.str("");
+                    ss << node[i];
+                    vec.push_back(LexicalCast<std::string, T>()(ss.str()));
+                }
+                return vec ;
+            }
+    };
+
+    template<class T>
+    class LexicalCast<std::vector<T>, std::string>{
+        public:
+            std::string operator()(const std::vector<T>& v){
+                YAML::Node node;
+                for(auto& i : v){
+                    node.push_back(YAML::Load(LexicalCast<T, std::string>()(i)));
+                }
+                std::stringstream ss;
+                ss << node;
+                return ss.str();
+            }
+    };
+
+    // 为了支持复杂类的配置，需要序列化和反序列化的操作；-- 5/25;
+    //FromStr: T operator() (const std::string&)
+    //ToStr: std::string operator() (const T&)
+    template<class T, class FromStr = LexicalCast<std::string, T>
+                    , class ToStr = LexicalCast<T, std::string> >
     class ConfigVar : public ConfigVarBase{
         public:
             typedef std::shared_ptr<ConfigVar> ptr;
@@ -45,7 +91,8 @@ namespace myhttp{
 
             std::string toString() override {
                 try{
-                    return boost::lexical_cast<std::string>(m_val);
+                    //return boost::lexical_cast<std::string>(m_val);
+                    return ToStr()(m_val);
                 }catch(std::exception& e){
                     MYHTTP_LOG_ERROR(MYHTTP_LOG_ROOT()) << "ConfigVar::toString exception"
                         << e.what() << " convert: " << typeid(m_val).name() << " to string";
@@ -56,7 +103,8 @@ namespace myhttp{
             bool fromString(const std::string& val) override{
                 try
                 {
-                    m_val = boost::lexical_cast<T>(val);
+                    // m_val = boost::lexical_cast<T>(val);
+                    setValue(FromStr()(val));
                     return true;
                 }
                 catch(const std::exception& e)
@@ -111,15 +159,15 @@ namespace myhttp{
                 return std::dynamic_pointer_cast<ConfigVar<T> > (it->second);
             }
 
-            // static void LoadFromYaml(const YAML::Node& root);
+            static void LoadFromYaml(const YAML::Node& root);
 
-            // static ConfigVarBase::ptr LookupBase(const std::string& name);
+            static ConfigVarBase::ptr LookupBase(const std::string& name);
 
         private:
             static ConfigVarMap s_datas;
     };
 
-    Config::ConfigVarMap Config::s_datas;
+   
 
 }
 
