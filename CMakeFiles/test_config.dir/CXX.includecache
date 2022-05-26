@@ -17,6 +17,18 @@ boost/lexical_cast.hpp
 -
 yaml-cpp/yaml.h
 -
+vector
+-
+list
+-
+map
+-
+set
+-
+unordered_map
+-
+unordered_set
+-
 log.h
 /home/ubuntu/HttpPractice/myhttp/log.h
 
