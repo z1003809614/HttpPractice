@@ -35,6 +35,8 @@ namespace myhttp{
             virtual std::string toString() = 0;
             virtual bool fromString(const std::string& val) = 0;
 
+            virtual std::string getTypeName() const = 0;
+
         protected:
             std::string m_name;
             std::string m_description;
@@ -268,7 +270,7 @@ namespace myhttp{
                 }
                 catch(const std::exception& e)
                 {
-                   MYHTTP_LOG_ERROR(MYHTTP_LOG_ROOT()) << "ConfigVar::toString exception"
+                   MYHTTP_LOG_ERROR(MYHTTP_LOG_ROOT()) << "ConfigVar::fromString exception"
                         << e.what() << " convert: " << typeid(m_val).name();
                 }
                 return false;
@@ -276,6 +278,8 @@ namespace myhttp{
 
             const T getValue() const {return m_val;}
             void setValue(const T& v) {m_val = v;}
+
+            std::string getTypeName() const override { return typeid(T).name(); }
 
         private:
             T m_val;
@@ -289,10 +293,19 @@ namespace myhttp{
             static typename ConfigVar<T>::ptr Lookup(const std::string& name,
                     const T& default_value, const std::string& description = "")
             {
-                auto tmp =  Lookup<T>(name);
-                if(tmp) {
-                    MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "Lookup name=" << name << " exists";
-                    return tmp;
+                auto it = s_datas.find(name);
+                if(it != s_datas.end()){
+                    // 已经存在的类型和转换的类型不符合，就会返回nullptr；
+                    auto tmp = std::dynamic_pointer_cast<ConfigVar<T> >(it->second);
+                    if(tmp){
+                        MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "Lookup name=" << name << " exists";
+                        return tmp;
+                    }else{
+                        MYHTTP_LOG_ERROR(MYHTTP_LOG_ROOT()) << "Lookup name=" << name << " exists but type not "
+                                << typeid(T).name() << " real_type=" << it->second->getTypeName()
+                                << " " << it->second->toString();
+                        return nullptr;
+                    }
                 }
 
                 if(name.find_first_not_of("abcdefghikjlmnopqrstuvwxyz._0123456789")

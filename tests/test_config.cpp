@@ -4,6 +4,9 @@
 myhttp::ConfigVar<int>::ptr g_int_value_config = 
     myhttp::Config::Lookup("system.port", (int)8080, "system port");
 
+myhttp::ConfigVar<float>::ptr g_int_valuex_config = 
+    myhttp::Config::Lookup("system.port", (float)8080, "system port");
+
 myhttp::ConfigVar<float>::ptr g_float_value_config = 
     myhttp::Config::Lookup("system.value", (float)10.2f, "system value");
 
@@ -103,12 +106,119 @@ void test_config(){
     XX_M(g_str_int_umap_value_config, str_int_umap, after);
 }
 
+class Person{
+    public:
+        std::string m_name = "";
+        int m_age = 0;
+        bool m_sex = 0;
+
+        std::string toString() const{
+            std::stringstream ss;
+            ss << "[Person name=" << m_name
+               << " age=" << m_age
+               << " sex=" << m_sex
+               << "]";
+            return ss.str();
+        }
+};
+
+namespace myhttp{
+    template<>
+    class LexicalCast<std::string, Person>{
+        public:
+            Person operator()(const std::string& v){
+                YAML::Node node = YAML::Load(v);
+                Person p;
+                p.m_name = node["name"].as<std::string>();
+                p.m_age = node["age"].as<int>();
+                p.m_sex = node["sex"].as<bool>();
+                return p;
+            }
+    };
+    template<>
+    class LexicalCast<Person, std::string>{
+        public:
+            std::string operator()(const Person& p){
+                YAML::Node node;
+                node["name"] = p.m_name;
+                node["age"] = p.m_age;
+                node["sex"] = p.m_sex;
+                std::stringstream ss;
+                ss << node;
+                return ss.str();
+            }
+    };
+}
+
+myhttp::ConfigVar<Person>::ptr g_person = 
+    myhttp::Config::Lookup("class.person", Person(), "system person");
+
+// 这里错误原因是class.map对应的是sequence，而不是map；
+// 1. 要么下面的map改成 ，序列容器；
+// 2. 要么yaml文件中，对每个person类都提供一个key；
+myhttp::ConfigVar<std::map<std::string, Person> >::ptr g_person_map = 
+    myhttp::Config::Lookup("class.map", std::map<std::string, Person>(), "system map person");
+
+// myhttp::ConfigVar<std::vector<Person> >::ptr g_person_vec = 
+//     myhttp::Config::Lookup("class.vec", std::vector<Person>(), "system person");
+
+myhttp::ConfigVar<std::map<std::string, std::vector<Person> > >::ptr g_person_map_vec = 
+    myhttp::Config::Lookup("class.map_vec", std::map<std::string, std::vector<Person> >(), "system map vec person");
+
+void test_class(){
+   
+// 反斜杠后面有空格会报错；
+#define XX_PM(g_var, prefix) \
+    { \
+        auto m = g_var->getValue(); \
+        for(auto& i : m){ \
+            MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << prefix << ": " << i.first << " - " << i.second.toString(); \
+        } \
+        MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << prefix << ": size=" << m.size(); \
+    }
+
+#define XX_PV(g_var, prefix) \
+    { \
+        auto m = g_var->getValue(); \
+        for(auto& i : m){ \
+            MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << prefix << ": " << i.toString(); \
+        } \
+        MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << prefix << ": size=" << m.size(); \
+    }
+
+#define XX_PMV(g_var, prefix) \
+    { \
+        auto m = g_var->getValue(); \
+        for(auto& i : m){ \
+           for(auto& p : i.second){ \
+               MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << prefix << ": " << i.first << " _ " << p.toString(); \
+           } \
+        } \
+        MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << prefix << ": size=" << m.size(); \
+    }
+
+    // MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "before: " << g_person->getValue().toString() << " - " << g_person->toString();
+    // XX_PM(g_person_map, "class.map before");
+
+    
+    XX_PMV(g_person_map_vec, "class.map_vec before");
+    
+    YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/log.yml");
+    myhttp::Config::LoadFromYaml(root);
+
+    // MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "after: " << g_person->getValue().toString() << " - " << g_person->toString();
+    // XX_PM(g_person_map, "class.map after");
+    XX_PMV(g_person_map_vec, "class.map_vec after");
+    MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) <<  g_person_map_vec->toString(); \
+}
+
+
 
 int main(int argc, char** argv){
     
     std::cout << std::endl << "this test_yaml " << std::endl;
     // test_yaml();
-    test_config();
-
+    // test_config();
+    test_class();
     return 0;
 }
