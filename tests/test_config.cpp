@@ -120,6 +120,12 @@ class Person{
                << "]";
             return ss.str();
         }
+
+        bool operator==(const Person& oth) const{
+            return m_name == oth.m_name
+                && m_age == oth.m_age
+                && m_sex == oth.m_sex;
+        }
 };
 
 namespace myhttp{
@@ -186,30 +192,22 @@ void test_class(){
         MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << prefix << ": size=" << m.size(); \
     }
 
-#define XX_PMV(g_var, prefix) \
-    { \
-        auto m = g_var->getValue(); \
-        for(auto& i : m){ \
-           for(auto& p : i.second){ \
-               MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << prefix << ": " << i.first << " _ " << p.toString(); \
-           } \
-        } \
-        MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << prefix << ": size=" << m.size(); \
-    }
+
+    g_person->addListener(10,[](const Person& old_value, const Person& new_value){
+        MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "Old_vlaue=" << old_value.toString()
+            << " new_value=" << new_value.toString();
+    });
+
 
     // MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "before: " << g_person->getValue().toString() << " - " << g_person->toString();
     // XX_PM(g_person_map, "class.map before");
-
-    
-    XX_PMV(g_person_map_vec, "class.map_vec before");
     
     YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/log.yml");
     myhttp::Config::LoadFromYaml(root);
 
     // MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "after: " << g_person->getValue().toString() << " - " << g_person->toString();
     // XX_PM(g_person_map, "class.map after");
-    XX_PMV(g_person_map_vec, "class.map_vec after");
-    MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) <<  g_person_map_vec->toString(); \
+    MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) <<  g_person_map_vec->toString(); 
 }
 
 
