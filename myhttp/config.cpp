@@ -6,12 +6,12 @@ namespace myhttp{
     // 在这里初始化静态资源，如果使用静态库链接，会出现段错误，放到test_config.cpp中进行初始化就没问题；现在将其转移到.h文件中进行初始化 -- 2022/5/24
     // 将下面的语句转至 .h 文件中 在使用共享库中，会导致两次对静态变量的析构问题，猜测原因是，congfig.cpp和test_congfig.cpp都引用了config.h，
     // 导致在程序执行完毕后，执行程序就析构了静态变量，然后释放 共享库的时候又 析构了一次该静态变量，即出现上面的问题；
-    Config::ConfigVarMap Config::s_datas;
+    // Config::ConfigVarMap Config::s_datas();
 
     // 查询key是否已经存在；
     ConfigVarBase::ptr Config::LookupBase(const std::string& name){
-        auto it = s_datas.find(name);
-        return it == s_datas.end() ? nullptr : it->second;
+        auto it = GetDatas().find(name);
+        return it == GetDatas().end() ? nullptr : it->second;
     }
 
     // 把yaml结点的属性构造成（一级.二级.三级：value）的样式；使用了深度优先的一种遍历思路；并且其存储(key,node)，

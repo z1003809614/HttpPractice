@@ -3,69 +3,17 @@ logs:
       level: info
       formatter: "%d%T%m%n"
       appender:
-          - type: FileLogAppender
-            path: log.txt
-          - type: StdoutLogAppender
+          - type: 1
+            file: log.txt
+            level: info
+          - type: 2
+            level: info
     - name: system
       level: debug
       formatter: "%d%T%m%n"
       appender:
-          - type: FileLogAppender
-            path: log.txt
-          - type: StdoutLogAppender
-
-system:
-    port: 9900
-    value: 15
-    int_vec:
-        - 10
-        - 30
-    int_list: [20, 40, 50] 
-    int_set: [20, 40, 50, 20]
-    int_uset: [20, 40, 50, 20]
-    str_int_map:
-        k: 30
-        k2: 20
-        k3: 10
-    str_int_umap:
-        k: 40
-        k2: 30
-        k3: 20
-
-class:
-    person:
-        name: myhttp
-        age: 31
-        sex: true
-    map:
-      p1:
-        name: myhttp01
-        age: 18
-        sex: false
-      p2:
-        name: myhttp02
-        age: 40
-        sex: true
-    vec:
-      - name: myhttp01
-        age: 18
-        sex: false
-      - name: myhttp02
-        age: 40
-        sex: true
-    map_vec:
-      group1:
-        - name: myhttp01
-          age: 18
-          sex: false
-        - name: myhttp02
-          age: 88
-          sex: true
-      group2:
-        - name: myhttp03
-          age: 11
-          sex: false
-        - name: myhttp04
-          age: 22
-          sex: true
-    
+          - type: 1
+            file: log.txt
+            level: debug
+          - type: 2
+            level: debug

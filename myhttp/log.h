@@ -41,17 +41,19 @@
 #define MYHTTP_LOG_FMT_FATAL(logger, fmt, ...) MYHTTP_LOG_FMT_LEVEL(logger, myhttp::LogLevel::FATAL, fmt, __VA_ARGS__)
 
 #define MYHTTP_LOG_ROOT() myhttp::LoggerMgr::GetInstance()->getRoot()
-
+#define MYHTTP_LOG_NAME(name) myhttp::LoggerMgr::GetInstance()->getLogger(name)
 
 namespace myhttp
 {
     class Logger;
+    class LoggerManager;
 
     class LogLevel
     {
     public:
         enum Level
         {
+            UNKNOW = 0,
             DEBUG = 1,
             INFO = 2,
             WARN = 3,
@@ -60,6 +62,7 @@ namespace myhttp
         };
 
         static const char *ToString(LogLevel::Level Level);
+        static LogLevel::Level FromString(const std::string& str);
     };
 
     class LogEvent
@@ -133,9 +136,13 @@ namespace myhttp
         // 分析patter,拆分成元组
         void init();
 
+        bool isError() const { return m_error; }
+
     private:
         std::string m_pattern;
         std::vector<FormatItem::ptr> m_items;
+
+        bool m_error = false;
     };
 
 
@@ -164,14 +171,7 @@ namespace myhttp
     // 日志器
     class Logger : public std::enable_shared_from_this<Logger>
     {
-    private:
-        /* data */
-        std::string m_name;                      //日志名称
-        LogLevel::Level m_level;                 //日志级别
-        std::list<LogAppender::ptr> m_appenders; // Appender集合；
-
-        LogFormatter::ptr m_formatter;
-
+    friend class LoggerManager;
     public:
         typedef std::shared_ptr<Logger> ptr;
 
@@ -188,10 +188,26 @@ namespace myhttp
 
         void addAppender(LogAppender::ptr appender);
         void delAppender(LogAppender::ptr appender);
+        void clearAppenders();
         LogLevel::Level getLevel() const { return m_level; }
         void setLevel(LogLevel::Level val) { m_level = val; }
 
         const std::string& getName() const {return m_name;}
+
+        void setFormatter(LogFormatter::ptr val);
+        void setFormatter(const std::string& val);
+
+        LogFormatter::ptr getFormatter();
+
+    private:
+        /* data */
+        std::string m_name;                      //日志名称
+        LogLevel::Level m_level;                 //日志级别
+        std::list<LogAppender::ptr> m_appenders; // Appender集合；
+        LogFormatter::ptr m_formatter;
+ 
+        Logger::ptr m_root;
+
     };
 
 
@@ -224,7 +240,7 @@ namespace myhttp
         LoggerManager();
         Logger::ptr getLogger(const std::string& name);
 
-        void init();
+        // void init();
         
         Logger::ptr getRoot() const {return m_root;}
     private:

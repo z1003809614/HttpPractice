@@ -54,7 +54,7 @@ void print_yaml(const YAML::Node& node,int level){
 
 
 void test_yaml(){
-    YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/log.yml");
+    YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/test.yml");
     print_yaml(root,0);
 
     //MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << root;
@@ -92,7 +92,7 @@ void test_config(){
     XX_M(g_str_int_map_value_config, str_int_map, before);
     XX_M(g_str_int_umap_value_config, str_int_umap, before);
 
-    YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/log.yml");
+    YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/test.yml");
     myhttp::Config::LoadFromYaml(root);
 
     MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "after: " << g_int_value_config->getValue();
@@ -202,21 +202,26 @@ void test_class(){
     // MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "before: " << g_person->getValue().toString() << " - " << g_person->toString();
     // XX_PM(g_person_map, "class.map before");
     
-    YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/log.yml");
+    YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/test.yml");
     myhttp::Config::LoadFromYaml(root);
 
     // MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "after: " << g_person->getValue().toString() << " - " << g_person->toString();
     // XX_PM(g_person_map, "class.map after");
-    MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) <<  g_person_map_vec->toString(); 
+    // MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) <<  g_person_map_vec->toString(); 
 }
 
-
+void test_log_config(){
+    YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/log.yml");
+    myhttp::Config::LoadFromYaml(root);
+}
 
 int main(int argc, char** argv){
     
     std::cout << std::endl << "this test_yaml " << std::endl;
     // test_yaml();
     // test_config();
-    test_class();
+    // test_class();
+    test_log_config();
+    
     return 0;
 }

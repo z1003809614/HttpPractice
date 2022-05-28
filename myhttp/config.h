@@ -324,8 +324,8 @@ namespace myhttp{
             static typename ConfigVar<T>::ptr Lookup(const std::string& name,
                     const T& default_value, const std::string& description = "")
             {
-                auto it = s_datas.find(name);
-                if(it != s_datas.end()){
+                auto it = GetDatas().find(name);
+                if(it != GetDatas().end()){
                     // 已经存在的类型和转换的类型不符合，就会返回nullptr；
                     auto tmp = std::dynamic_pointer_cast<ConfigVar<T> >(it->second);
                     if(tmp){
@@ -347,15 +347,15 @@ namespace myhttp{
                 }
 
                 typename ConfigVar<T>::ptr v(new ConfigVar<T>(name,default_value,description));
-                s_datas[name] = v;
+                GetDatas()[name] = v;
                 return v;
             }
             
             template<class T>
             static typename ConfigVar<T>::ptr Lookup(const std::string& name){
-                auto it = s_datas.find(name);
+                auto it = GetDatas().find(name);
 
-                if(it == s_datas.end()){
+                if(it == GetDatas().end()){
                     return nullptr;
                 }
 
@@ -367,7 +367,12 @@ namespace myhttp{
             static ConfigVarBase::ptr LookupBase(const std::string& name);
 
         private:
-            static ConfigVarMap s_datas;
+            //  这里为了保证GetDatas()一定被初始化，使用静态函数来调用 -- 5/28；
+            static ConfigVarMap& GetDatas(){
+                static ConfigVarMap s_datas;
+                return s_datas;
+            }
+            
     };
 
    
