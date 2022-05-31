@@ -585,15 +585,35 @@ namespace myhttp
         public:
             LogAppenderDefine operator()(const std::string& v){
                 YAML::Node node = YAML::Load(v);
-                LogAppenderDefine ld;
-                ld.type = node["type"].as<int>();
-                //ld.level = LexicalCast<std::string, LogLevel::Level>()(node["level"].as<std::string>());
-                ld.level = LogLevel::FromString(node["level"].as<std::string>());
-                ld.formatter = node["formatter"].as<std::string>();
-                ld.file = node["file"].as<std::string>();
-                return ld;
+                LogAppenderDefine lad;
+                if(!node["type"].IsDefined()){
+                    std::cout << "log config error: appender type is null, " << node
+                              << std::endl;
+                    return;
+
+                }
+                std::string type = node["type"].as<std::string>();
+                if(type == "FileLogAppender"){
+                    lad.type = 1;
+                    if(!node["file"].IsDefined()){
+                        std::cout << "log config error: fileAppender file is null, "
+                                  << std::endl;
+                        return;
+                    }
+                    lad.file = node["file"].as<std::string>();
+                    if(node["formatter"].IsDefined()){
+                        lad.formatter = node["formatter"].as<std::string>();
+                    }
+                }else if(type == "StdoutLogAppender"){
+                    lad.type = 2;   
+                }else{
+                    std::cout << "log config error: appender type is invalid, "
+                              << std::endl;
+                }
+                return lad;
             }
     };
+
     template<>
     class LexicalCast<LogAppenderDefine, std::string>{
         public:
@@ -615,12 +635,24 @@ namespace myhttp
         public:
             LogDefine operator()(const std::string& v){
                 YAML::Node node = YAML::Load(v);
+                if(!node["name"].IsDefined()){
+                    std::cout << "log config error: name is null, " << node << std::endl;
+                    return;
+                }
                 LogDefine ld;
                 ld.name = node["name"].as<std::string>();
-                // ld.level = LexicalCast<std::string, LogLevel::Level>()(node["level"].as<std::string>());
-                ld.level = LogLevel::FromString(node["level"].as<std::string>());
-                ld.formatter = node["formatter"].as<std::string>();
-                ld.appenders = LexicalCast<std::string, std::vector<LogAppenderDefine> >()(node["appenders"].as<std::string>());
+                ld.level = LogLevel::FromString(node["level"].IsDefined() ? node["level"].as<std::string>() : ""); 
+                if(node["formatter"].IsDefined()){
+                    ld.formatter = node["formatter"].as<std::string>();
+                }
+                
+                if(node["appenders"].IsDefined()){
+                    for(size_t x = 0; x < node["appenders"].size(); ++x){
+                        auto a = node["appenders"][x];
+                        LogAppenderDefine lad = LexicalCast<std::string, LogAppenderDefine>()(a.as<std::string>());
+                        ld.appenders.push_back(lad);
+                    }
+                }
                 return ld;
             }
     };
