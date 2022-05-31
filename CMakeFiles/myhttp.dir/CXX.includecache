@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/ubuntu/HttpPractice/myhttp/config.cpp
+config.h
+/home/ubuntu/HttpPractice/myhttp/config.h
+
 /home/ubuntu/HttpPractice/myhttp/config.h
 memory
 -

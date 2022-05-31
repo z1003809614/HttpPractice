@@ -558,28 +558,6 @@ namespace myhttp
         }
     };
 
-
-    // template<>
-    // class LexicalCast<std::string, myhttp::LogLevel::Level>{
-    //     public:
-    //         LogLevel::Level operator()(const std::string& v){
-    //             YAML::Node node = YAML::Load(v);
-    //             LogLevel::Level ld = LogLevel::FromString(node.as<std::string>());
-    //             return ld;
-    //         }
-    // };
-    // template<>
-    // class LexicalCast<myhttp::LogLevel::Level, std::string>{
-    //     public:
-    //         std::string operator()(const LogLevel::Level& ld){
-    //             YAML::Node node;
-    //             node["level"] = LogLevel::ToString(ld);
-    //             std::stringstream ss;
-    //             ss << node;
-    //             return ss.str();
-    //         }
-    // };
-
     template<>
     class LexicalCast<std::string, LogAppenderDefine >{
         public:
@@ -589,8 +567,7 @@ namespace myhttp
                 if(!node["type"].IsDefined()){
                     std::cout << "log config error: appender type is null, " << node
                               << std::endl;
-                    return;
-
+                    return lad;
                 }
                 std::string type = node["type"].as<std::string>();
                 if(type == "FileLogAppender"){
@@ -598,7 +575,7 @@ namespace myhttp
                     if(!node["file"].IsDefined()){
                         std::cout << "log config error: fileAppender file is null, "
                                   << std::endl;
-                        return;
+                        return lad;
                     }
                     lad.file = node["file"].as<std::string>();
                     if(node["formatter"].IsDefined()){
@@ -619,11 +596,18 @@ namespace myhttp
         public:
             std::string operator()(const LogAppenderDefine& ld){
                 YAML::Node node;
-                node["type"] = ld.type;
-                //node["level"] = LexicalCast<LogLevel::Level, std::string>()(ld.level);
+                if(ld.type == 1){
+                    node["type"] = "FileLogAppender";
+                    node["file"] = ld.file;
+                }else if(ld.type == 2){
+                    node["type"] = "StdoutLogAppender";
+                }
                 node["level"] = LogLevel::ToString(ld.level);
-                node["formatter"] = ld.formatter;
-                node["file"] = ld.file;
+
+                if(!ld.formatter.empty()){
+                    node["formatter"] = ld.formatter;
+                }
+
                 std::stringstream ss;
                 ss << node;
                 return ss.str();
@@ -631,27 +615,32 @@ namespace myhttp
     };
     
     template<>
-    class LexicalCast<std::string, LogDefine >{
+    class LexicalCast<std::string, LogDefine>{
         public:
             LogDefine operator()(const std::string& v){
                 YAML::Node node = YAML::Load(v);
+                LogDefine ld;
                 if(!node["name"].IsDefined()){
                     std::cout << "log config error: name is null, " << node << std::endl;
-                    return;
+                    return ld;
                 }
-                LogDefine ld;
                 ld.name = node["name"].as<std::string>();
+
                 ld.level = LogLevel::FromString(node["level"].IsDefined() ? node["level"].as<std::string>() : ""); 
                 if(node["formatter"].IsDefined()){
                     ld.formatter = node["formatter"].as<std::string>();
                 }
-                
+
                 if(node["appenders"].IsDefined()){
-                    for(size_t x = 0; x < node["appenders"].size(); ++x){
-                        auto a = node["appenders"][x];
-                        LogAppenderDefine lad = LexicalCast<std::string, LogAppenderDefine>()(a.as<std::string>());
-                        ld.appenders.push_back(lad);
-                    }
+                    // for(size_t x = 0; x < node["appenders"].size(); ++x){
+                    //     auto a = node["appenders"][x];
+                    //     LogAppenderDefine lad = LexicalCast<std::string, LogAppenderDefine>()(a.as<std::string>());
+                    //     ld.appenders.push_back(lad);
+                    // }
+                    // 这里发现，yaml的 as 函数，似乎只能用于 scalar对象，而不能使用与 sequence对象，可能其他对象也不行，这里使用 stringstream来做string转换；-- 5/31 nxj;
+                    std::stringstream ss;
+                    ss << node["appenders"];
+                    ld.appenders = LexicalCast<std::string, std::vector<LogAppenderDefine> >()(ss.str());
                 }
                 return ld;
             }
@@ -662,9 +651,10 @@ namespace myhttp
             std::string operator()(const LogDefine& ld){
                 YAML::Node node;
                 node["name"] = ld.name;
-                // node["level"] = LexicalCast<LogLevel::Level, std::string>()(ld.level);
                 node["level"] = LogLevel::ToString(ld.level);
-                node["formatter"] = ld.formatter;
+                if(!ld.formatter.empty()){
+                    node["formatter"] = ld.formatter;
+                }
                 node["appenders"] = LexicalCast<std::vector<LogAppenderDefine>, std::string>()(ld.appenders);
                 std::stringstream ss;
                 ss << node;
@@ -679,6 +669,7 @@ namespace myhttp
     struct LogIniter{
         LogIniter() {
             // 添加 log配置 变化事件的回调函数；
+            // 回调函数执行完之前，全局变量执行的数据还没改变，所以，在回调中打印，依旧无数值 -- 5/31 nxj；
             g_log_defines->addListener(0xF1E231, [](const std::set<LogDefine>& old_value,
                                                 const std::set<LogDefine>& new_value){
                 MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "on_logger_conf_changed";
@@ -722,7 +713,7 @@ namespace myhttp
                         auto logger = MYHTTP_LOG_NAME(i.name);
                         logger->setLevel((LogLevel::Level)100);
                         logger->clearAppenders();
-                     } 
+                    }
                 }
             });
         }

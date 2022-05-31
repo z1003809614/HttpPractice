@@ -15,6 +15,7 @@
 #include "singleton.h"
 #include "util.h"
 
+
 #define MYHTTP_LOG_LEVEL(logger, level) \
     if(logger->getLevel() <= level) \
         myhttp::LogEventWrap(myhttp::LogEvent::ptr(new myhttp::LogEvent(logger,level, \

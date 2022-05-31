@@ -285,6 +285,7 @@ namespace myhttp{
                 if(v == m_val){
                     return;
                 }
+                // m_cbs指向回调函数；
                 for(auto& i : m_cbs){
                     i.second(m_val, v);
                 }

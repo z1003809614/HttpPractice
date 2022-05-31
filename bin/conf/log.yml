@@ -2,18 +2,15 @@ logs:
     - name: root
       level: info
       formatter: "%d%T%m%n"
-      appender:
-          - type: 1
+      appenders:
+          - type: FileLogAppender
             file: log.txt
-            level: info
-          - type: 2
+          - type: StdoutLogAppender
             level: info
     - name: system
       level: debug
       formatter: "%d%T%m%n"
-      appender:
-          - type: 1
+      appenders:
+          - type: FileLogAppender
             file: log.txt
-            level: debug
-          - type: 2
-            level: debug
+          - type: StdoutLogAppender
