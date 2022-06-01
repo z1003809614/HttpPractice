@@ -125,6 +125,8 @@ namespace myhttp
 
         std::string format(std::shared_ptr<Logger> Logger, LogLevel::Level level, LogEvent::ptr event);
 
+        const std::string getPattern() const { return m_pattern; }
+
     public:
         class FormatItem
         {
@@ -167,6 +169,8 @@ namespace myhttp
 
         LogAppender() {}
         virtual ~LogAppender() {}
+
+        virtual std::string toYamlString() = 0;
     };
 
     // 日志器
@@ -200,6 +204,8 @@ namespace myhttp
 
         LogFormatter::ptr getFormatter();
 
+        std::string toYamlString();
+
     private:
         /* data */
         std::string m_name;                      //日志名称
@@ -218,7 +224,7 @@ namespace myhttp
     public:
         typedef std::shared_ptr<StdoutLogAppender> ptr;
         virtual void log(Logger::ptr logger, LogLevel::Level level, LogEvent::ptr event) override;
-
+        std::string toYamlString() override;
     private:
     };
 
@@ -230,6 +236,7 @@ namespace myhttp
         virtual void log(Logger::ptr logger, LogLevel::Level level, LogEvent::ptr event) override;
         FileLogAppender(const std::string &filename);
         bool reopen(); // 重新打开文件，文件打开成功返回true;
+        std::string toYamlString() override;
     private:
         std::string m_filename;
         std::ofstream m_filestream;
@@ -244,6 +251,8 @@ namespace myhttp
         // void init();
         
         Logger::ptr getRoot() const {return m_root;}
+
+        std::string toYamlString();
     private:
         std::map<std::string, Logger::ptr> m_loggers;
         Logger::ptr m_root;

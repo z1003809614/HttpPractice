@@ -71,12 +71,14 @@ namespace myhttp
     }
 
     LogLevel::Level LogLevel::FromString(const std::string& str){
+        std::string temp = str;
+        transform(temp.begin(),temp.end(),temp.begin(),::toupper);
 #define XX(name) \
-        if(str == #name){ \
+        if(temp == #name){ \
             return LogLevel::name; \
         }
         XX(DEBUG);
-        XX(INFO);
+        XX(INFO); 
         XX(WARN);
         XX(ERROR);
         XX(FATAL);
@@ -172,6 +174,22 @@ namespace myhttp
         log(LogLevel::FATAL, event);
     }
 
+
+    std::string Logger::toYamlString(){
+        YAML::Node node;
+        node["name"] = m_name;
+        node["level"] = LogLevel::ToString(m_level);
+        if(m_formatter){
+            node["formatter"] = m_formatter->getPattern();
+        }
+        for(auto& i : m_appenders){
+            node["appenders"].push_back(YAML::Load(i->toYamlString()));
+        }
+        std::stringstream ss;
+        ss << node;
+        return ss.str();
+    }
+
     // ==================================LogAppender=========================================
 
     void StdoutLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
@@ -181,6 +199,19 @@ namespace myhttp
             std::cout << m_formatter->format(logger, level, event);
         }
     }
+
+    std::string StdoutLogAppender::toYamlString() {
+        YAML::Node node;
+        node["type"] = "StdoutLogAppender";
+        node["level"] = LogLevel::ToString(m_level);
+        if(m_formatter){
+            node["formatter"] = m_formatter->getPattern();
+        }
+        std::stringstream ss;
+        ss << node;
+        return ss.str();
+    }
+
     void FileLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
     {
         if (level >= m_level)
@@ -203,6 +234,20 @@ namespace myhttp
     {
         reopen();
     }
+
+    std::string FileLogAppender::toYamlString() {
+        YAML::Node node;
+        node["type"] = "FileLogAppender";
+        node["file"] = m_filename;
+        node["level"] = LogLevel::ToString(m_level);
+        if(m_formatter){
+            node["formatter"] = m_formatter->getPattern();
+        }
+        std::stringstream ss;
+        ss << node;
+        return ss.str();
+    }
+
 
     // =====================================LogFormatter===============================================
 
@@ -503,6 +548,7 @@ namespace myhttp
         m_root.reset(new Logger);
         m_root->addAppender(LogAppender::ptr(new StdoutLogAppender));
         
+        m_loggers[m_root->m_name] = m_root;
         //init();
     }
     Logger::ptr LoggerManager::getLogger(const std::string& name){
@@ -519,7 +565,15 @@ namespace myhttp
         return logger;
     }
 
-
+    std::string LoggerManager::toYamlString(){
+        YAML::Node node;
+        for(auto& i : m_loggers){
+            node.push_back(YAML::Load(i.second->toYamlString()));
+        }
+        std::stringstream ss;
+        ss << node;
+        return ss.str();
+    }
 
 
 
@@ -569,6 +623,7 @@ namespace myhttp
                               << std::endl;
                     return lad;
                 }
+                lad.level = LogLevel::FromString(node["level"].IsDefined() ? node["level"].as<std::string>() : ""); 
                 std::string type = node["type"].as<std::string>();
                 if(type == "FileLogAppender"){
                     lad.type = 1;
@@ -602,6 +657,7 @@ namespace myhttp
                 }else if(ld.type == 2){
                     node["type"] = "StdoutLogAppender";
                 }
+                
                 node["level"] = LogLevel::ToString(ld.level);
 
                 if(!ld.formatter.empty()){
@@ -681,7 +737,9 @@ namespace myhttp
 
                     if(it == old_value.end()){
                         //新增Logger；
-                        logger.reset(new myhttp::Logger(i.name));
+                        // 这种写法，会导致新logger没有注册到logMgr中；
+                        // logger.reset(new myhttp::Logger(i.name)); 
+                        logger = MYHTTP_LOG_NAME(i.name);
                     }else {
                         if(!( i == *it)){
                             // 修改的logger
@@ -700,6 +758,11 @@ namespace myhttp
                         }else if(a.type == 2){
                             ap.reset(new StdoutLogAppender);
                         }
+
+                        if(!a.formatter.empty()){
+                            ap->setFormatter(LogFormatter::ptr(new myhttp::LogFormatter(a.formatter)));
+                        }
+
                         ap->setLevel(a.level);
                         logger->addAppender(ap);
                     }

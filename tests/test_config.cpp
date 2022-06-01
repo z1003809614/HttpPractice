@@ -211,8 +211,16 @@ void test_class(){
 }
 
 void test_log_config(){
+    static myhttp::Logger::ptr system_log = MYHTTP_LOG_NAME("system");
+    MYHTTP_LOG_INFO(system_log) << "hello system" << std::endl;
+
+    // std::cout <<  myhttp::LoggerMgr::GetInstance()->toYamlString() << std::endl;
     YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/log.yml");
     myhttp::Config::LoadFromYaml(root);
+    std::cout << "==============================================================" << std::endl;
+    std::cout <<  myhttp::LoggerMgr::GetInstance()->toYamlString() << std::endl;
+
+    MYHTTP_LOG_INFO(system_log) << "hello system" << std::endl;
 }
 
 int main(int argc, char** argv){
