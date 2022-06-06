@@ -760,7 +760,13 @@ namespace myhttp
                         }
 
                         if(!a.formatter.empty()){
-                            ap->setFormatter(LogFormatter::ptr(new myhttp::LogFormatter(a.formatter)));
+                            LogFormatter::ptr fmt(new LogFormatter(a.formatter));
+                            if(!fmt->isError()){
+                                ap->setFormatter(fmt);
+                            }else{
+                                std::cout << "log name=" << i.name << "appender type=" << a.type 
+                                          << " formatter=" << a.formatter << " is invalid" << std::endl;
+                            }
                         }
 
                         ap->setLevel(a.level);

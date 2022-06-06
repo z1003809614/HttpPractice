@@ -63,41 +63,41 @@ include CMakeFiles/myhttp.dir/flags.make
 CMakeFiles/myhttp.dir/myhttp/log.cpp.o: CMakeFiles/myhttp.dir/flags.make
 CMakeFiles/myhttp.dir/myhttp/log.cpp.o: myhttp/log.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/HttpPractice/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/myhttp.dir/myhttp/log.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myhttp.dir/myhttp/log.cpp.o -c /home/ubuntu/HttpPractice/myhttp/log.cpp
+	/usr/bin/c++  $(CXX_DEFINES) -D__FILE__=\"myhttp/log.cpp\" $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myhttp.dir/myhttp/log.cpp.o -c /home/ubuntu/HttpPractice/myhttp/log.cpp
 
 CMakeFiles/myhttp.dir/myhttp/log.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myhttp.dir/myhttp/log.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/HttpPractice/myhttp/log.cpp > CMakeFiles/myhttp.dir/myhttp/log.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"myhttp/log.cpp\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/HttpPractice/myhttp/log.cpp > CMakeFiles/myhttp.dir/myhttp/log.cpp.i
 
 CMakeFiles/myhttp.dir/myhttp/log.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myhttp.dir/myhttp/log.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/HttpPractice/myhttp/log.cpp -o CMakeFiles/myhttp.dir/myhttp/log.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"myhttp/log.cpp\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/HttpPractice/myhttp/log.cpp -o CMakeFiles/myhttp.dir/myhttp/log.cpp.s
 
 CMakeFiles/myhttp.dir/myhttp/util.cpp.o: CMakeFiles/myhttp.dir/flags.make
 CMakeFiles/myhttp.dir/myhttp/util.cpp.o: myhttp/util.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/HttpPractice/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/myhttp.dir/myhttp/util.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myhttp.dir/myhttp/util.cpp.o -c /home/ubuntu/HttpPractice/myhttp/util.cpp
+	/usr/bin/c++  $(CXX_DEFINES) -D__FILE__=\"myhttp/util.cpp\" $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myhttp.dir/myhttp/util.cpp.o -c /home/ubuntu/HttpPractice/myhttp/util.cpp
 
 CMakeFiles/myhttp.dir/myhttp/util.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myhttp.dir/myhttp/util.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/HttpPractice/myhttp/util.cpp > CMakeFiles/myhttp.dir/myhttp/util.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"myhttp/util.cpp\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/HttpPractice/myhttp/util.cpp > CMakeFiles/myhttp.dir/myhttp/util.cpp.i
 
 CMakeFiles/myhttp.dir/myhttp/util.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myhttp.dir/myhttp/util.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/HttpPractice/myhttp/util.cpp -o CMakeFiles/myhttp.dir/myhttp/util.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"myhttp/util.cpp\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/HttpPractice/myhttp/util.cpp -o CMakeFiles/myhttp.dir/myhttp/util.cpp.s
 
 CMakeFiles/myhttp.dir/myhttp/config.cpp.o: CMakeFiles/myhttp.dir/flags.make
 CMakeFiles/myhttp.dir/myhttp/config.cpp.o: myhttp/config.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ubuntu/HttpPractice/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/myhttp.dir/myhttp/config.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myhttp.dir/myhttp/config.cpp.o -c /home/ubuntu/HttpPractice/myhttp/config.cpp
+	/usr/bin/c++  $(CXX_DEFINES) -D__FILE__=\"myhttp/config.cpp\" $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/myhttp.dir/myhttp/config.cpp.o -c /home/ubuntu/HttpPractice/myhttp/config.cpp
 
 CMakeFiles/myhttp.dir/myhttp/config.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/myhttp.dir/myhttp/config.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/HttpPractice/myhttp/config.cpp > CMakeFiles/myhttp.dir/myhttp/config.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"myhttp/config.cpp\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ubuntu/HttpPractice/myhttp/config.cpp > CMakeFiles/myhttp.dir/myhttp/config.cpp.i
 
 CMakeFiles/myhttp.dir/myhttp/config.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/myhttp.dir/myhttp/config.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/HttpPractice/myhttp/config.cpp -o CMakeFiles/myhttp.dir/myhttp/config.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) -D__FILE__=\"myhttp/config.cpp\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ubuntu/HttpPractice/myhttp/config.cpp -o CMakeFiles/myhttp.dir/myhttp/config.cpp.s
 
 # Object files for target myhttp
 myhttp_OBJECTS = \

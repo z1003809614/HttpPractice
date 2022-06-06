@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 project(myhttp)
 
+include(cmake/utils.cmake)
+
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function")
+set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined")
 
 # 头文件搜索路径；
 include_directories(.)
@@ -18,6 +20,7 @@ set(LIB_SRC
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
 # 生成 动态库文件；静态库用 STATIC关键字；
 add_library(myhttp SHARED ${LIB_SRC})
+force_redefine_file_macro_for_sources(myhttp) #__FILE__
 target_link_libraries(myhttp yaml-cpp)
 # 不加这句，会导致 编译 test出错；按道理 test并未使用config相关文件，即没有用到yaml相关函数，怎么会报错呢？ 
 # 原因是 test 使用 myhttp库，而myhttp库是包含config的相关信息的； 
@@ -34,11 +37,13 @@ target_link_libraries(myhttp yaml-cpp)
 add_executable(test tests/test.cpp)
 # 提示编译器 先生成 myhttp 依赖，再生成可执行文件；
 add_dependencies(test myhttp)
+force_redefine_file_macro_for_sources(test) #__FILE__
 # 设置  target需要连接的库；
 target_link_libraries(test myhttp)
 
 add_executable(test_config tests/test_config.cpp)
 add_dependencies(test_config myhttp)
+force_redefine_file_macro_for_sources(test_config) #__FILE__
 target_link_libraries(test_config myhttp yaml-cpp)
 
 # 设置输出文件的路径；
