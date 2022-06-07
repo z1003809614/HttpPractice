@@ -14,3 +14,5 @@ CXX_INCLUDES = -I/home/ubuntu/HttpPractice/.
 
 # Custom defines: CMakeFiles/myhttp.dir/myhttp/config.cpp.o_DEFINES = __FILE__="myhttp/config.cpp"
 
+# Custom defines: CMakeFiles/myhttp.dir/myhttp/thread.cpp.o_DEFINES = __FILE__="myhttp/thread.cpp"
+

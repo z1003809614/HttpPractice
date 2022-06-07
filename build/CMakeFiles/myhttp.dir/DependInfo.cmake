@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/ubuntu/HttpPractice/myhttp/config.cpp" "/home/ubuntu/HttpPractice/build/CMakeFiles/myhttp.dir/myhttp/config.cpp.o"
   "/home/ubuntu/HttpPractice/myhttp/log.cpp" "/home/ubuntu/HttpPractice/build/CMakeFiles/myhttp.dir/myhttp/log.cpp.o"
+  "/home/ubuntu/HttpPractice/myhttp/thread.cpp" "/home/ubuntu/HttpPractice/build/CMakeFiles/myhttp.dir/myhttp/thread.cpp.o"
   "/home/ubuntu/HttpPractice/myhttp/util.cpp" "/home/ubuntu/HttpPractice/build/CMakeFiles/myhttp.dir/myhttp/util.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

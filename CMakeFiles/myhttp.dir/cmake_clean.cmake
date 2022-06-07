@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/myhttp.dir/myhttp/config.cpp.o"
   "CMakeFiles/myhttp.dir/myhttp/log.cpp.o"
+  "CMakeFiles/myhttp.dir/myhttp/thread.cpp.o"
   "CMakeFiles/myhttp.dir/myhttp/util.cpp.o"
   "lib/libmyhttp.pdb"
   "lib/libmyhttp.so"

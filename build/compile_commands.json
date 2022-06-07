@@ -6,6 +6,11 @@
 },
 {
   "directory": "/home/ubuntu/HttpPractice/build",
+  "command": "/usr/bin/g++   -D__FILE__=\\\"tests/test_thread.cpp\\\" -I/home/ubuntu/HttpPractice/.   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g   -o CMakeFiles/test_thread.dir/tests/test_thread.cpp.o -c /home/ubuntu/HttpPractice/tests/test_thread.cpp",
+  "file": "/home/ubuntu/HttpPractice/tests/test_thread.cpp"
+},
+{
+  "directory": "/home/ubuntu/HttpPractice/build",
   "command": "/usr/bin/g++   -D__FILE__=\\\"tests/test.cpp\\\" -I/home/ubuntu/HttpPractice/.   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g   -o CMakeFiles/test.dir/tests/test.cpp.o -c /home/ubuntu/HttpPractice/tests/test.cpp",
   "file": "/home/ubuntu/HttpPractice/tests/test.cpp"
 },
@@ -23,5 +28,10 @@
   "directory": "/home/ubuntu/HttpPractice/build",
   "command": "/usr/bin/g++  -Dmyhttp_EXPORTS -D__FILE__=\\\"myhttp/config.cpp\\\" -I/home/ubuntu/HttpPractice/.   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/myhttp.dir/myhttp/config.cpp.o -c /home/ubuntu/HttpPractice/myhttp/config.cpp",
   "file": "/home/ubuntu/HttpPractice/myhttp/config.cpp"
+},
+{
+  "directory": "/home/ubuntu/HttpPractice/build",
+  "command": "/usr/bin/g++  -Dmyhttp_EXPORTS -D__FILE__=\\\"myhttp/thread.cpp\\\" -I/home/ubuntu/HttpPractice/.   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/myhttp.dir/myhttp/thread.cpp.o -c /home/ubuntu/HttpPractice/myhttp/thread.cpp",
+  "file": "/home/ubuntu/HttpPractice/myhttp/thread.cpp"
 }
 ]

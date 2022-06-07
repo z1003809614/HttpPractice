@@ -28,7 +28,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 22,
+				"line" : 23,
 				"parent" : 0
 			},
 			{
@@ -40,8 +40,14 @@
 			{
 				"command" : 3,
 				"file" : 0,
-				"line" : 23,
+				"line" : 24,
 				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 12,
+				"parent" : 3
 			},
 			{
 				"command" : 2,
@@ -154,6 +160,36 @@
 			[
 				2
 			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : " -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC  "
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 7,
+					"define" : "__FILE__=\"myhttp/thread.cpp\""
+				},
+				{
+					"define" : "myhttp_EXPORTS"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 2,
+					"path" : "/home/ubuntu/HttpPractice/."
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				3
+			]
 		}
 	],
 	"id" : "myhttp::@6890427a1f51a3e7e1df",
@@ -167,6 +203,10 @@
 			},
 			{
 				"fragment" : "-lyaml-cpp",
+				"role" : "libraries"
+			},
+			{
+				"fragment" : "-lpthread",
 				"role" : "libraries"
 			}
 		],
@@ -187,7 +227,8 @@
 			[
 				0,
 				1,
-				2
+				2,
+				3
 			]
 		}
 	],
@@ -209,6 +250,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 2,
 			"path" : "myhttp/config.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 3,
+			"path" : "myhttp/thread.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

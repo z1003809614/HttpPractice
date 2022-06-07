@@ -13,6 +13,12 @@ CMakeFiles/myhttp.dir/myhttp/log.cpp.o
  /home/ubuntu/HttpPractice/myhttp/log.h
  /home/ubuntu/HttpPractice/myhttp/singleton.h
  /home/ubuntu/HttpPractice/myhttp/util.h
+CMakeFiles/myhttp.dir/myhttp/thread.cpp.o
+ /home/ubuntu/HttpPractice/myhttp/log.h
+ /home/ubuntu/HttpPractice/myhttp/singleton.h
+ /home/ubuntu/HttpPractice/myhttp/thread.cpp
+ /home/ubuntu/HttpPractice/myhttp/thread.h
+ /home/ubuntu/HttpPractice/myhttp/util.h
 CMakeFiles/myhttp.dir/myhttp/util.cpp.o
  /home/ubuntu/HttpPractice/myhttp/util.cpp
  /home/ubuntu/HttpPractice/myhttp/util.h

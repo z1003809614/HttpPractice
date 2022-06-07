@@ -13,6 +13,12 @@ CMakeFiles/myhttp.dir/myhttp/log.cpp.o: myhttp/log.h
 CMakeFiles/myhttp.dir/myhttp/log.cpp.o: myhttp/singleton.h
 CMakeFiles/myhttp.dir/myhttp/log.cpp.o: myhttp/util.h
 
+CMakeFiles/myhttp.dir/myhttp/thread.cpp.o: myhttp/log.h
+CMakeFiles/myhttp.dir/myhttp/thread.cpp.o: myhttp/singleton.h
+CMakeFiles/myhttp.dir/myhttp/thread.cpp.o: myhttp/thread.cpp
+CMakeFiles/myhttp.dir/myhttp/thread.cpp.o: myhttp/thread.h
+CMakeFiles/myhttp.dir/myhttp/thread.cpp.o: myhttp/util.h
+
 CMakeFiles/myhttp.dir/myhttp/util.cpp.o: myhttp/util.cpp
 CMakeFiles/myhttp.dir/myhttp/util.cpp.o: myhttp/util.h
 
