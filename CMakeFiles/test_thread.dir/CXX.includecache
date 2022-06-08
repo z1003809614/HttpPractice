@@ -85,6 +85,10 @@ pthread.h
 -
 memory.h
 -
+semaphore.h
+-
+stdint.h
+-
 
 /home/ubuntu/HttpPractice/myhttp/util.h
 stdio.h

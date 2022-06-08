@@ -8,6 +8,26 @@ namespace myhttp{
 
     static myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
 
+    Semaphore::Semaphore(uint32_t count){
+        if(sem_init(&m_semaphore, 0, count)){
+            throw std::logic_error("sem_init error");
+        }
+    }
+    Semaphore::~Semaphore(){
+        sem_destroy(&m_semaphore);
+    }
+
+    void Semaphore::wait(){
+        if(sem_wait(&m_semaphore)){
+            throw std::logic_error("sem_wait error");
+        }
+    }
+    void Semaphore::notify(){
+        if(sem_post(&m_semaphore)){
+            throw std::logic_error("sem_post error");
+        }
+    }
+
     Thread* Thread::GetThis(){
         return t_thread;
     }
@@ -36,6 +56,8 @@ namespace myhttp{
                 << " name=" << name;
             throw std::logic_error("pthread_create error");
         }
+
+        m_semaphore.wait();
     }
     Thread::~Thread(){
         // 当pthread_join执行失败的时候，需要使用pthread_detach来回收资源；
@@ -67,6 +89,8 @@ namespace myhttp{
 
         std::function<void()> cb;
         cb.swap(thread->m_cb); // 防止该函数内部存在智能指针，不会释放资源的情况，这样可以减少一层引用；
+
+        thread->m_semaphore.notify();
 
         cb();
         return 0;
