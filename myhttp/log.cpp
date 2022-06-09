@@ -93,7 +93,16 @@ namespace myhttp
     }
 
     void Logger::setFormatter(LogFormatter::ptr val){
+        MutexType::Lock lock(m_mutex);
         m_formatter = val;
+
+        // 当logger下属的appender使用logger默认的formater的时候，进行同步更新；
+        // for(auto& i : m_appenders){
+        //     MutexType::Lock ll(i->m_mutex);
+        //     if(!i->m_hasFormatter){
+        //         i->m_formatter = m_formatter;
+        //     }
+        // }
     }
 
     void Logger::setFormatter(const std::string& val){
@@ -104,25 +113,27 @@ namespace myhttp
                         << std::endl;
             return;
         }
-        m_formatter = new_val;
+        setFormatter(new_val);
     }
 
     LogFormatter::ptr Logger::getFormatter(){
+        MutexType::Lock lock(m_mutex);
         return m_formatter;
     }
 
 
     void Logger::addAppender(LogAppender::ptr appender)
     {
+        MutexType::Lock lock(m_mutex);
         if (!appender->getFormatter())
         {
             appender->setFormatter(m_formatter);
         }
-
         m_appenders.push_back(appender);
     }
     void Logger::delAppender(LogAppender::ptr appender)
     {
+        MutexType::Lock lock(m_mutex);
         for (auto it = m_appenders.begin(); it != m_appenders.end(); ++it)
         {
             if (*it == appender)
@@ -134,6 +145,7 @@ namespace myhttp
     }
 
     void Logger::clearAppenders(){
+        MutexType::Lock lock(m_mutex);
         m_appenders.clear();
     }
 
@@ -142,6 +154,7 @@ namespace myhttp
         if (level >= m_level)
         {
             auto self = shared_from_this();
+            MutexType::Lock lock(m_mutex);
             if(!m_appenders.empty()){
                 for (auto &i : m_appenders)
                 {
@@ -176,6 +189,7 @@ namespace myhttp
 
 
     std::string Logger::toYamlString(){
+        MutexType::Lock lock(m_mutex);
         YAML::Node node;
         node["name"] = m_name;
         node["level"] = LogLevel::ToString(m_level);
@@ -192,15 +206,27 @@ namespace myhttp
 
     // ==================================LogAppender=========================================
 
+    void LogAppender::setFormatter(LogFormatter::ptr val) { 
+        MutexType::Lock lock(m_mutex);
+        m_formatter = val; 
+    }
+    LogFormatter::ptr LogAppender::getFormatter(){
+        MutexType::Lock lock(m_mutex);
+        return m_formatter;
+    }
+
+
     void StdoutLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
     {
         if (level >= m_level)
         {
+            MutexType::Lock lock(m_mutex);
             std::cout << m_formatter->format(logger, level, event);
         }
     }
 
     std::string StdoutLogAppender::toYamlString() {
+        MutexType::Lock lock(m_mutex);
         YAML::Node node;
         node["type"] = "StdoutLogAppender";
         node["level"] = LogLevel::ToString(m_level);
@@ -216,12 +242,14 @@ namespace myhttp
     {
         if (level >= m_level)
         {
+            MutexType::Lock lock(m_mutex);
             m_filestream << m_formatter->format(logger, level, event);
         }
     }
 
     bool FileLogAppender::reopen()
     {
+        MutexType::Lock lock(m_mutex);
         if (m_filestream)
         {
             m_filestream.close();
@@ -236,6 +264,7 @@ namespace myhttp
     }
 
     std::string FileLogAppender::toYamlString() {
+        MutexType::Lock lock(m_mutex);
         YAML::Node node;
         node["type"] = "FileLogAppender";
         node["file"] = m_filename;
@@ -552,6 +581,7 @@ namespace myhttp
         //init();
     }
     Logger::ptr LoggerManager::getLogger(const std::string& name){
+        MutexType::Lock lock(m_mutex);
         auto it = m_loggers.find(name);
 
         if(it != m_loggers.end()){
@@ -566,6 +596,7 @@ namespace myhttp
     }
 
     std::string LoggerManager::toYamlString(){
+        MutexType::Lock lock(m_mutex);
         YAML::Node node;
         for(auto& i : m_loggers){
             node.push_back(YAML::Load(i.second->toYamlString()));

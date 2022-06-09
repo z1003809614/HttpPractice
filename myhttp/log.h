@@ -14,7 +14,7 @@
 #include <map>
 #include "singleton.h"
 #include "util.h"
-
+#include "thread.h"
 
 #define MYHTTP_LOG_LEVEL(logger, level) \
     if(logger->getLevel() <= level) \
@@ -152,17 +152,13 @@ namespace myhttp
     // 日志输出地
     class LogAppender
     {
-    protected:
-        /* data */
-        LogLevel::Level m_level = LogLevel::DEBUG;
-        LogFormatter::ptr m_formatter;
-
     public:
         typedef std::shared_ptr<LogAppender> ptr;
+        typedef Mutex MutexType;
         virtual void log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event) = 0;
 
-        void setFormatter(LogFormatter::ptr val) { m_formatter = val; }
-        LogFormatter::ptr getFormatter() const { return m_formatter; }
+        void setFormatter(LogFormatter::ptr val);
+        LogFormatter::ptr getFormatter();
 
         LogLevel::Level getLevel() const { return m_level; }
         void setLevel(LogLevel::Level val) { m_level = val;}
@@ -171,6 +167,13 @@ namespace myhttp
         virtual ~LogAppender() {}
 
         virtual std::string toYamlString() = 0;
+
+    protected:
+        /* data */
+        LogLevel::Level m_level = LogLevel::DEBUG;
+        LogFormatter::ptr m_formatter;
+
+        MutexType m_mutex;
     };
 
     // 日志器
@@ -179,6 +182,7 @@ namespace myhttp
     friend class LoggerManager;
     public:
         typedef std::shared_ptr<Logger> ptr;
+        typedef Mutex MutexType;
 
         Logger(const std::string &name = "root");
         ~Logger(){}
@@ -210,6 +214,7 @@ namespace myhttp
         /* data */
         std::string m_name;                      //日志名称
         LogLevel::Level m_level;                 //日志级别
+        MutexType m_mutex;
         std::list<LogAppender::ptr> m_appenders; // Appender集合；
         LogFormatter::ptr m_formatter;
  
@@ -245,6 +250,7 @@ namespace myhttp
 
     class LoggerManager{
     public:
+        typedef Mutex MutexType;
         LoggerManager();
         Logger::ptr getLogger(const std::string& name);
 
@@ -254,6 +260,7 @@ namespace myhttp
 
         std::string toYamlString();
     private:
+        MutexType m_mutex;
         std::map<std::string, Logger::ptr> m_loggers;
         Logger::ptr m_root;
     };

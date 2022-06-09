@@ -3,6 +3,7 @@
 
 CMakeFiles/test.dir/tests/test.cpp.o: myhttp/log.h
 CMakeFiles/test.dir/tests/test.cpp.o: myhttp/singleton.h
+CMakeFiles/test.dir/tests/test.cpp.o: myhttp/thread.h
 CMakeFiles/test.dir/tests/test.cpp.o: myhttp/util.h
 CMakeFiles/test.dir/tests/test.cpp.o: tests/test.cpp
 

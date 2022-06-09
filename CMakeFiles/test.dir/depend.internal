@@ -4,5 +4,6 @@
 CMakeFiles/test.dir/tests/test.cpp.o
  /home/ubuntu/HttpPractice/myhttp/log.h
  /home/ubuntu/HttpPractice/myhttp/singleton.h
+ /home/ubuntu/HttpPractice/myhttp/thread.h
  /home/ubuntu/HttpPractice/myhttp/util.h
  /home/ubuntu/HttpPractice/tests/test.cpp

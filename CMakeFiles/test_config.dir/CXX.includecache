@@ -61,8 +61,24 @@ singleton.h
 /home/ubuntu/HttpPractice/myhttp/singleton.h
 util.h
 /home/ubuntu/HttpPractice/myhttp/util.h
+thread.h
+/home/ubuntu/HttpPractice/myhttp/thread.h
 
 /home/ubuntu/HttpPractice/myhttp/singleton.h
+
+/home/ubuntu/HttpPractice/myhttp/thread.h
+thread
+-
+functional
+-
+pthread.h
+-
+memory.h
+-
+semaphore.h
+-
+stdint.h
+-
 
 /home/ubuntu/HttpPractice/myhttp/util.h
 stdio.h

@@ -5,12 +5,14 @@ CMakeFiles/myhttp.dir/myhttp/config.cpp.o: myhttp/config.cpp
 CMakeFiles/myhttp.dir/myhttp/config.cpp.o: myhttp/config.h
 CMakeFiles/myhttp.dir/myhttp/config.cpp.o: myhttp/log.h
 CMakeFiles/myhttp.dir/myhttp/config.cpp.o: myhttp/singleton.h
+CMakeFiles/myhttp.dir/myhttp/config.cpp.o: myhttp/thread.h
 CMakeFiles/myhttp.dir/myhttp/config.cpp.o: myhttp/util.h
 
 CMakeFiles/myhttp.dir/myhttp/log.cpp.o: myhttp/config.h
 CMakeFiles/myhttp.dir/myhttp/log.cpp.o: myhttp/log.cpp
 CMakeFiles/myhttp.dir/myhttp/log.cpp.o: myhttp/log.h
 CMakeFiles/myhttp.dir/myhttp/log.cpp.o: myhttp/singleton.h
+CMakeFiles/myhttp.dir/myhttp/log.cpp.o: myhttp/thread.h
 CMakeFiles/myhttp.dir/myhttp/log.cpp.o: myhttp/util.h
 
 CMakeFiles/myhttp.dir/myhttp/thread.cpp.o: myhttp/log.h
