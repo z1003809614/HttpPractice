@@ -241,7 +241,14 @@ namespace myhttp
     void FileLogAppender::log(std::shared_ptr<Logger> logger, LogLevel::Level level, LogEvent::ptr event)
     {
         if (level >= m_level)
-        {
+        {   
+            uint64_t now = time(0);
+            // 不断重复的打开文件；效率应该会低；
+            // 但是能够在log文件被删除的时候，保证重新生成文件；
+            if(now != m_lastTime){ 
+                reopen();
+                m_lastTime= now;
+            }
             MutexType::Lock lock(m_mutex);
             m_filestream << m_formatter->format(logger, level, event);
         }
