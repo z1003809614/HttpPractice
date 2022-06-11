@@ -250,7 +250,9 @@ namespace myhttp
                 m_lastTime = now;
             }
             MutexType::Lock lock(m_mutex);
-            m_filestream << m_formatter->format(logger, level, event);
+            if(!(m_filestream << m_formatter->format(logger, level, event))){
+                std::cout << "error" << std::endl;
+            }
         }
     }
 
@@ -261,7 +263,7 @@ namespace myhttp
         {
             m_filestream.close();
         }
-        m_filestream.open(m_filename);
+        m_filestream.open(m_filename, std::ios::app);
         return !!m_filestream;
     }
 
