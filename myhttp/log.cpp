@@ -247,7 +247,7 @@ namespace myhttp
             // 但是能够在log文件被删除的时候，保证重新生成文件；
             if(now != m_lastTime){ 
                 reopen();
-                m_lastTime= now;
+                m_lastTime = now;
             }
             MutexType::Lock lock(m_mutex);
             m_filestream << m_formatter->format(logger, level, event);
@@ -764,7 +764,7 @@ namespace myhttp
         LogIniter() {
             // 添加 log配置 变化事件的回调函数；
             // 回调函数执行完之前，全局变量执行的数据还没改变，所以，在回调中打印，依旧无数值 -- 5/31 nxj；
-            g_log_defines->addListener(0xF1E231, [](const std::set<LogDefine>& old_value,
+            g_log_defines->addListener([](const std::set<LogDefine>& old_value,
                                                 const std::set<LogDefine>& new_value){
                 MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "on_logger_conf_changed";
                 // 新增

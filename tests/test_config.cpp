@@ -193,7 +193,7 @@ void test_class(){
     }
 
 
-    g_person->addListener(10,[](const Person& old_value, const Person& new_value){
+    g_person->addListener([](const Person& old_value, const Person& new_value){
         MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << "Old_vlaue=" << old_value.toString()
             << " new_value=" << new_value.toString();
     });
@@ -230,6 +230,13 @@ int main(int argc, char** argv){
     // test_config();
     // test_class();
     test_log_config();
+
+    myhttp::Config::visit([](myhttp::ConfigVarBase::ptr var){
+        MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << " name=" << var->getName()
+            <<" description=" << var->getDescription()
+            <<" tyename=" << var->getTypeName()
+            << " value=" << var->toString();
+    });
     
     return 0;
 }

@@ -13,7 +13,9 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <functional>
+
 #include "log.h"
+#include "thread.h"
 
 
 namespace myhttp{
@@ -245,6 +247,9 @@ namespace myhttp{
                     , class ToStr = LexicalCast<T, std::string> >
     class ConfigVar : public ConfigVarBase{
         public:
+
+            typedef RWMutex RWMutexType;
+
             typedef std::shared_ptr<ConfigVar> ptr;
             typedef std::function<void (const T& old_value, const T& new_value)> on_change_cb;
 
@@ -256,6 +261,7 @@ namespace myhttp{
             std::string toString() override {
                 try{
                     //return boost::lexical_cast<std::string>(m_val);
+                    RWMutexType::ReadLock lock(m_mutex);
                     return ToStr()(m_val);
                 }catch(std::exception& e){
                     MYHTTP_LOG_ERROR(MYHTTP_LOG_ROOT()) << "ConfigVar::toString exception"
@@ -279,30 +285,43 @@ namespace myhttp{
                 return false;
             }
 
-            const T getValue() const {return m_val;}
+            const T getValue() const {
+                RWMutexType::ReadLock lock(m_mutex);
+                return m_val;
+            }
             
             void setValue(const T& v) {
-                if(v == m_val){
-                    return;
+                {
+                    RWMutexType::ReadLock lock(m_mutex);
+                    if(v == m_val){
+                        return;
+                    }
+                    // m_cbs指向回调函数；
+                    for(auto& i : m_cbs){
+                        i.second(m_val, v);
+                    }
                 }
-                // m_cbs指向回调函数；
-                for(auto& i : m_cbs){
-                    i.second(m_val, v);
-                }
+                RWMutexType::WriteLock lock(m_mutex);
                 m_val = v;
             }
 
             std::string getTypeName() const override { return typeid(T).name(); }
 
-            void addListener(uint64_t key, on_change_cb cb){
-                m_cbs[key] = cb;
+            uint64_t addListener(on_change_cb cb){
+                static uint64_t s_fun_id = 0;
+                RWMutexType::WriteLock lock(m_mutex);
+                ++s_fun_id;
+                m_cbs[s_fun_id] = cb;
+                return s_fun_id;
             }
 
             void delListener(uint64_t key){
+                RWMutexType::WriteLock lock(m_mutex);
                 m_cbs.erase(key);
             }
 
             on_change_cb getListener(uint64_t key){
+                RWMutexType::ReadLock lock(m_mutex);
                 auto it = m_cbs.find(key);
                 return it == m_cbs.end() ? nullptr : it->second;
             }
@@ -312,6 +331,7 @@ namespace myhttp{
             }
 
         private:
+            mutable RWMutexType m_mutex;
             T m_val;
             // 变更回调函数组，uint64_t key ,要求唯一， 一般可以用hash;
             std::map<uint64_t, on_change_cb> m_cbs;
@@ -320,11 +340,13 @@ namespace myhttp{
     class Config{
         public:
             typedef std::map<std::string, ConfigVarBase::ptr> ConfigVarMap;
+            typedef RWMutex RWMutexType;
 
             template<class T>
             static typename ConfigVar<T>::ptr Lookup(const std::string& name,
                     const T& default_value, const std::string& description = "")
             {
+                RWMutexType::WriteLock lock(GetMutex());
                 auto it = GetDatas().find(name);
                 if(it != GetDatas().end()){
                     // 已经存在的类型和转换的类型不符合，就会返回nullptr；
@@ -354,6 +376,7 @@ namespace myhttp{
             
             template<class T>
             static typename ConfigVar<T>::ptr Lookup(const std::string& name){
+                RWMutexType::ReadLock lock(GetMutex());
                 auto it = GetDatas().find(name);
 
                 if(it == GetDatas().end()){
@@ -367,11 +390,18 @@ namespace myhttp{
 
             static ConfigVarBase::ptr LookupBase(const std::string& name);
 
+            static void visit(std::function<void(ConfigVarBase::ptr)> cb);
+
         private:
             //  这里为了保证GetDatas()一定被初始化，使用静态函数来调用 -- 5/28；
             static ConfigVarMap& GetDatas(){
                 static ConfigVarMap s_datas;
                 return s_datas;
+            }
+
+            static RWMutexType& GetMutex(){
+                static RWMutexType s_mutex;
+                return s_mutex;
             }
             
     };

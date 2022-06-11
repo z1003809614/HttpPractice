@@ -33,6 +33,8 @@ functional
 -
 log.h
 /home/ubuntu/HttpPractice/myhttp/log.h
+thread.h
+/home/ubuntu/HttpPractice/myhttp/thread.h
 
 /home/ubuntu/HttpPractice/myhttp/log.h
 string
