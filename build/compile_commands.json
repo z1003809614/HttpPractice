@@ -16,6 +16,11 @@
 },
 {
   "directory": "/home/ubuntu/HttpPractice/build",
+  "command": "/usr/bin/g++   -D__FILE__=\\\"tests/test_utils.cpp\\\" -I/home/ubuntu/HttpPractice/.   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g   -o CMakeFiles/test_utils.dir/tests/test_utils.cpp.o -c /home/ubuntu/HttpPractice/tests/test_utils.cpp",
+  "file": "/home/ubuntu/HttpPractice/tests/test_utils.cpp"
+},
+{
+  "directory": "/home/ubuntu/HttpPractice/build",
   "command": "/usr/bin/g++  -Dmyhttp_EXPORTS -D__FILE__=\\\"myhttp/log.cpp\\\" -I/home/ubuntu/HttpPractice/.   -rdynamic -O3 -g -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -g -fPIC   -o CMakeFiles/myhttp.dir/myhttp/log.cpp.o -c /home/ubuntu/HttpPractice/myhttp/log.cpp",
   "file": "/home/ubuntu/HttpPractice/myhttp/log.cpp"
 },

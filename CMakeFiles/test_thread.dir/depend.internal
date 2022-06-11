@@ -4,6 +4,7 @@
 CMakeFiles/test_thread.dir/tests/test_thread.cpp.o
  /home/ubuntu/HttpPractice/myhttp/config.h
  /home/ubuntu/HttpPractice/myhttp/log.h
+ /home/ubuntu/HttpPractice/myhttp/macro.h
  /home/ubuntu/HttpPractice/myhttp/myhttp.h
  /home/ubuntu/HttpPractice/myhttp/singleton.h
  /home/ubuntu/HttpPractice/myhttp/thread.h

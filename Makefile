@@ -153,6 +153,19 @@ test/fast:
 .PHONY : test/fast
 
 #=============================================================================
+# Target rules for targets named test_utils
+
+# Build rule for target.
+test_utils: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_utils
+.PHONY : test_utils
+
+# fast build rule for target.
+test_utils/fast:
+	$(MAKE) -f CMakeFiles/test_utils.dir/build.make CMakeFiles/test_utils.dir/build
+.PHONY : test_utils/fast
+
+#=============================================================================
 # Target rules for targets named myhttp
 
 # Build rule for target.
@@ -354,6 +367,33 @@ tests/test_thread.cpp.s:
 	$(MAKE) -f CMakeFiles/test_thread.dir/build.make CMakeFiles/test_thread.dir/tests/test_thread.cpp.s
 .PHONY : tests/test_thread.cpp.s
 
+tests/test_utils.o: tests/test_utils.cpp.o
+
+.PHONY : tests/test_utils.o
+
+# target to build an object file
+tests/test_utils.cpp.o:
+	$(MAKE) -f CMakeFiles/test_utils.dir/build.make CMakeFiles/test_utils.dir/tests/test_utils.cpp.o
+.PHONY : tests/test_utils.cpp.o
+
+tests/test_utils.i: tests/test_utils.cpp.i
+
+.PHONY : tests/test_utils.i
+
+# target to preprocess a source file
+tests/test_utils.cpp.i:
+	$(MAKE) -f CMakeFiles/test_utils.dir/build.make CMakeFiles/test_utils.dir/tests/test_utils.cpp.i
+.PHONY : tests/test_utils.cpp.i
+
+tests/test_utils.s: tests/test_utils.cpp.s
+
+.PHONY : tests/test_utils.s
+
+# target to generate assembly for a file
+tests/test_utils.cpp.s:
+	$(MAKE) -f CMakeFiles/test_utils.dir/build.make CMakeFiles/test_utils.dir/tests/test_utils.cpp.s
+.PHONY : tests/test_utils.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -365,6 +405,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... test_thread"
 	@echo "... test"
+	@echo "... test_utils"
 	@echo "... myhttp"
 	@echo "... myhttp/config.o"
 	@echo "... myhttp/config.i"
@@ -387,6 +428,9 @@ help:
 	@echo "... tests/test_thread.o"
 	@echo "... tests/test_thread.i"
 	@echo "... tests/test_thread.s"
+	@echo "... tests/test_utils.o"
+	@echo "... tests/test_utils.i"
+	@echo "... tests/test_utils.s"
 .PHONY : help
 
 

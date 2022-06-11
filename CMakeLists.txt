@@ -52,6 +52,11 @@ add_dependencies(test_thread myhttp)
 force_redefine_file_macro_for_sources(test_thread) #__FILE__
 target_link_libraries(test_thread myhttp)
 
+add_executable(test_utils tests/test_utils.cpp)
+add_dependencies(test_utils myhttp)
+force_redefine_file_macro_for_sources(test_utils) #__FILE__
+target_link_libraries(test_utils myhttp)
+
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

@@ -93,6 +93,10 @@ unistd.h
 -
 sys/syscall.h
 -
+vector
+-
+string
+-
 
 /home/ubuntu/HttpPractice/tests/test_config.cpp
 ../myhttp/config.h

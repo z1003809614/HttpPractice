@@ -3,4 +3,5 @@
 /home/ubuntu/HttpPractice/build/CMakeFiles/edit_cache.dir
 /home/ubuntu/HttpPractice/build/CMakeFiles/test_thread.dir
 /home/ubuntu/HttpPractice/build/CMakeFiles/test.dir
+/home/ubuntu/HttpPractice/build/CMakeFiles/test_utils.dir
 /home/ubuntu/HttpPractice/build/CMakeFiles/myhttp.dir

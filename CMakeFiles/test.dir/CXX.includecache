@@ -63,6 +63,10 @@ unistd.h
 -
 sys/syscall.h
 -
+vector
+-
+string
+-
 
 /home/ubuntu/HttpPractice/tests/test.cpp
 iostream

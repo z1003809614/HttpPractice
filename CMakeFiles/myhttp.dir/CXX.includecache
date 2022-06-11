@@ -6,6 +6,10 @@
 
 #IncludeRegexTransform: 
 
+/home/ubuntu/HttpPractice/myhttp/config.cpp
+config.h
+/home/ubuntu/HttpPractice/myhttp/config.h
+
 /home/ubuntu/HttpPractice/myhttp/config.h
 memory
 -
@@ -78,6 +82,14 @@ thread.h
 
 /home/ubuntu/HttpPractice/myhttp/singleton.h
 
+/home/ubuntu/HttpPractice/myhttp/thread.cpp
+thread.h
+/home/ubuntu/HttpPractice/myhttp/thread.h
+log.h
+/home/ubuntu/HttpPractice/myhttp/log.h
+util.h
+/home/ubuntu/HttpPractice/myhttp/util.h
+
 /home/ubuntu/HttpPractice/myhttp/thread.h
 thread
 -
@@ -92,6 +104,14 @@ semaphore.h
 stdint.h
 -
 
+/home/ubuntu/HttpPractice/myhttp/util.cpp
+util.h
+/home/ubuntu/HttpPractice/myhttp/util.h
+execinfo.h
+-
+log.h
+/home/ubuntu/HttpPractice/myhttp/log.h
+
 /home/ubuntu/HttpPractice/myhttp/util.h
 stdio.h
 -
@@ -102,5 +122,9 @@ pthread.h
 unistd.h
 -
 sys/syscall.h
+-
+vector
+-
+string
 -
 

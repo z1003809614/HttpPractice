@@ -66,6 +66,12 @@ util.h
 thread.h
 /home/ubuntu/HttpPractice/myhttp/thread.h
 
+/home/ubuntu/HttpPractice/myhttp/macro.h
+string
+-
+assert.h
+-
+
 /home/ubuntu/HttpPractice/myhttp/myhttp.h
 config.h
 /home/ubuntu/HttpPractice/myhttp/config.h
@@ -77,6 +83,8 @@ util.h
 /home/ubuntu/HttpPractice/myhttp/util.h
 thread.h
 /home/ubuntu/HttpPractice/myhttp/thread.h
+macro.h
+/home/ubuntu/HttpPractice/myhttp/macro.h
 
 /home/ubuntu/HttpPractice/myhttp/singleton.h
 
@@ -104,6 +112,10 @@ pthread.h
 unistd.h
 -
 sys/syscall.h
+-
+vector
+-
+string
 -
 
 /home/ubuntu/HttpPractice/tests/test_thread.cpp
