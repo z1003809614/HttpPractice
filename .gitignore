@@ -1,3 +1,4 @@
-mutex.txt
-root.txt
-system.txt
+log*.txt
+CMakeFiles/
+build/
+.vscode/
