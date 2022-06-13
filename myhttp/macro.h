@@ -4,6 +4,7 @@
 #include <string>
 #include <assert.h>
 #include "util.h"
+#include "log.h"
 
 #define MYHTTP_ASSERT(x) \
     if(!(x)) { \
