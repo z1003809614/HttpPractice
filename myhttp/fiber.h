@@ -16,7 +16,8 @@ namespace myhttp{
                 HOLD,
                 EXEC,
                 TERM,
-                READY
+                READY,
+                EXCEPT
             };
 
         private:
@@ -33,6 +34,7 @@ namespace myhttp{
             // 切换到后台执行
             void swapOut();
 
+            uint64_t getId() const { return m_id ;}
         public:
             // 设置当前协程
             static void SetThis(Fiber* f);
@@ -46,6 +48,7 @@ namespace myhttp{
             static uint64_t ToTalFibers();
 
             static void MainFunc();
+            static uint64_t GetFiberId();
 
         private:
             uint64_t m_id = 0;

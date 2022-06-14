@@ -16,6 +16,7 @@ set(LIB_SRC
     myhttp/util.cpp
     myhttp/config.cpp
     myhttp/thread.cpp
+    myhttp/fiber.cpp
     )
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
@@ -56,6 +57,11 @@ add_executable(test_utils tests/test_utils.cpp)
 add_dependencies(test_utils myhttp)
 force_redefine_file_macro_for_sources(test_utils) #__FILE__
 target_link_libraries(test_utils myhttp)
+
+add_executable(test_fiber tests/test_fiber.cpp)
+add_dependencies(test_fiber myhttp)
+force_redefine_file_macro_for_sources(test_fiber) #__FILE__
+target_link_libraries(test_fiber myhttp)
 
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

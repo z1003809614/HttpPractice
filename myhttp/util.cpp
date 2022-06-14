@@ -1,14 +1,14 @@
-#include "util.h"
 #include <execinfo.h>
-
+#include "util.h"
 #include "log.h"
+#include "fiber.h"
 
 namespace myhttp{
     
     myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
 
     pid_t GetFiberId(){
-        return 0;
+        return myhttp::Fiber::GetFiberId();
     }
 
     pid_t GetThreadId(){
