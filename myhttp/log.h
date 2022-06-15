@@ -20,7 +20,7 @@
     if(logger->getLevel() <= level) \
         myhttp::LogEventWrap(myhttp::LogEvent::ptr(new myhttp::LogEvent(logger,level, \
                             __FILE__, __LINE__,0, myhttp::GetThreadId(),\
-                            myhttp::GetFiberId(), time(0)))).getSS() 
+                            myhttp::GetFiberId(), time(0), myhttp::Thread::GetName()))).getSS() 
 
 #define MYHTTP_LOG_DEBUG(logger) MYHTTP_LOG_LEVEL(logger, myhttp::LogLevel::DEBUG)
 #define MYHTTP_LOG_INFO(logger) MYHTTP_LOG_LEVEL(logger, myhttp::LogLevel::INFO)
@@ -33,7 +33,7 @@
     if(logger->getLevel() <= level) \
         myhttp::LogEventWrap(myhttp::LogEvent::ptr(new myhttp::LogEvent(logger, level, \
                         __FILE__, __LINE__, 0, myhttp::GetThreadId(),\
-                        myhttp::GetFiberId(), time(0)))).getEvent()->format(fmt, __VA_ARGS__)
+                        myhttp::GetFiberId(), time(0), myhttp::Thread::GetName()))).getEvent()->format(fmt, __VA_ARGS__)
 
 #define MYHTTP_LOG_FMT_DEBUG(logger, fmt, ...) MYHTTP_LOG_FMT_LEVEL(logger, myhttp::LogLevel::DEBUG, fmt, __VA_ARGS__)
 #define MYHTTP_LOG_FMT_INFO(logger, fmt, ...) MYHTTP_LOG_FMT_LEVEL(logger, myhttp::LogLevel::INFO, fmt, __VA_ARGS__)
@@ -72,7 +72,8 @@ namespace myhttp
         typedef std::shared_ptr<LogEvent> ptr;
         LogEvent(std::shared_ptr<Logger> logger,LogLevel::Level level,
                  const char* file,int32_t line,uint32_t elapse,
-                 uint32_t thread_id, uint32_t fiber_id, uint64_t time);
+                 uint32_t thread_id, uint32_t fiber_id, uint64_t time,
+                 const std::string& thread_name);
 
         const char *getFile() const { return m_file; }
         int32_t getLine() const { return m_line; }
@@ -82,6 +83,8 @@ namespace myhttp
         uint64_t getTime() const { return m_time;}
         const std::string getContent() const { return m_ss.str(); }
         std::stringstream& getSS() {return m_ss;}
+
+        const std::string& getThreadName() const { return m_threadName; }
 
         std::shared_ptr<Logger> getLogger() const { return m_logger; }
         LogLevel::Level getLevel() const {return m_level;} 
@@ -97,9 +100,12 @@ namespace myhttp
         uint32_t m_fiberId = 0;       // 携程ID
         uint64_t m_time = 0;          // 时间戳
         std::stringstream m_ss;
+        
 
         std::shared_ptr<Logger> m_logger;
         LogLevel::Level m_level;
+
+        std::string m_threadName;
 
     };
 

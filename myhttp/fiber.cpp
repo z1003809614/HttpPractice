@@ -11,7 +11,9 @@ namespace myhttp{
     static std::atomic<uint64_t> s_fiber_id {0};
     static std::atomic<uint64_t> s_fiber_count {0};
 
+    // 记录当前执行的协程；
     static thread_local Fiber* t_fiber = nullptr; 
+    // 记录主协程的地址；
     static thread_local Fiber::ptr t_threadFiber = nullptr;
 
     static ConfigVar<uint32_t>::ptr g_fiber_stack_size =
@@ -163,5 +165,15 @@ namespace myhttp{
             cur->m_state = EXCEPT;
             MYHTTP_LOG_ERROR(g_logger) << "Fiber Except:";
         }
+
+        // 本来uc_link就是执行调用协程的上一个协程的，可以用该变量完成协程的自动跳转；
+        // 但是这里，使用了自己控制跳转的策略，为了能够正确析构，必须释放智能指针；
+        // 所以下面提取了裸指针来完成上面的策略；
+        auto raw_ptr = cur.get();
+        // 这里的reset不是fiber的reset；
+        cur.reset();
+        raw_ptr->swapOut();
+
+        MYHTTP_ASSERT2(false, "never reach");
     }
 }
