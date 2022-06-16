@@ -4,8 +4,10 @@
 #include <memory>
 #include <vector>
 #include <list>
+#include <atomic>
 #include "thread.h"
 #include "fiber.h"
+
 
 
 namespace myhttp{
@@ -54,7 +56,11 @@ namespace myhttp{
                 }
             }
         protected:
+            void run();
+            void setThis();
             virtual void tickle();
+            virtual bool stopping();
+            virtual void idle();
         private:
             template<class FiberOrCb>
             bool scheduleNoLock(FiberOrCb fc, int thread){
@@ -105,9 +111,18 @@ namespace myhttp{
         private:
             MutexType m_mutex;
             std::vector<Thread::ptr> m_threads;        //线程池；
-            std::list<FiberAndThread> m_fibers;
+            std::list<FiberAndThread> m_fibers;         // 协程队列，可以是func or fiber;
+            Fiber::ptr m_rootFiber;
             std::string m_name;
-
+        
+        protected:
+            std::vector<int> m_threadIds;
+            size_t m_threadCount = 0;
+            std::atomic<size_t> m_activeThreadCount = {0};
+            std::atomic<size_t> m_idleThreadCount = {0};
+            bool m_stoping = true;
+            bool m_autoStop = false;
+            int m_rootThread = 0;
     };
 }
 
