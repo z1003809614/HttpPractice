@@ -146,16 +146,16 @@ namespace myhttp
         while(true){
             //======================挑选当前线程需要处理的协程=========================
             ft.reset();
-            bool tickle_me = false;
+            // bool tickle_me = false;
             {
                 MutexType::Lock lock(m_mutex);
                 // 迭代当前的调度器已经存储的协程；
                 auto it = m_fibers.begin();
                 while(it != m_fibers.end()){
                     // 当前判断当前协程是否由当前线程执行；
-                    if(it->thread != -1 && it->thread != myhttp::GetFiberId()){
+                    if(it->thread != -1 && it->thread != myhttp::GetThreadId()){
                         ++it;
-                        tickle_me = true;
+                        // tickle_me = true;
                         continue;
                     }  
                     // 判断当前ft是有效的；
@@ -174,9 +174,9 @@ namespace myhttp
             }
 
             // 是否需要通知其他线程；
-            if(tickle_me){
-                tickle();
-            }
+            // if(tickle_me){
+            //     tickle();
+            // }
 
             //=====================开始对当前需要处理的协程进行分析执行=====================
             // 1. ft是 fiber的情况
@@ -255,8 +255,10 @@ namespace myhttp
     }
     
     void Scheduler::idle(){
-        MYHTTP_LOG_INFO(g_logger) << " idle ";
+        
         while(!stopping()){
+            MYHTTP_LOG_INFO(g_logger) << " idle ";
+            sleep(1);
             Fiber::YieldToHold();
         }
         // Fiber::YieldToReady();
