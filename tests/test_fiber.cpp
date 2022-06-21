@@ -9,9 +9,10 @@ void run_in_fiber(){
 }
 
 void test_fiber(){
-    // 创建主协程；
+    // 创建主协程；记录初始该协程初始化时的位置；
     myhttp::Fiber::GetThis();
     MYHTTP_LOG_INFO(g_logger) << "main begin";
+    // 有参构造的协程，会设定其上下文环境为 MainFunc 函数中；
     myhttp::Fiber::ptr fiber(new myhttp::Fiber(run_in_fiber));
     fiber->swapIn();
     MYHTTP_LOG_INFO(g_logger) << "main after swapIn";

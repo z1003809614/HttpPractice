@@ -64,6 +64,11 @@ add_dependencies(test_fiber myhttp)
 force_redefine_file_macro_for_sources(test_fiber) #__FILE__
 target_link_libraries(test_fiber myhttp)
 
+add_executable(test_scheduler tests/test_scheduler.cpp)
+add_dependencies(test_scheduler myhttp)
+force_redefine_file_macro_for_sources(test_scheduler) #__FILE__
+target_link_libraries(test_scheduler myhttp)
+
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

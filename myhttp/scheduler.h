@@ -16,7 +16,7 @@ namespace myhttp{
             typedef std::shared_ptr<Scheduler> ptr;
             typedef Mutex MutexType;
 
-            Scheduler(size_t threads = 1, bool use_caller = true, const std::string& name = "");
+            Scheduler(size_t threads = 2, bool use_caller = false, const std::string& name = "");
             virtual ~Scheduler();
 
             const std::string& getName() const { return m_name; }
@@ -27,7 +27,7 @@ namespace myhttp{
             void start();
             void stop();
 
-            // schedule 是该类的入口函数；
+            // 添加fiber任务；
             template<class FiberOrCb>
             void schedule(FiberOrCb fc, int thread = -1){
                 bool need_tickle = false;
@@ -112,7 +112,9 @@ namespace myhttp{
             MutexType m_mutex;
             std::vector<Thread::ptr> m_threads;        //线程池；
             std::list<FiberAndThread> m_fibers;         // 协程队列，可以是func or fiber;
-            Fiber::ptr m_rootFiber;
+            
+            // Fiber::ptr m_rootFiber;
+            
             std::string m_name;
         
         protected:
@@ -120,9 +122,9 @@ namespace myhttp{
             size_t m_threadCount = 0;
             std::atomic<size_t> m_activeThreadCount = {0};
             std::atomic<size_t> m_idleThreadCount = {0};
-            bool m_stoping = true;
+            bool m_stopping = true;
             bool m_autoStop = false;
-            int m_rootThread = 0;
+            int m_rootThreadId = 0;
     };
 }
 
