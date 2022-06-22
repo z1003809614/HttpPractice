@@ -52,7 +52,7 @@ namespace myhttp
 
         // 初始化管道
         int rt = pipe(m_tickleFds);
-        MYHTTP_ASSERT(rt);
+        MYHTTP_ASSERT(!rt);
 
         // 设置管道的读端添加epoll ET in事件
         epoll_event event;
@@ -61,10 +61,10 @@ namespace myhttp
         event.data.fd = m_tickleFds[0];
         // 设置管道读端为非阻塞的；
         rt = fcntl(m_tickleFds[0], F_SETFL, O_NONBLOCK);
-        MYHTTP_ASSERT(rt);
+        MYHTTP_ASSERT(!rt);
         // 将管道读端与设置好的event进行绑定，并添加到epoll内核事件表中；
         rt = epoll_ctl(m_epfd, EPOLL_CTL_ADD, m_tickleFds[0], &event);
-        MYHTTP_ASSERT(rt);
+        MYHTTP_ASSERT(!rt);
 
         contextResize(32);
 
@@ -99,14 +99,14 @@ namespace myhttp
         FdContext* fd_ctx = nullptr;
         RWMutexType::ReadLock lock(m_mutex);
         // 判断当前添加的任务是否在任务池内部；
-        if(m_fdContexts.size() > fd){
+        if( (int)m_fdContexts.size() > fd){
             fd_ctx = m_fdContexts[fd];
             lock.unlock();
         }
         else{
             lock.unlock();
             RWMutexType::WriteLock lock2(m_mutex);
-            contextResize(m_fdContexts.size() * 1.5);
+            contextResize(fd * 1.5);
             fd_ctx = m_fdContexts[fd];
         }
 
@@ -156,13 +156,13 @@ namespace myhttp
     bool IOManager::delEvent(int fd, Event event){
         RWMutexType::ReadLock lock(m_mutex);
         // 当前请求的fd不再任务池中，当然不能进行后续操作了；
-        if(m_fdContexts.size() <= fd){
+        if((int)m_fdContexts.size() <= fd){
             return false;
         }
         FdContext* fd_ctx = m_fdContexts[fd];
         lock.unlock();
 
-        FdContext::MutexType::Lock lock(fd_ctx->mutex);
+        FdContext::MutexType::Lock lock1(fd_ctx->mutex);
         // 当前要删除的事件没有注册，当然也不对；
         if(!(fd_ctx->events & event)){
             return false;
@@ -193,13 +193,13 @@ namespace myhttp
     bool IOManager::cancelEvent(int fd, Event event){
         RWMutexType::ReadLock lock(m_mutex);
         // 当前请求的fd不再任务池中，当然不能进行后续操作了；
-        if(m_fdContexts.size() <= fd){
+        if( (int)m_fdContexts.size() <= fd){
             return false;
         }
         FdContext* fd_ctx = m_fdContexts[fd];
         lock.unlock();
 
-        FdContext::MutexType::Lock lock(fd_ctx->mutex);
+        FdContext::MutexType::Lock lock1(fd_ctx->mutex);
         // 当前要删除的事件没有注册，当然也不对；
         if(!(fd_ctx->events & event)){
             return false;
@@ -228,13 +228,13 @@ namespace myhttp
     bool IOManager::cancelAll(int fd){
         RWMutexType::ReadLock lock(m_mutex);
         // 当前请求的fd不再任务池中，当然不能进行后续操作了；
-        if(m_fdContexts.size() <= fd){
+        if( (int)m_fdContexts.size() <= fd){
             return false;
         }
         FdContext* fd_ctx = m_fdContexts[fd];
         lock.unlock();
 
-        FdContext::MutexType::Lock lock(fd_ctx->mutex);
+        FdContext::MutexType::Lock lock1(fd_ctx->mutex);
         // 当前要删除的事件没有注册，当然也不对；
         if(!(fd_ctx->events)){
             return false;
@@ -271,7 +271,7 @@ namespace myhttp
 
     void IOManager::tickle(){
         if(hasIdleThreads()){
-            continue;
+            return;
         }
         int rt = write(m_tickleFds[1], "T", 1);
         MYHTTP_ASSERT(rt == 1);
@@ -320,7 +320,7 @@ namespace myhttp
                 }
 
                 // 这里在对事件的属性进行处理，但不知道具体是为了什么；
-                FdContext* fd_ctx = event.data.ptr;
+                FdContext* fd_ctx = (FdContext*) event.data.ptr;
                 FdContext::MutexType::Lock lock(fd_ctx->mutex);
 
                 if(event.events & (EPOLLERR | EPOLLHUP)){

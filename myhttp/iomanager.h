@@ -12,7 +12,7 @@ namespace myhttp{
             enum Event {
                 NONE = 0x0,
                 READ = 0x1,
-                WRITE = 0x2
+                WRITE = 0x4
             };
         
         private:
@@ -40,7 +40,7 @@ namespace myhttp{
             };
 
         public:
-            IOManager(size_t threads = 1, bool use_caller = true, const std::string& name = "");
+            IOManager(size_t threads = 1, bool use_caller = false, const std::string& name = "");
             ~IOManager();
 
 

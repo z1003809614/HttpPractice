@@ -22,7 +22,7 @@ namespace myhttp
             myhttp::Fiber::GetThis();
             --threads;
             MYHTTP_ASSERT(GetThis() == nullptr);
-            t_scheduler = this;
+            //t_scheduler = this;
 
             // 当前调度器的根协程绑定run函数；
             // m_rootFiber.reset(new Fiber(std::bind(&Scheduler::run, this)));
@@ -39,6 +39,7 @@ namespace myhttp
         }else{
             m_rootThreadId = -1;
         }
+        t_scheduler = this;
         m_threadCount = threads;
     }
 
@@ -90,11 +91,11 @@ namespace myhttp
 
         // bool exit_on_this_fiber = false;
         
-        if(m_rootThreadId != -1){
-            MYHTTP_ASSERT(GetThis() == this);
-        }else{
-            MYHTTP_ASSERT(GetThis() != this);
-        }
+        // if(m_rootThreadId != -1){
+        //     MYHTTP_ASSERT(GetThis() == this);
+        // }else{
+        //     MYHTTP_ASSERT(GetThis() != this);
+        // }
 
         m_stopping = true;
         for(size_t i = 0; i < m_threadCount; ++i){
@@ -146,7 +147,7 @@ namespace myhttp
         while(true){
             //======================挑选当前线程需要处理的协程=========================
             ft.reset();
-            // bool tickle_me = false;
+            bool tickle_me = false;
             {
                 MutexType::Lock lock(m_mutex);
                 // 迭代当前的调度器已经存储的协程；
@@ -155,7 +156,7 @@ namespace myhttp
                     // 当前判断当前协程是否由当前线程执行；
                     if(it->thread != -1 && it->thread != myhttp::GetThreadId()){
                         ++it;
-                        // tickle_me = true;
+                        tickle_me = true;
                         continue;
                     }  
                     // 判断当前ft是有效的；
@@ -174,9 +175,9 @@ namespace myhttp
             }
 
             // 是否需要通知其他线程；
-            // if(tickle_me){
-            //     tickle();
-            // }
+            if(tickle_me){
+                tickle();
+            }
 
             //=====================开始对当前需要处理的协程进行分析执行=====================
             // 1. ft是 fiber的情况

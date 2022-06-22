@@ -114,6 +114,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named test_iomanager
+
+# Build rule for target.
+test_iomanager: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_iomanager
+.PHONY : test_iomanager
+
+# fast build rule for target.
+test_iomanager/fast:
+	$(MAKE) -f CMakeFiles/test_iomanager.dir/build.make CMakeFiles/test_iomanager.dir/build
+.PHONY : test_iomanager/fast
+
+#=============================================================================
 # Target rules for targets named test_scheduler
 
 # Build rule for target.
@@ -257,6 +270,33 @@ myhttp/fiber.s: myhttp/fiber.cpp.s
 myhttp/fiber.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/fiber.cpp.s
 .PHONY : myhttp/fiber.cpp.s
+
+myhttp/iomanager.o: myhttp/iomanager.cpp.o
+
+.PHONY : myhttp/iomanager.o
+
+# target to build an object file
+myhttp/iomanager.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/iomanager.cpp.o
+.PHONY : myhttp/iomanager.cpp.o
+
+myhttp/iomanager.i: myhttp/iomanager.cpp.i
+
+.PHONY : myhttp/iomanager.i
+
+# target to preprocess a source file
+myhttp/iomanager.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/iomanager.cpp.i
+.PHONY : myhttp/iomanager.cpp.i
+
+myhttp/iomanager.s: myhttp/iomanager.cpp.s
+
+.PHONY : myhttp/iomanager.s
+
+# target to generate assembly for a file
+myhttp/iomanager.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/iomanager.cpp.s
+.PHONY : myhttp/iomanager.cpp.s
 
 myhttp/log.o: myhttp/log.cpp.o
 
@@ -447,6 +487,33 @@ tests/test_fiber.cpp.s:
 	$(MAKE) -f CMakeFiles/test_fiber.dir/build.make CMakeFiles/test_fiber.dir/tests/test_fiber.cpp.s
 .PHONY : tests/test_fiber.cpp.s
 
+tests/test_iomanager.o: tests/test_iomanager.cpp.o
+
+.PHONY : tests/test_iomanager.o
+
+# target to build an object file
+tests/test_iomanager.cpp.o:
+	$(MAKE) -f CMakeFiles/test_iomanager.dir/build.make CMakeFiles/test_iomanager.dir/tests/test_iomanager.cpp.o
+.PHONY : tests/test_iomanager.cpp.o
+
+tests/test_iomanager.i: tests/test_iomanager.cpp.i
+
+.PHONY : tests/test_iomanager.i
+
+# target to preprocess a source file
+tests/test_iomanager.cpp.i:
+	$(MAKE) -f CMakeFiles/test_iomanager.dir/build.make CMakeFiles/test_iomanager.dir/tests/test_iomanager.cpp.i
+.PHONY : tests/test_iomanager.cpp.i
+
+tests/test_iomanager.s: tests/test_iomanager.cpp.s
+
+.PHONY : tests/test_iomanager.s
+
+# target to generate assembly for a file
+tests/test_iomanager.cpp.s:
+	$(MAKE) -f CMakeFiles/test_iomanager.dir/build.make CMakeFiles/test_iomanager.dir/tests/test_iomanager.cpp.s
+.PHONY : tests/test_iomanager.cpp.s
+
 tests/test_scheduler.o: tests/test_scheduler.cpp.o
 
 .PHONY : tests/test_scheduler.o
@@ -535,6 +602,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
+	@echo "... test_iomanager"
 	@echo "... test_scheduler"
 	@echo "... test_fiber"
 	@echo "... test_config"
@@ -549,6 +617,9 @@ help:
 	@echo "... myhttp/fiber.o"
 	@echo "... myhttp/fiber.i"
 	@echo "... myhttp/fiber.s"
+	@echo "... myhttp/iomanager.o"
+	@echo "... myhttp/iomanager.i"
+	@echo "... myhttp/iomanager.s"
 	@echo "... myhttp/log.o"
 	@echo "... myhttp/log.i"
 	@echo "... myhttp/log.s"
@@ -570,6 +641,9 @@ help:
 	@echo "... tests/test_fiber.o"
 	@echo "... tests/test_fiber.i"
 	@echo "... tests/test_fiber.s"
+	@echo "... tests/test_iomanager.o"
+	@echo "... tests/test_iomanager.i"
+	@echo "... tests/test_iomanager.s"
 	@echo "... tests/test_scheduler.o"
 	@echo "... tests/test_scheduler.i"
 	@echo "... tests/test_scheduler.s"

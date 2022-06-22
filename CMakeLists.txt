@@ -18,6 +18,7 @@ set(LIB_SRC
     myhttp/thread.cpp
     myhttp/fiber.cpp
     myhttp/scheduler.cpp
+    myhttp/iomanager.cpp
     )
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
@@ -68,6 +69,12 @@ add_executable(test_scheduler tests/test_scheduler.cpp)
 add_dependencies(test_scheduler myhttp)
 force_redefine_file_macro_for_sources(test_scheduler) #__FILE__
 target_link_libraries(test_scheduler myhttp)
+
+
+add_executable(test_iomanager tests/test_iomanager.cpp)
+add_dependencies(test_iomanager myhttp)
+force_redefine_file_macro_for_sources(test_iomanager) #__FILE__
+target_link_libraries(test_iomanager myhttp)
 
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

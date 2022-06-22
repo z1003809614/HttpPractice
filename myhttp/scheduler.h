@@ -16,7 +16,7 @@ namespace myhttp{
             typedef std::shared_ptr<Scheduler> ptr;
             typedef Mutex MutexType;
 
-            Scheduler(size_t threads = 2, bool use_caller = false, const std::string& name = "");
+            Scheduler(size_t threads = 1, bool use_caller = false, const std::string& name = "");
             virtual ~Scheduler();
 
             const std::string& getName() const { return m_name; }
