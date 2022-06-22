@@ -62,6 +62,8 @@ namespace myhttp{
             virtual void tickle();
             virtual bool stopping();
             virtual void idle();
+
+            bool hasIdleThreads() { return m_idleThreadCount > 0; }
         private:
             template<class FiberOrCb>
             bool scheduleNoLock(FiberOrCb fc, int thread){
