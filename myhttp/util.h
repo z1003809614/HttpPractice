@@ -8,6 +8,7 @@
 #include <sys/syscall.h>
 #include <vector>
 #include <string>
+#include <sys/time.h>
 
 namespace myhttp
 {
@@ -17,6 +18,9 @@ namespace myhttp
     void Backtrace(std::vector<std::string>& bt, int size, int skip = 1);
     std::string BacktraceToString(int size, int skip = 2, const std::string& prefix = "");
 
+    //时间ms
+    uint64_t GetCurrentMS();
+    uint64_t GetCurrentUS();
 } // namespace myhttp
 
 #endif

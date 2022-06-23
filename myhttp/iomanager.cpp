@@ -265,6 +265,8 @@ namespace myhttp
         return true;
     }
 
+    // 这个地方父转子，可能出现问题；
+    // 现在好像是可以正常使用，表明这个scheduler::getThis,可能实际指向的就是派生类的地址
     IOManager* IOManager::GetThis(){
         return dynamic_cast<IOManager*>(Scheduler::GetThis());
     }

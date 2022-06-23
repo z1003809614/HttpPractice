@@ -13,7 +13,7 @@ void test_fiber(){
 }
 
 void test1(){
-    myhttp::IOManager iom;
+    myhttp::IOManager iom(2);
     iom.schedule(&test_fiber);
 
     int sock = socket(AF_INET, SOCK_STREAM, 0);
