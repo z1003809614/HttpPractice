@@ -2,17 +2,18 @@
 #define __MYHTTP_IOMANAGER_H__
 
 #include "scheduler.h"
+#include "timer.h"
 
 namespace myhttp{
-    class IOManager : public Scheduler{
+    class IOManager : public Scheduler, public TimerManager{
         public:
             typedef std::shared_ptr<IOManager> ptr;
             typedef RWMutex RWMutexType;
 
             enum Event {
                 NONE = 0x0,
-                READ = 0x1,
-                WRITE = 0x4
+                READ = 0x1, //EPOLLIN
+                WRITE = 0x4 //EPOLLOUT
             };
         
         private:
@@ -55,9 +56,12 @@ namespace myhttp{
         protected:
             void tickle() override;
             bool stopping() override;
+            bool stopping(uint64_t& timeout);
             void idle() override;
             
             void contextResize(size_t size);
+
+            void onTimerInsertedAtFront() override;
         private:
             int m_epfd = 0;
             int m_tickleFds[2]; // 管道，用来进行消息通信，有人说可以使用eventFd来实现；

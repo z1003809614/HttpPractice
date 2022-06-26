@@ -379,6 +379,33 @@ myhttp/thread.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/thread.cpp.s
 .PHONY : myhttp/thread.cpp.s
 
+myhttp/timer.o: myhttp/timer.cpp.o
+
+.PHONY : myhttp/timer.o
+
+# target to build an object file
+myhttp/timer.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/timer.cpp.o
+.PHONY : myhttp/timer.cpp.o
+
+myhttp/timer.i: myhttp/timer.cpp.i
+
+.PHONY : myhttp/timer.i
+
+# target to preprocess a source file
+myhttp/timer.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/timer.cpp.i
+.PHONY : myhttp/timer.cpp.i
+
+myhttp/timer.s: myhttp/timer.cpp.s
+
+.PHONY : myhttp/timer.s
+
+# target to generate assembly for a file
+myhttp/timer.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/timer.cpp.s
+.PHONY : myhttp/timer.cpp.s
+
 myhttp/util.o: myhttp/util.cpp.o
 
 .PHONY : myhttp/util.o
@@ -629,6 +656,9 @@ help:
 	@echo "... myhttp/thread.o"
 	@echo "... myhttp/thread.i"
 	@echo "... myhttp/thread.s"
+	@echo "... myhttp/timer.o"
+	@echo "... myhttp/timer.i"
+	@echo "... myhttp/timer.s"
 	@echo "... myhttp/util.o"
 	@echo "... myhttp/util.i"
 	@echo "... myhttp/util.s"

@@ -1,8 +1,12 @@
 #include "timer.h"
 #include "util.h"
+#include "log.h"
 
 namespace myhttp
 {
+
+    static myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
+
     bool Timer::Comparator::operator()(const Timer::ptr& lhs, const Timer::ptr& rhs) const{
         if(!lhs && !rhs){
             return false;
@@ -99,7 +103,6 @@ namespace myhttp
         Timer::ptr timer(new Timer(ms, cb, recurring, this));
         RWMutexType::WriteLock lock(m_mutex);
         addTimer(timer, lock);
-
         return timer;
     }
 
@@ -110,8 +113,10 @@ namespace myhttp
         }
     }
 
+    // 添加条件定时器
     Timer::ptr TimerManager::addConditiaonTimer(uint64_t ms, std::function<void()> cb
-                                          ,bool recurring = false)
+                                            ,std::weak_ptr<void> weak_cond
+                                            ,bool recurring)
     {
         return addTimer(ms, std::bind(&OnTimer, weak_cond, cb), recurring);
     }
@@ -133,6 +138,7 @@ namespace myhttp
         }
     }
 
+    // 返回已经超过时间的定时器；
     void TimerManager::listExpiredCb(std::vector<std::function<void()> >& cbs){
         uint64_t now_ms = myhttp::GetCurrentMS();
         std::vector<Timer::ptr> expired;
@@ -169,8 +175,13 @@ namespace myhttp
         }
     }
 
-    void TimerManager::addTimer(Timer::ptr timer, RWMutexType::WriteLock& lock){
-        auto it = m_timers.insert(timer).first;
+    void TimerManager::addTimer(Timer::ptr val, RWMutexType::WriteLock& lock){
+        // 定时器链表中的首元素；
+        auto it = m_timers.insert(val).first;
+        
+        // MYHTTP_LOG_DEBUG(g_logger) << "addtimer after m_times size:" << m_timers.size();
+        
+        // 判断该定时器是否为需要额外唤醒，进行处理；
         bool at_front = (it == m_timers.begin()) && !m_tickled;
         if(at_front){
             m_tickled = true;
@@ -178,10 +189,12 @@ namespace myhttp
         lock.unlock();
 
         if(at_front){
+            // MYHTTP_LOG_DEBUG(g_logger) << "come in addTimer at_front";
             onTimerInsertedAtFront();
         }
     }
 
+    // 解决系统时间变化所产生的问题
     bool TimerManager::detectClockRollover(uint64_t now_ms){
         bool rollover = false;
         if(now_ms < m_previouseTime &&
@@ -190,6 +203,11 @@ namespace myhttp
         }
         m_previouseTime = now_ms;
         return rollover;
+    }
+
+    bool TimerManager::hasTimer(){
+        RWMutexType::ReadLock lock(m_mutex);
+        return !m_timers.empty();
     }
 
 } // namespace myhttp

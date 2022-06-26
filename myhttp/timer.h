@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 #include <set>
+#include <vector>
 #include "thread.h"
 
 namespace myhttp{
@@ -13,15 +14,14 @@ namespace myhttp{
     friend class TimerManager;
         public:
             typedef std::shared_ptr<Timer> ptr;
+            bool cancel();
+            bool refresh();
+            bool reset(uint64_t ms, bool from_now);
         private:
             Timer(uint64_t ms, std::function<void()> cb,
                  bool recurring, TimerManager* manager);
 
             Timer(uint64_t next);
-
-            bool cancel();
-            bool refresh();
-            bool reset(uint64_t ms, bool from_now);
         
         private:
             bool m_recurring = false;       //是否循环定时器
@@ -50,16 +50,18 @@ namespace myhttp{
             Timer::ptr addTimer(uint64_t ms, std::function<void()> cb
                                 ,bool recurring = false);
             Timer::ptr addConditiaonTimer(uint64_t ms, std::function<void()> cb
-                                          ,bool recurring = false);
+                                            ,std::weak_ptr<void> weak_cond
+                                            ,bool recurring = false);
 
             uint64_t getNextTimer();
 
             void listExpiredCb(std::vector<std::function<void()> >& cbs);
-
+            bool hasTimer();
         protected:
+            // 当前定时器被插入到链表最头部的时候，就执行该函数，提前唤醒进程对该定时器任务进行处理；
             virtual void onTimerInsertedAtFront() = 0;
             void addTimer(Timer::ptr val, RWMutexType::WriteLock& lock);
-
+            
         private:
             // 用来检测服务器时间变化的问题
             bool detectClockRollover(uint64_t now_ms);

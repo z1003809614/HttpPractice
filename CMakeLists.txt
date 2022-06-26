@@ -19,6 +19,7 @@ set(LIB_SRC
     myhttp/fiber.cpp
     myhttp/scheduler.cpp
     myhttp/iomanager.cpp
+    myhttp/timer.cpp
     )
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
