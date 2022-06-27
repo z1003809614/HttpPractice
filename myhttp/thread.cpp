@@ -80,6 +80,7 @@ namespace myhttp{
     }
 
     void* Thread::run(void* arg){
+        // 将自己封装的线程类的信息赋予内核线程；
         Thread* thread = (Thread*)arg;
         t_thread = thread;
         t_thread_name = thread->m_name;
@@ -92,7 +93,9 @@ namespace myhttp{
 
         thread->m_semaphore.notify();
 
+        // 开始执行回调函数；
         cb();
+
         return 0;
     }
 }

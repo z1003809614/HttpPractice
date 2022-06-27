@@ -1,6 +1,7 @@
 #include "scheduler.h"
 #include "log.h"
 #include "macro.h"
+#include "hook.h"
 
 namespace myhttp
 {
@@ -129,6 +130,9 @@ namespace myhttp
     }
 
     void Scheduler::run(){
+
+        set_hook_enable(true);
+
         // 让每个线程的调度器都指向主线程调度器；
         setThis();
         // 初始化子线程的主协程；

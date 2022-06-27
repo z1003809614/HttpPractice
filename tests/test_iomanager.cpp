@@ -51,7 +51,7 @@ myhttp::Timer::ptr s_timer;
 void test_timer(){
     myhttp::IOManager iom(1);
    // 这里不能使用这种形式，因为s_timer是局部变量，内部传引用后，由于不是同一个线程执行，当前s_timer很可能在其他线程使用的时候，就被析构了，导致其内部数据是不能保证的，造成了野指针的问题；
-   // myhttp::Timer::ptr s_timer = iom.addTimer(1000,[&s_timer](){
+   // myhttp::Timer::ptr s_timer = iom.addTimer(1000,[&s_timer](){}
     s_timer = iom.addTimer(1000,[](){
         MYHTTP_LOG_INFO(g_logger) << "hello timer";
         static int times = 1;

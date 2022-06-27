@@ -276,7 +276,7 @@ namespace myhttp
             // MYHTTP_LOG_DEBUG(g_logger) << "tickle hasIdleThreads";
             return;
         }
-        MYHTTP_LOG_DEBUG(g_logger) << "tickle";
+        // MYHTTP_LOG_DEBUG(g_logger) << "tickle";
         int rt = write(m_tickleFds[1], "T", 1);
         MYHTTP_ASSERT(rt == 1);
     }
@@ -308,7 +308,7 @@ namespace myhttp
                 break;
             }
 
-            // MYHTTP_LOG_DEBUG(g_logger) << "test idle next_timeout:" << next_timeout << " trans int :" << (int)next_timeout << " ~0ull:" << ~0ull ;
+            // MYHTTP_LOG_DEBUG(g_logger) << " test idle next_timeout:" << next_timeout << " trans int :" << (int)next_timeout << " ~0ull: " << ~0ull ;
 
             int rt = 0;
             // 阻塞等待内核中的某些事件被触发；感觉不用写循环?
@@ -333,6 +333,7 @@ namespace myhttp
 
             std::vector<std::function<void()> > cbs;
             listExpiredCb(cbs);
+            MYHTTP_LOG_INFO(g_logger) << " cbs size:" << cbs.size();
             if(!cbs.empty()){
                 schedule(cbs.begin(), cbs.end());
                 cbs.clear();

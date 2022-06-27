@@ -20,7 +20,7 @@ namespace myhttp
         if(lhs->m_next < rhs->m_next){
             return true;
         }
-        if(rhs->m_next < rhs->m_next){
+        if(rhs->m_next < lhs->m_next){
             return false;
         }
         return lhs.get() < rhs.get();
@@ -100,6 +100,7 @@ namespace myhttp
     }
 
     Timer::ptr TimerManager::addTimer(uint64_t ms, std::function<void()> cb, bool recurring){
+        
         Timer::ptr timer(new Timer(ms, cb, recurring, this));
         RWMutexType::WriteLock lock(m_mutex);
         addTimer(timer, lock);
@@ -155,11 +156,19 @@ namespace myhttp
             return;
         }
 
+        // MYHTTP_LOG_DEBUG(g_logger) << "rollover: " << rollover;
+
         Timer::ptr now_timer(new Timer(now_ms));
-        auto it = rollover ? m_timers.end() : m_timers.lower_bound(now_timer);
-        while(it != m_timers.end() && (*it)->m_next == now_ms){
-            ++it;
-        }
+        auto it = rollover ? m_timers.end() : m_timers.upper_bound(now_timer);
+
+        // for(auto& t : m_timers){
+        //     MYHTTP_LOG_DEBUG(g_logger) << "timer next time: " << (t)->m_next << " now_ms: " << now_ms;
+        // }
+
+        // while(it != m_timers.end() && (*it)->m_next == now_ms){
+        //     ++it;
+        // }
+
         expired.insert(expired.begin(), m_timers.begin(), it);
         m_timers.erase(m_timers.begin(), it);
         cbs.reserve(expired.size());
@@ -197,8 +206,11 @@ namespace myhttp
     // 解决系统时间变化所产生的问题
     bool TimerManager::detectClockRollover(uint64_t now_ms){
         bool rollover = false;
-        if(now_ms < m_previouseTime &&
-            now_ms < (m_previouseTime - 60 * 60 * 1000)){
+
+        // MYHTTP_LOG_DEBUG(g_logger) << "now_ms: " << now_ms << " m_previousTime:" << m_previouseTime;
+
+        if(now_ms < m_previouseTime 
+            && now_ms < (m_previouseTime - 60 * 60 * 1000)){
             rollover = true;
         }
         m_previouseTime = now_ms;

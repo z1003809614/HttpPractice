@@ -20,13 +20,14 @@ set(LIB_SRC
     myhttp/scheduler.cpp
     myhttp/iomanager.cpp
     myhttp/timer.cpp
+    myhttp/hook.cpp
     )
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
 # 生成 动态库文件；静态库用 STATIC关键字；
 add_library(myhttp SHARED ${LIB_SRC})
 force_redefine_file_macro_for_sources(myhttp) #__FILE__
-target_link_libraries(myhttp yaml-cpp pthread)
+target_link_libraries(myhttp yaml-cpp pthread dl)
 # 不加这句，会导致 编译 test出错；按道理 test并未使用config相关文件，即没有用到yaml相关函数，怎么会报错呢？ 
 # 原因是 test 使用 myhttp库，而myhttp库是包含config的相关信息的； 
 # 前期 生成 config.o 文件未经过链接阶段，不会报错；
@@ -76,6 +77,11 @@ add_executable(test_iomanager tests/test_iomanager.cpp)
 add_dependencies(test_iomanager myhttp)
 force_redefine_file_macro_for_sources(test_iomanager) #__FILE__
 target_link_libraries(test_iomanager myhttp)
+
+add_executable(test_hook tests/test_hook.cpp)
+add_dependencies(test_hook myhttp)
+force_redefine_file_macro_for_sources(test_hook) #__FILE__
+target_link_libraries(test_hook myhttp)
 
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
