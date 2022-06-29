@@ -21,6 +21,7 @@ set(LIB_SRC
     myhttp/iomanager.cpp
     myhttp/timer.cpp
     myhttp/hook.cpp
+    myhttp/fd_manager.cpp
     )
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；

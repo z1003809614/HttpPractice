@@ -257,6 +257,33 @@ myhttp/config.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/config.cpp.s
 .PHONY : myhttp/config.cpp.s
 
+myhttp/fd_manager.o: myhttp/fd_manager.cpp.o
+
+.PHONY : myhttp/fd_manager.o
+
+# target to build an object file
+myhttp/fd_manager.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/fd_manager.cpp.o
+.PHONY : myhttp/fd_manager.cpp.o
+
+myhttp/fd_manager.i: myhttp/fd_manager.cpp.i
+
+.PHONY : myhttp/fd_manager.i
+
+# target to preprocess a source file
+myhttp/fd_manager.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/fd_manager.cpp.i
+.PHONY : myhttp/fd_manager.cpp.i
+
+myhttp/fd_manager.s: myhttp/fd_manager.cpp.s
+
+.PHONY : myhttp/fd_manager.s
+
+# target to generate assembly for a file
+myhttp/fd_manager.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/fd_manager.cpp.s
+.PHONY : myhttp/fd_manager.cpp.s
+
 myhttp/fiber.o: myhttp/fiber.cpp.o
 
 .PHONY : myhttp/fiber.o
@@ -709,6 +736,9 @@ help:
 	@echo "... myhttp/config.o"
 	@echo "... myhttp/config.i"
 	@echo "... myhttp/config.s"
+	@echo "... myhttp/fd_manager.o"
+	@echo "... myhttp/fd_manager.i"
+	@echo "... myhttp/fd_manager.s"
 	@echo "... myhttp/fiber.o"
 	@echo "... myhttp/fiber.i"
 	@echo "... myhttp/fiber.s"
