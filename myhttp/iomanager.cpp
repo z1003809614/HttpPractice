@@ -35,9 +35,11 @@ namespace myhttp
         events = (Event)(events & ~event);
         EventContext& ctx = getContext(event);
         if(ctx.cb){
+            // 如果有回调，执行回调；
             ctx.scheduler->schedule(&ctx.cb);
         }
         else{
+            // 没有回调，就执行指定的fiber；
             ctx.scheduler->schedule(&ctx.fiber);
         }
         ctx.scheduler = nullptr;
@@ -311,7 +313,7 @@ namespace myhttp
             // MYHTTP_LOG_DEBUG(g_logger) << " test idle next_timeout:" << next_timeout << " trans int :" << (int)next_timeout << " ~0ull: " << ~0ull ;
 
             int rt = 0;
-            // 阻塞等待内核中的某些事件被触发；感觉不用写循环?
+            // 阻塞等待内核中的某些事件被触发；感觉不用写循环? 需要循环，某些导致的唤醒不需处理；
             do{
                 static const int MAX_TIMEOUT = 3000;
                 if(next_timeout != ~0ull){
@@ -350,6 +352,7 @@ namespace myhttp
                 }
 
                 // 这里在对事件的属性进行处理，但不知道具体是为了什么；
+                // 这里是在根据内核的事件属性，转换为自己定义的属性表达，如EPOLLIN->READ,EPOLLOUT->WRITE;
                 FdContext* fd_ctx = (FdContext*) event.data.ptr;
                 FdContext::MutexType::Lock lock(fd_ctx->mutex);
 

@@ -10,12 +10,13 @@
 
  myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
 
-  struct timer_info
-    {
-        int cancelled = 0;
-    };
+struct timer_info
+{
+    int cancelled = 0;
+};
 namespace myhttp
 {
+    // 从配置系统中获得 conncect的超时时间；
     static myhttp::ConfigVar<int>::ptr g_tcp_connect_timeout = 
         myhttp::Config::Lookup("tcp.connect.timeout", 5000, "tcp connect timeout");
 
@@ -63,6 +64,7 @@ namespace myhttp
             hook_init();
             s_connect_timeout = g_tcp_connect_timeout->getValue();
 
+            // 监听配置系统的值和默认值是否存在差别；
             g_tcp_connect_timeout->addListener([](const int& old_value, const int& new_value){
                 MYHTTP_LOG_INFO(g_logger) << "tcp connect timeout changed from"
                                           << old_value << " to " << new_value;
@@ -140,7 +142,7 @@ namespace myhttp
                 }, winfo);
             }
 
-            // 添加事件
+            // 添加事件;addEvent默认使用当前协程，
             int rt = iom->addEvent(fd, (myhttp::IOManager::Event)(event));
             if(rt){ // 事件添加失败的情况
                 MYHTTP_LOG_ERROR(g_logger) << hook_fun_name << " addEvent("
@@ -276,6 +278,7 @@ extern "C"{
         std::shared_ptr<timer_info> tinfo(new timer_info);
         std::weak_ptr<timer_info> winfo(tinfo);
 
+        // 如果connect中存在超时时间时，添加一个条件定时任务，定时唤醒线程进行处理，保证异步性能；
         if(timeout_ms != (uint64_t)-1){
             timer = iom->addConditiaonTimer(timeout_ms, [winfo, fd, iom](){
                 auto t = winfo.lock();
@@ -287,9 +290,11 @@ extern "C"{
             }, winfo);
         }
 
+        // 添加IO事件，用epoll_wait来替代阻塞的行为；
         int rt = iom->addEvent(fd, myhttp::IOManager::WRITE);
         if(rt == 0){
             myhttp::Fiber::YieldToHold();
+            // 当fiber被唤醒的时候
             if(timer){
                 timer->cancel();
             }
