@@ -130,7 +130,7 @@ namespace myhttp
     }
 
     void Scheduler::run(){
-
+        // 开启hook
         set_hook_enable(true);
 
         // 让每个线程的调度器都指向主线程调度器；

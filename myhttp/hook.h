@@ -54,7 +54,7 @@ extern "C"{
     extern recvmsg_fun recvmsg_f;
 
     // write
-    typedef size_t (*write_fun)(int fd, const void *buf, size_t count);
+    typedef ssize_t (*write_fun)(int fd, const void *buf, size_t count);
     extern write_fun write_f;
 
     typedef ssize_t (*writev_fun)(int fd, const struct iovec *iov, int iovcnt);

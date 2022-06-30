@@ -3,11 +3,22 @@
 #include "iomanager.h"
 #include "log.h"
 #include "fd_manager.h"
+#include "config.h"
 
 #include <dlfcn.h>
+
+
+ myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
+
+  struct timer_info
+    {
+        int cancelled = 0;
+    };
 namespace myhttp
 {
-    myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
+    static myhttp::ConfigVar<int>::ptr g_tcp_connect_timeout = 
+        myhttp::Config::Lookup("tcp.connect.timeout", 5000, "tcp connect timeout");
+
     static thread_local bool t_hook_enable = false;
 
     #define HOOK_FUN(XX) \
@@ -26,6 +37,7 @@ namespace myhttp
         XX(writev) \
         XX(send) \
         XX(sendto) \
+        XX(sendmsg) \
         XX(close) \
         XX(fcntl) \
         XX(ioctl) \
@@ -44,10 +56,18 @@ namespace myhttp
         #undef XX
     }
 
+    static uint64_t s_connect_timeout = -1;
     struct _HookIniter
     {
         _HookIniter(){
             hook_init();
+            s_connect_timeout = g_tcp_connect_timeout->getValue();
+
+            g_tcp_connect_timeout->addListener([](const int& old_value, const int& new_value){
+                MYHTTP_LOG_INFO(g_logger) << "tcp connect timeout changed from"
+                                          << old_value << " to " << new_value;
+                s_connect_timeout = new_value;
+            });
         }
     };
     // 保证其在正式程序执行之前能够初始化；
@@ -60,10 +80,7 @@ namespace myhttp
         t_hook_enable = flag;
     }
 
-    struct timer_info
-    {
-        int cancelled = 0;
-    };
+   
 
     template<typename OriginFun, typename ... Args>
     static ssize_t do_io(int fd, OriginFun fun, const char* hook_fun_name,
@@ -104,6 +121,8 @@ namespace myhttp
         }
         // 当errno类型为EAGAIN的时候进行相应的操作；
         if(n == -1 && errno == EAGAIN){
+            MYHTTP_LOG_DEBUG(g_logger) << "do_io<" << hook_fun_name << ">";
+            
             myhttp::IOManager* iom = myhttp::IOManager::GetThis();
             myhttp::Timer::ptr timer;
             std::weak_ptr<timer_info> winfo(tinfo); 
@@ -131,6 +150,9 @@ namespace myhttp
                 }
                 return -1;
             }else{ // 事件添加成功的情况
+                
+                MYHTTP_LOG_DEBUG(g_logger) << "do_io<" << hook_fun_name << ">";
+
                 // 换出当前fiber，等待event出现；
                 myhttp::Fiber::YieldToHold();
                 // fiber被唤醒的后执行的任务；
@@ -257,7 +279,7 @@ extern "C"{
         if(timeout_ms != (uint64_t)-1){
             timer = iom->addConditiaonTimer(timeout_ms, [winfo, fd, iom](){
                 auto t = winfo.lock();
-                if(!t || ->cancelled){
+                if(!t || t->cancelled){
                     return;
                 }
                 t->cancelled = ETIMEDOUT;
@@ -295,7 +317,7 @@ extern "C"{
     }
 
     int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen){
-        return connect_f(sockfd, addr, addrlen);
+        return connect_with_timeout(sockfd, addr, addrlen, myhttp::s_connect_timeout); 
     }
 
     int accept(int s, struct sockaddr *addr, socklen_t *addrlen){
@@ -330,7 +352,7 @@ extern "C"{
     }
 
 
-    size_t write(int fd, const void *buf, size_t count){
+    ssize_t write(int fd, const void *buf, size_t count){
         return do_io(fd, write_f, "write", myhttp::IOManager::WRITE, SO_SNDTIMEO, buf, count);
     }
 
@@ -370,10 +392,6 @@ extern "C"{
 
 
     int fcntl(int fd, int cmd, .../*arg*/){
-        if(!myhttp::t_hook_enable){
-            return fcntl_f(fd, cmd, .../*arg*/);
-        }
-
         va_list va;
         va_start(va, cmd);
         switch (cmd)
@@ -484,14 +502,14 @@ extern "C"{
                     const void *optval, socklen_t optlen)
     {
         if(!myhttp::t_hook_enable){
-            return setsockopt(sockfd, level, optname, optval, optlen);
+            return setsockopt_f(sockfd, level, optname, optval, optlen);
         }
         if(level == SOL_SOCKET){
             if(optname == SO_RCVTIMEO || optname == SO_SNDTIMEO){
                 myhttp::FdCtx::ptr ctx = myhttp::FdMgr::GetInstance()->get(sockfd);
                 if(ctx){
                     const timeval* v = (const timeval*) optval;
-                    ctx->setTimeout(optname, tv->tv_sec * 1000 + tv->tv_usec / 1000);
+                    ctx->setTimeout(optname, v->tv_sec * 1000 + v->tv_usec / 1000);
                 }
             }
         }

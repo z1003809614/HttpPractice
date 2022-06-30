@@ -1,6 +1,8 @@
 #ifndef __MYHTTP_THREAD_H__
 #define __MYHTTP_THREAD_H__
 
+#include "noncopyable.h"
+
 #include <thread>
 #include <functional>
 #include <pthread.h>
@@ -12,17 +14,13 @@
 //std::thread, pthread
 namespace myhttp{
 
-    class Semaphore{
+    class Semaphore : Noncopyable{
         public:
             Semaphore(uint32_t count = 0);
             ~Semaphore();
 
             void wait();
             void notify();
-        private:
-            Semaphore(const Semaphore&) = delete;
-            Semaphore(const Semaphore&&) = delete;
-            Semaphore& operator=(const Semaphore&) = delete;
         private:    
             sem_t m_semaphore;
     };
@@ -118,7 +116,7 @@ namespace myhttp{
             bool m_locked;
     };
 
-    class Mutex{
+    class Mutex : Noncopyable{
         public:
             typedef ScopedLockImpl<Mutex> Lock;
             Mutex(){
@@ -138,7 +136,7 @@ namespace myhttp{
             pthread_mutex_t m_mutex;
     };
 
-    class NullMutex{
+    class NullMutex : Noncopyable{
         public:
             typedef ScopedLockImpl<NullMutex> Lock;
             NullMutex(){}
@@ -147,7 +145,7 @@ namespace myhttp{
             void unlock(){}
     };
     
-    class RWMutex{
+    class RWMutex : Noncopyable{
         public:
             typedef ReadScopedLockImpl<RWMutex> ReadLock;
             typedef WriteScopedLockImpl<RWMutex> WriteLock;
@@ -171,7 +169,7 @@ namespace myhttp{
             pthread_rwlock_t m_lock;
     };
 
-    class NullRWMutex{
+    class NullRWMutex : Noncopyable{
         public:
             typedef ReadScopedLockImpl<NullRWMutex> ReadLock;
             typedef WriteScopedLockImpl<NullRWMutex> WriteLock;
@@ -182,7 +180,7 @@ namespace myhttp{
             void unlock(){}
     };
     // 自旋锁；
-    class Spinlock{
+    class Spinlock : Noncopyable{
         public:
             typedef ScopedLockImpl<Spinlock> Lock;
             Spinlock(){
@@ -250,6 +248,5 @@ namespace myhttp{
             Semaphore m_semaphore;
     };
 }
-
 
 #endif
