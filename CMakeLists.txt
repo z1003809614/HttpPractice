@@ -22,6 +22,7 @@ set(LIB_SRC
     myhttp/timer.cpp
     myhttp/hook.cpp
     myhttp/fd_manager.cpp
+    myhttp/address.cpp
     )
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
@@ -83,6 +84,11 @@ add_executable(test_hook tests/test_hook.cpp)
 add_dependencies(test_hook myhttp)
 force_redefine_file_macro_for_sources(test_hook) #__FILE__
 target_link_libraries(test_hook myhttp)
+
+add_executable(test_address tests/test_address.cpp)
+add_dependencies(test_address myhttp)
+force_redefine_file_macro_for_sources(test_address) #__FILE__
+target_link_libraries(test_address myhttp)
 
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
