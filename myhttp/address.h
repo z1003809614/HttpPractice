@@ -107,24 +107,24 @@ namespace myhttp
         public:
             typedef std::shared_ptr<IPAddress> ptr;
 
-            static IPAddress::ptr Create(const char* address, uint32_t port = 0);
+            static IPAddress::ptr Create(const char* address, uint16_t port = 0);
 
             virtual IPAddress::ptr broadcastAddress(uint32_t prefix_len) = 0;
             virtual IPAddress::ptr networdAddress(uint32_t prefix_len) = 0;
             virtual IPAddress::ptr subnetMast(uint32_t prefix_len) = 0;
             
-            virtual uint32_t getPort() const = 0;
-            virtual void setPort(uint32_t v) = 0;
+            virtual uint16_t getPort() const = 0;
+            virtual void setPort(uint16_t v) = 0;
     };
 
     class IPv4Address : public IPAddress{
         public:
             typedef std::shared_ptr<IPv4Address> ptr;
 
-            static IPv4Address::ptr Create(const char* address, uint32_t port = 0);
+            static IPv4Address::ptr Create(const char* address, uint16_t port = 0);
 
             IPv4Address(const sockaddr_in& address);
-            IPv4Address(uint32_t address = INADDR_ANY, uint32_t port = 0);
+            IPv4Address(uint32_t address = INADDR_ANY, uint16_t port = 0);
 
             const sockaddr* getAddr() const override;
             socklen_t getAddrLen() const override;
@@ -134,8 +134,8 @@ namespace myhttp
             IPAddress::ptr networdAddress(uint32_t prefix_len) override;
             IPAddress::ptr subnetMast(uint32_t prefix_len) override;
 
-            uint32_t getPort() const override;
-            void setPort(uint32_t v) override;
+            uint16_t getPort() const override;
+            void setPort(uint16_t v) override;
         
         private:
             sockaddr_in m_addr;
@@ -144,11 +144,11 @@ namespace myhttp
     class IPv6Address : public IPAddress{
         public:
             typedef std::shared_ptr<IPv6Address> ptr;
-            static IPv6Address::ptr Create(const char* address, uint32_t port = 0);
+            static IPv6Address::ptr Create(const char* address, uint16_t port = 0);
 
             IPv6Address();
             IPv6Address(const sockaddr_in6& address);
-            IPv6Address(const uint8_t address[16], uint32_t port);
+            IPv6Address(const uint8_t address[16], uint16_t port);
 
             const sockaddr* getAddr() const override;
             socklen_t getAddrLen() const override;
@@ -158,8 +158,8 @@ namespace myhttp
             IPAddress::ptr networdAddress(uint32_t prefix_len) override;
             IPAddress::ptr subnetMast(uint32_t prefix_len) override;
 
-            uint32_t getPort() const override;
-            void setPort(uint32_t v) override;
+            uint16_t getPort() const override;
+            void setPort(uint16_t v) override;
         
         private:
             sockaddr_in6 m_addr;
@@ -173,6 +173,8 @@ namespace myhttp
 
             const sockaddr* getAddr() const override;
             socklen_t getAddrLen() const override;
+            void setAddrLen(uint32_t v);
+
             std::ostream& insert(std::ostream& os) const override;
         private:
             sockaddr_un m_addr;

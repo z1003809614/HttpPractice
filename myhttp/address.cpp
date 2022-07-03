@@ -9,7 +9,7 @@
 namespace myhttp
 {
     
-    static myhttp::Logger::ptr g_logger = MYHTTP_LOG_ROOT();
+    static myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
 
     template<class T>
     static T CreateMask(uint32_t bits){
@@ -256,7 +256,7 @@ namespace myhttp
         return !(*this == rhs);
     }
 
-    IPAddress::ptr IPAddress::Create(const char* address, uint32_t port){
+    IPAddress::ptr IPAddress::Create(const char* address, uint16_t port){
         addrinfo hints, *results;
         memset(&hints, 0, sizeof(addrinfo));
 
@@ -288,7 +288,7 @@ namespace myhttp
     }
 
 // ================================IPv4Address=====================================
-    IPv4Address::ptr IPv4Address::Create(const char* address, uint32_t port){
+    IPv4Address::ptr IPv4Address::Create(const char* address, uint16_t port){
         IPv4Address::ptr rt(new IPv4Address);
         rt->m_addr.sin_port = byteswapOnLittleEndian(port);
         int result = inet_pton(AF_INET, address, &rt->m_addr.sin_addr);
@@ -304,7 +304,7 @@ namespace myhttp
     IPv4Address::IPv4Address(const sockaddr_in& address){
         m_addr = address;
     }
-    IPv4Address::IPv4Address(uint32_t address, uint32_t port){
+    IPv4Address::IPv4Address(uint32_t address, uint16_t port){
         memset(&m_addr, 0, sizeof(m_addr));
         m_addr.sin_family = AF_INET;
         m_addr.sin_port = byteswapOnLittleEndian(port);
@@ -357,17 +357,17 @@ namespace myhttp
         return IPv4Address::ptr(new IPv4Address(subnet));
     }
 
-    uint32_t IPv4Address::getPort() const {
+    uint16_t IPv4Address::getPort() const {
         return byteswapOnLittleEndian(m_addr.sin_port);
     }
-    void IPv4Address::setPort(uint32_t v) {
+    void IPv4Address::setPort(uint16_t v) {
         m_addr.sin_port = byteswapOnLittleEndian(v); // 视频中是little
     }
 
 
 // ================================IPv6Address=====================================
     
-    IPv6Address::ptr IPv6Address::Create(const char* address, uint32_t port){
+    IPv6Address::ptr IPv6Address::Create(const char* address, uint16_t port){
         // 指向IPv6地址的指针；
         IPv6Address::ptr rt(new IPv6Address);
         // 转换port为小段字节序并存入地址结构中；
@@ -393,7 +393,7 @@ namespace myhttp
         m_addr = address;
     }
     
-    IPv6Address::IPv6Address(const uint8_t address[16], uint32_t port){
+    IPv6Address::IPv6Address(const uint8_t address[16], uint16_t port){
         memset(&m_addr, 0, sizeof(m_addr));
         m_addr.sin6_family = AF_INET6;
         m_addr.sin6_port = byteswapOnLittleEndian(port);
@@ -464,10 +464,10 @@ namespace myhttp
         return IPv6Address::ptr(new IPv6Address(subnet));
     }
 
-    uint32_t IPv6Address::getPort() const {
+    uint16_t IPv6Address::getPort() const {
         return byteswapOnLittleEndian(m_addr.sin6_port);
     }
-    void IPv6Address::setPort(uint32_t v) {
+    void IPv6Address::setPort(uint16_t v) {
         m_addr.sin6_port = byteswapOnLittleEndian(v);
     }
 
@@ -499,9 +499,15 @@ namespace myhttp
     const sockaddr* UnixAddress::getAddr() const {
         return (sockaddr*)&m_addr;
     }
+
     socklen_t UnixAddress::getAddrLen() const {
         return m_length;
     }
+
+    void UnixAddress::setAddrLen(uint32_t v){
+        m_length = v;
+    }
+
     std::ostream& UnixAddress::insert(std::ostream& os) const {
         if(m_length > offsetof(sockaddr_un, sun_path)
                 && m_addr.sun_path[0] =='\0')

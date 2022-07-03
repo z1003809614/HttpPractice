@@ -5,7 +5,7 @@
 
 namespace myhttp{
     
-    myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
+    static myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
 
     pid_t GetFiberId(){
         return myhttp::Fiber::GetFiberId();

@@ -114,6 +114,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named test_socket
+
+# Build rule for target.
+test_socket: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_socket
+.PHONY : test_socket
+
+# fast build rule for target.
+test_socket/fast:
+	$(MAKE) -f CMakeFiles/test_socket.dir/build.make CMakeFiles/test_socket.dir/build
+.PHONY : test_socket/fast
+
+#=============================================================================
 # Target rules for targets named test_hook
 
 # Build rule for target.
@@ -459,6 +472,33 @@ myhttp/scheduler.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/scheduler.cpp.s
 .PHONY : myhttp/scheduler.cpp.s
 
+myhttp/socket.o: myhttp/socket.cpp.o
+
+.PHONY : myhttp/socket.o
+
+# target to build an object file
+myhttp/socket.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/socket.cpp.o
+.PHONY : myhttp/socket.cpp.o
+
+myhttp/socket.i: myhttp/socket.cpp.i
+
+.PHONY : myhttp/socket.i
+
+# target to preprocess a source file
+myhttp/socket.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/socket.cpp.i
+.PHONY : myhttp/socket.cpp.i
+
+myhttp/socket.s: myhttp/socket.cpp.s
+
+.PHONY : myhttp/socket.s
+
+# target to generate assembly for a file
+myhttp/socket.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/socket.cpp.s
+.PHONY : myhttp/socket.cpp.s
+
 myhttp/thread.o: myhttp/thread.cpp.o
 
 .PHONY : myhttp/thread.o
@@ -729,6 +769,33 @@ tests/test_scheduler.cpp.s:
 	$(MAKE) -f CMakeFiles/test_scheduler.dir/build.make CMakeFiles/test_scheduler.dir/tests/test_scheduler.cpp.s
 .PHONY : tests/test_scheduler.cpp.s
 
+tests/test_socket.o: tests/test_socket.cpp.o
+
+.PHONY : tests/test_socket.o
+
+# target to build an object file
+tests/test_socket.cpp.o:
+	$(MAKE) -f CMakeFiles/test_socket.dir/build.make CMakeFiles/test_socket.dir/tests/test_socket.cpp.o
+.PHONY : tests/test_socket.cpp.o
+
+tests/test_socket.i: tests/test_socket.cpp.i
+
+.PHONY : tests/test_socket.i
+
+# target to preprocess a source file
+tests/test_socket.cpp.i:
+	$(MAKE) -f CMakeFiles/test_socket.dir/build.make CMakeFiles/test_socket.dir/tests/test_socket.cpp.i
+.PHONY : tests/test_socket.cpp.i
+
+tests/test_socket.s: tests/test_socket.cpp.s
+
+.PHONY : tests/test_socket.s
+
+# target to generate assembly for a file
+tests/test_socket.cpp.s:
+	$(MAKE) -f CMakeFiles/test_socket.dir/build.make CMakeFiles/test_socket.dir/tests/test_socket.cpp.s
+.PHONY : tests/test_socket.cpp.s
+
 tests/test_thread.o: tests/test_thread.cpp.o
 
 .PHONY : tests/test_thread.o
@@ -790,6 +857,7 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
+	@echo "... test_socket"
 	@echo "... test_hook"
 	@echo "... test_iomanager"
 	@echo "... test_scheduler"
@@ -825,6 +893,9 @@ help:
 	@echo "... myhttp/scheduler.o"
 	@echo "... myhttp/scheduler.i"
 	@echo "... myhttp/scheduler.s"
+	@echo "... myhttp/socket.o"
+	@echo "... myhttp/socket.i"
+	@echo "... myhttp/socket.s"
 	@echo "... myhttp/thread.o"
 	@echo "... myhttp/thread.i"
 	@echo "... myhttp/thread.s"
@@ -855,6 +926,9 @@ help:
 	@echo "... tests/test_scheduler.o"
 	@echo "... tests/test_scheduler.i"
 	@echo "... tests/test_scheduler.s"
+	@echo "... tests/test_socket.o"
+	@echo "... tests/test_socket.i"
+	@echo "... tests/test_socket.s"
 	@echo "... tests/test_thread.o"
 	@echo "... tests/test_thread.i"
 	@echo "... tests/test_thread.s"
