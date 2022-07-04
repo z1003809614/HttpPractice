@@ -6,7 +6,8 @@
 #include "util.h"
 #include "log.h"
 
-
+// 双感叹号目的是将其转换为bool类型，就是取两次非的情况
+// __builtin_expect(var, target) 表示var是target的概率很大，能够帮助编译器进行代码优化；
 #if defined __GNUC__ || defined __llvm__
 #   define MYHTTP_LICKLY(x)     __builtin_expect(!!(x), 1)
 #   define MYHTTP_UNLICKLY(x)   __builtin_expect(!!(x), 0)
