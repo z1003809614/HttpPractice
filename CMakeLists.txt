@@ -25,6 +25,10 @@ set(LIB_SRC
     myhttp/address.cpp
     myhttp/socket.cpp
     myhttp/bytearray.cpp
+    myhttp/http/http.cpp
+    myhttp/http/http11_parser.rl.cpp
+    myhttp/http/httpclient_parser.rl.cpp
+    myhttp/http/http_parser.cpp
     )
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
@@ -101,6 +105,11 @@ add_executable(test_bytearray tests/test_bytearray.cpp)
 add_dependencies(test_bytearray myhttp)
 force_redefine_file_macro_for_sources(test_bytearray) #__FILE__
 target_link_libraries(test_bytearray myhttp)
+
+add_executable(test_http tests/test_http.cpp)
+add_dependencies(test_http myhttp)
+force_redefine_file_macro_for_sources(test_http) #__FILE__
+target_link_libraries(test_http myhttp)
 
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

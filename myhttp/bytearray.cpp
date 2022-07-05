@@ -169,7 +169,9 @@ namespace myhttp
     }
 
     void ByteArray::writeString16(const std::string& value){
+        // 先写字符串长度；
         writeFuint16(value.size());
+        // 再写字符串内容；
         write(value.c_str(), value.size());
     }
     void ByteArray::writeString32(const std::string& value){
