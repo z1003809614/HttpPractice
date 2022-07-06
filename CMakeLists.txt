@@ -29,6 +29,7 @@ set(LIB_SRC
     myhttp/http/http11_parser.rl.cpp
     myhttp/http/httpclient_parser.rl.cpp
     myhttp/http/http_parser.cpp
+    myhttp/tcp_server.cpp
     )
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
@@ -110,6 +111,21 @@ add_executable(test_http tests/test_http.cpp)
 add_dependencies(test_http myhttp)
 force_redefine_file_macro_for_sources(test_http) #__FILE__
 target_link_libraries(test_http myhttp)
+
+add_executable(test_http_parser tests/test_http_parser.cpp)
+add_dependencies(test_http_parser myhttp)
+force_redefine_file_macro_for_sources(test_http_parser) #__FILE__
+target_link_libraries(test_http_parser myhttp)
+
+add_executable(test_tcpserver tests/test_tcpserver.cpp)
+add_dependencies(test_tcpserver myhttp)
+force_redefine_file_macro_for_sources(test_tcpserver) #__FILE__
+target_link_libraries(test_tcpserver myhttp)
+
+add_executable(echo_server examples/echo_server.cpp)
+add_dependencies(echo_server myhttp)
+force_redefine_file_macro_for_sources(echo_server) #__FILE__
+target_link_libraries(echo_server myhttp)
 
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

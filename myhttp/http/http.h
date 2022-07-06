@@ -241,20 +241,20 @@ namespace myhttp
 
                 template<class T>
                 bool checkGetParamAs(const std::string& key, T& val, const T& def = T()){
-                    return checkgetAs(m_headers, key, val, def);
+                    return checkgetAs(m_params, key, val, def);
                 }
                 template<class T>
                 T getParamAs(const std::string& key, const T& def = T()){
-                    return getAs(m_headers, key, def);
+                    return getAs(m_params, key, def);
                 }
 
                 template<class T>
                 bool checkGetCookieAs(const std::string& key, T& val, const T& def = T()){
-                    return checkgetAs(m_headers, key, val, def);
+                    return checkgetAs(m_cookies, key, val, def);
                 }
                 template<class T>
                 T getCookieAs(const std::string& key, const T& def = T()){
-                    return getAs(m_headers, key, def);
+                    return getAs(m_cookies, key, def);
                 }
 
                 std::ostream& dump(std::ostream& os) const;
@@ -307,24 +307,6 @@ namespace myhttp
                 }
                 template<class T>
                 T getHeaderAs(const std::string& key, const T& def = T()){
-                    return getAs(m_headers, key, def);
-                }
-
-                template<class T>
-                bool checkGetParamAs(const std::string& key, T& val, const T& def = T()){
-                    return checkgetAs(m_headers, key, val, def);
-                }
-                template<class T>
-                T getParamAs(const std::string& key, const T& def = T()){
-                    return getAs(m_headers, key, def);
-                }
-
-                template<class T>
-                bool checkGetCookieAs(const std::string& key, T& val, const T& def = T()){
-                    return checkgetAs(m_headers, key, val, def);
-                }
-                template<class T>
-                T getCookieAs(const std::string& key, const T& def = T()){
                     return getAs(m_headers, key, def);
                 }
 

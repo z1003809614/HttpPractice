@@ -156,7 +156,7 @@ namespace myhttp
                 MutexType::Lock lock(m_mutex);
                 // 迭代当前的调度器已经存储的协程；
 
-                MYHTTP_LOG_DEBUG(g_logger) << "m_fibers.size: " << m_fibers.size();
+                // MYHTTP_LOG_DEBUG(g_logger) << "m_fibers.size: " << m_fibers.size();
 
                 auto it = m_fibers.begin();
                 while(it != m_fibers.end()){

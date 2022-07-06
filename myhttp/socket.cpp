@@ -424,4 +424,10 @@ namespace myhttp
                 << errno << " errstr=" << strerror(errno);
         }
     }
+
+    // 重载<<运算符，用于配合log系统输出信息；
+    std::ostream& operator<<(std::ostream& os, const Socket& sock){
+        sock.dump(os);
+        return os;
+    }
 } // namespace myhttp

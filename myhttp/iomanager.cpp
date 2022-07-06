@@ -335,7 +335,9 @@ namespace myhttp
             // 处理timer
             std::vector<std::function<void()> > cbs;
             listExpiredCb(cbs);
-            MYHTTP_LOG_INFO(g_logger) << " cbs size:" << cbs.size();
+            
+            // MYHTTP_LOG_INFO(g_logger) << " cbs size:" << cbs.size();
+            
             if(!cbs.empty()){
                 schedule(cbs.begin(), cbs.end());
                 cbs.clear();
