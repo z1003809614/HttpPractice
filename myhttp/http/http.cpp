@@ -6,7 +6,7 @@ namespace myhttp
     {
         HttpMethod StringToHttpMethod(const std::string& m){
             #define XX(num, name, string) \
-                if(strcmp(#string, m.c_str()) == 0){ \
+                if(strncmp(#string, m.c_str(), strlen(#string)) == 0){ \
                     return HttpMethod::name; \
                 }
                 HTTP_METHOD_MAP(XX);
@@ -15,7 +15,7 @@ namespace myhttp
         }
         HttpMethod CharsToHttpMethod(const char* m){
             #define XX(num, name, string) \
-                if(strcmp(#string, m) == 0){ \
+                if(strncmp(#string, m, strlen(#string)) == 0){ \
                     return HttpMethod::name; \
                 }
                 HTTP_METHOD_MAP(XX);
@@ -128,7 +128,7 @@ namespace myhttp
             return true;
         }
 
-        std::ostream& HttpRequest::dump(std::ostream& os){
+        std::ostream& HttpRequest::dump(std::ostream& os) const{
             // GET /uri HTTP/1.1
             // Host: www.sylar.top
 
@@ -162,6 +162,12 @@ namespace myhttp
             return os;
         }
 
+        std::string HttpRequest::toString() const{
+            std::stringstream ss;
+            dump(ss);
+            return ss.str();
+        }
+
 
 //====================================Response================================================
 
@@ -180,7 +186,7 @@ namespace myhttp
         void HttpResponse::delHeader(const std::string& key){
             m_headers.erase(key);
         }
-        std::ostream& HttpResponse::dump(std::ostream& os){
+        std::ostream& HttpResponse::dump(std::ostream& os) const{
             os << "HTTP/"
                << ((uint32_t)(m_version >> 4))
                << "."
@@ -206,6 +212,12 @@ namespace myhttp
                 os << "\r\n";
             }
             return os;
+        }
+
+        std::string HttpResponse::toString() const{
+            std::stringstream ss;
+            dump(ss);
+            return ss.str();
         }
     } // namespace http
     

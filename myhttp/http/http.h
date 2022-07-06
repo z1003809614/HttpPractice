@@ -257,7 +257,8 @@ namespace myhttp
                     return getAs(m_headers, key, def);
                 }
 
-                std::ostream& dump(std::ostream& os);
+                std::ostream& dump(std::ostream& os) const;
+                std::string toString() const;
 
             private:
                 HttpMethod m_method;
@@ -304,13 +305,31 @@ namespace myhttp
                 bool checkGetHeaderAs(const std::string& key, T& val, const T& def = T()){
                     return checkgetAs(m_headers, key, val, def);
                 }
-
                 template<class T>
-                bool checkGetHeaderAs(const std::string& key, const T& def = T()){
+                T getHeaderAs(const std::string& key, const T& def = T()){
                     return getAs(m_headers, key, def);
                 }
 
-                std::ostream& dump(std::ostream& os);
+                template<class T>
+                bool checkGetParamAs(const std::string& key, T& val, const T& def = T()){
+                    return checkgetAs(m_headers, key, val, def);
+                }
+                template<class T>
+                T getParamAs(const std::string& key, const T& def = T()){
+                    return getAs(m_headers, key, def);
+                }
+
+                template<class T>
+                bool checkGetCookieAs(const std::string& key, T& val, const T& def = T()){
+                    return checkgetAs(m_headers, key, val, def);
+                }
+                template<class T>
+                T getCookieAs(const std::string& key, const T& def = T()){
+                    return getAs(m_headers, key, def);
+                }
+
+                std::ostream& dump(std::ostream& os) const;
+                std::string toString() const;
 
             private:
                 HttpStatus m_status;
