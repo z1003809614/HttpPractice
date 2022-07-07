@@ -24,9 +24,12 @@ void EchoServer::handleClient(myhttp::Socket::ptr client){
     myhttp::ByteArray::ptr ba(new myhttp::ByteArray);
     while(true){
         ba->clear();
+        // 这里的iovec只是用来获取bytearray中可用的地址信息；
+        // 其实际的数据的内存开辟是在bytearray中完成的；
         std::vector<iovec> iovs;
+        // 利用iov结构体，获得1024字节的数据；
         ba->getWriteBuffers(iovs, 1024);
-
+        // 调用recv函数，读取数据到buffer中；
         int rt = client->recv(&iovs[0], iovs.size());
         if(rt == 0){
             MYHTTP_LOG_INFO(g_logger) << " client close: " << *client;
@@ -37,7 +40,7 @@ void EchoServer::handleClient(myhttp::Socket::ptr client){
                 << " errno=" << errno << " errstr=" << strerror(errno);
             break;
         }
-        
+        // 这里这样使用是为了读取数据，但是写法很怪异，根本原因是bytearray的封装有问题；
         ba->setPosition(ba->getPosition() + rt);
         ba->setPosition(0);
         if(m_type == 1){ // text
