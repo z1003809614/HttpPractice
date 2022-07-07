@@ -726,6 +726,33 @@ myhttp/socket.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/socket.cpp.s
 .PHONY : myhttp/socket.cpp.s
 
+myhttp/stream.o: myhttp/stream.cpp.o
+
+.PHONY : myhttp/stream.o
+
+# target to build an object file
+myhttp/stream.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/stream.cpp.o
+.PHONY : myhttp/stream.cpp.o
+
+myhttp/stream.i: myhttp/stream.cpp.i
+
+.PHONY : myhttp/stream.i
+
+# target to preprocess a source file
+myhttp/stream.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/stream.cpp.i
+.PHONY : myhttp/stream.cpp.i
+
+myhttp/stream.s: myhttp/stream.cpp.s
+
+.PHONY : myhttp/stream.s
+
+# target to generate assembly for a file
+myhttp/stream.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/stream.cpp.s
+.PHONY : myhttp/stream.cpp.s
+
 myhttp/tcp_server.o: myhttp/tcp_server.cpp.o
 
 .PHONY : myhttp/tcp_server.o
@@ -1281,6 +1308,9 @@ help:
 	@echo "... myhttp/socket.o"
 	@echo "... myhttp/socket.i"
 	@echo "... myhttp/socket.s"
+	@echo "... myhttp/stream.o"
+	@echo "... myhttp/stream.i"
+	@echo "... myhttp/stream.s"
 	@echo "... myhttp/tcp_server.o"
 	@echo "... myhttp/tcp_server.i"
 	@echo "... myhttp/tcp_server.s"

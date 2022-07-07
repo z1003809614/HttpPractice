@@ -30,6 +30,8 @@ set(LIB_SRC
     myhttp/http/httpclient_parser.rl.cpp
     myhttp/http/http_parser.cpp
     myhttp/tcp_server.cpp
+    myhttp/stream.cpp
+    myhttp/socket_stream.cpp
     )
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
