@@ -213,6 +213,9 @@ namespace myhttp
                 void setParams(const MapType& v) { m_params = v; }
                 void setCookies(const MapType& v) { m_cookies = v; }
 
+                bool isClose() const { return m_close; }
+                void setClose(bool v) { m_close = v;}
+
                 // 查询map中是否存在key的元素；
                 std::string getHeader(const std::string& key, const std::string& def = "") const;
                 std::string getParam(const std::string& key, const std::string& def = "") const;
@@ -324,7 +327,8 @@ namespace myhttp
 
         };
 
-
+        std::ostream& operator<<(std::ostream& os, const HttpRequest& req);
+        std::ostream& operator<<(std::ostream& os, const HttpResponse& rsp);
    } // namespace http
    
 } // namespace myhttp

@@ -32,6 +32,8 @@ set(LIB_SRC
     myhttp/tcp_server.cpp
     myhttp/stream.cpp
     myhttp/socket_stream.cpp
+    myhttp/http/http_session.cpp
+    myhttp/http/http_server.cpp
     )
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
@@ -128,6 +130,12 @@ add_executable(echo_server examples/echo_server.cpp)
 add_dependencies(echo_server myhttp)
 force_redefine_file_macro_for_sources(echo_server) #__FILE__
 target_link_libraries(echo_server myhttp)
+
+
+add_executable(test_http_server tests/test_http_server.cpp)
+add_dependencies(test_http_server myhttp)
+force_redefine_file_macro_for_sources(test_http_server) #__FILE__
+target_link_libraries(test_http_server myhttp)
 
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

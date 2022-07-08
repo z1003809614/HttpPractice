@@ -20,24 +20,37 @@ namespace myhttp
         static uint64_t s_http_request_buffer_size = 0;
         static uint64_t s_http_request_max_body_size = 0;
         
-        struct _RequestSizeIniter{
-            _RequestSizeIniter(){
-                s_http_request_buffer_size = g_http_request_buffer_size->getValue();
-                s_http_request_max_body_size = g_http_request_max_body_size->getValue();
-                // 添加配置信息修改事件
-                g_http_request_buffer_size->addListener(
-                    [](const uint64_t& ov, const uint64_t& nv){
-                        s_http_request_buffer_size = nv;
-                    });
+        uint64_t HttpRequestParser::GetHttpRequestBufferSize(){
+            return s_http_request_buffer_size;
+        }
+        uint64_t HttpRequestParser::GetHttpRequestMaxBodySize(){
+            return s_http_request_max_body_size;
+        }
+
+        // 使用匿名namespace,来执行静态变量初始化，防止污染全局命名空间；
+        // 不同命名空间的变量，函数可以互相访问，主要是访问的方式稍有区别，其本质就是解决命名冲突的；
+        namespace 
+        {
+            struct _RequestSizeIniter{
+                _RequestSizeIniter(){
+                    s_http_request_buffer_size = g_http_request_buffer_size->getValue();
+                    s_http_request_max_body_size = g_http_request_max_body_size->getValue();
+                    // 添加配置信息修改事件
+                    g_http_request_buffer_size->addListener(
+                        [](const uint64_t& ov, const uint64_t& nv){
+                            s_http_request_buffer_size = nv;
+                        });
+            
+                    g_http_request_buffer_size->addListener(
+                        [](const uint64_t& ov, const uint64_t& nv){
+                            s_http_request_max_body_size = nv;
+                        });
+                }
+            };
+            // 使用静态变量来达到main执行前就初始化的效果
+            static _RequestSizeIniter _init;
+        } // namespace 
         
-                g_http_request_buffer_size->addListener(
-                    [](const uint64_t& ov, const uint64_t& nv){
-                        s_http_request_max_body_size = nv;
-                    });
-            }
-        };
-        // 使用静态变量来达到main执行前就初始化的效果
-        static _RequestSizeIniter _init;
 
         // ===============================解析对应属性成功后的回调函数=====================================
         // 这里的data其实是自己定义的HttpRequestParser对象的指针

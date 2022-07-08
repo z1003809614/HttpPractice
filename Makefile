@@ -218,6 +218,19 @@ test_fiber/fast:
 .PHONY : test_fiber/fast
 
 #=============================================================================
+# Target rules for targets named test_http_server
+
+# Build rule for target.
+test_http_server: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_http_server
+.PHONY : test_http_server
+
+# fast build rule for target.
+test_http_server/fast:
+	$(MAKE) -f CMakeFiles/test_http_server.dir/build.make CMakeFiles/test_http_server.dir/build
+.PHONY : test_http_server/fast
+
+#=============================================================================
 # Target rules for targets named test_address
 
 # Build rule for target.
@@ -591,6 +604,60 @@ myhttp/http/http_parser.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/http_parser.cpp.s
 .PHONY : myhttp/http/http_parser.cpp.s
 
+myhttp/http/http_server.o: myhttp/http/http_server.cpp.o
+
+.PHONY : myhttp/http/http_server.o
+
+# target to build an object file
+myhttp/http/http_server.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/http_server.cpp.o
+.PHONY : myhttp/http/http_server.cpp.o
+
+myhttp/http/http_server.i: myhttp/http/http_server.cpp.i
+
+.PHONY : myhttp/http/http_server.i
+
+# target to preprocess a source file
+myhttp/http/http_server.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/http_server.cpp.i
+.PHONY : myhttp/http/http_server.cpp.i
+
+myhttp/http/http_server.s: myhttp/http/http_server.cpp.s
+
+.PHONY : myhttp/http/http_server.s
+
+# target to generate assembly for a file
+myhttp/http/http_server.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/http_server.cpp.s
+.PHONY : myhttp/http/http_server.cpp.s
+
+myhttp/http/http_session.o: myhttp/http/http_session.cpp.o
+
+.PHONY : myhttp/http/http_session.o
+
+# target to build an object file
+myhttp/http/http_session.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/http_session.cpp.o
+.PHONY : myhttp/http/http_session.cpp.o
+
+myhttp/http/http_session.i: myhttp/http/http_session.cpp.i
+
+.PHONY : myhttp/http/http_session.i
+
+# target to preprocess a source file
+myhttp/http/http_session.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/http_session.cpp.i
+.PHONY : myhttp/http/http_session.cpp.i
+
+myhttp/http/http_session.s: myhttp/http/http_session.cpp.s
+
+.PHONY : myhttp/http/http_session.s
+
+# target to generate assembly for a file
+myhttp/http/http_session.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/http_session.cpp.s
+.PHONY : myhttp/http/http_session.cpp.s
+
 myhttp/http/httpclient_parser.rl.o: myhttp/http/httpclient_parser.rl.cpp.o
 
 .PHONY : myhttp/http/httpclient_parser.rl.o
@@ -725,6 +792,33 @@ myhttp/socket.s: myhttp/socket.cpp.s
 myhttp/socket.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/socket.cpp.s
 .PHONY : myhttp/socket.cpp.s
+
+myhttp/socket_stream.o: myhttp/socket_stream.cpp.o
+
+.PHONY : myhttp/socket_stream.o
+
+# target to build an object file
+myhttp/socket_stream.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/socket_stream.cpp.o
+.PHONY : myhttp/socket_stream.cpp.o
+
+myhttp/socket_stream.i: myhttp/socket_stream.cpp.i
+
+.PHONY : myhttp/socket_stream.i
+
+# target to preprocess a source file
+myhttp/socket_stream.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/socket_stream.cpp.i
+.PHONY : myhttp/socket_stream.cpp.i
+
+myhttp/socket_stream.s: myhttp/socket_stream.cpp.s
+
+.PHONY : myhttp/socket_stream.s
+
+# target to generate assembly for a file
+myhttp/socket_stream.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/socket_stream.cpp.s
+.PHONY : myhttp/socket_stream.cpp.s
 
 myhttp/stream.o: myhttp/stream.cpp.o
 
@@ -1077,6 +1171,33 @@ tests/test_http_parser.cpp.s:
 	$(MAKE) -f CMakeFiles/test_http_parser.dir/build.make CMakeFiles/test_http_parser.dir/tests/test_http_parser.cpp.s
 .PHONY : tests/test_http_parser.cpp.s
 
+tests/test_http_server.o: tests/test_http_server.cpp.o
+
+.PHONY : tests/test_http_server.o
+
+# target to build an object file
+tests/test_http_server.cpp.o:
+	$(MAKE) -f CMakeFiles/test_http_server.dir/build.make CMakeFiles/test_http_server.dir/tests/test_http_server.cpp.o
+.PHONY : tests/test_http_server.cpp.o
+
+tests/test_http_server.i: tests/test_http_server.cpp.i
+
+.PHONY : tests/test_http_server.i
+
+# target to preprocess a source file
+tests/test_http_server.cpp.i:
+	$(MAKE) -f CMakeFiles/test_http_server.dir/build.make CMakeFiles/test_http_server.dir/tests/test_http_server.cpp.i
+.PHONY : tests/test_http_server.cpp.i
+
+tests/test_http_server.s: tests/test_http_server.cpp.s
+
+.PHONY : tests/test_http_server.s
+
+# target to generate assembly for a file
+tests/test_http_server.cpp.s:
+	$(MAKE) -f CMakeFiles/test_http_server.dir/build.make CMakeFiles/test_http_server.dir/tests/test_http_server.cpp.s
+.PHONY : tests/test_http_server.cpp.s
+
 tests/test_iomanager.o: tests/test_iomanager.cpp.o
 
 .PHONY : tests/test_iomanager.o
@@ -1255,6 +1376,7 @@ help:
 	@echo "... test_config"
 	@echo "... test_bytearray"
 	@echo "... test_fiber"
+	@echo "... test_http_server"
 	@echo "... test_address"
 	@echo "... test_scheduler"
 	@echo "... test_utils"
@@ -1293,6 +1415,12 @@ help:
 	@echo "... myhttp/http/http_parser.o"
 	@echo "... myhttp/http/http_parser.i"
 	@echo "... myhttp/http/http_parser.s"
+	@echo "... myhttp/http/http_server.o"
+	@echo "... myhttp/http/http_server.i"
+	@echo "... myhttp/http/http_server.s"
+	@echo "... myhttp/http/http_session.o"
+	@echo "... myhttp/http/http_session.i"
+	@echo "... myhttp/http/http_session.s"
 	@echo "... myhttp/http/httpclient_parser.rl.o"
 	@echo "... myhttp/http/httpclient_parser.rl.i"
 	@echo "... myhttp/http/httpclient_parser.rl.s"
@@ -1308,6 +1436,9 @@ help:
 	@echo "... myhttp/socket.o"
 	@echo "... myhttp/socket.i"
 	@echo "... myhttp/socket.s"
+	@echo "... myhttp/socket_stream.o"
+	@echo "... myhttp/socket_stream.i"
+	@echo "... myhttp/socket_stream.s"
 	@echo "... myhttp/stream.o"
 	@echo "... myhttp/stream.i"
 	@echo "... myhttp/stream.s"
@@ -1347,6 +1478,9 @@ help:
 	@echo "... tests/test_http_parser.o"
 	@echo "... tests/test_http_parser.i"
 	@echo "... tests/test_http_parser.s"
+	@echo "... tests/test_http_server.o"
+	@echo "... tests/test_http_server.i"
+	@echo "... tests/test_http_server.s"
 	@echo "... tests/test_iomanager.o"
 	@echo "... tests/test_iomanager.i"
 	@echo "... tests/test_iomanager.s"
