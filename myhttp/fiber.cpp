@@ -154,17 +154,17 @@ namespace myhttp{
     void Fiber::MainFunc(){
         Fiber::ptr cur = GetThis();
         MYHTTP_ASSERT(cur);
-        // try{
+        try{
             cur->m_cb();
             cur->m_cb = nullptr;
             cur->m_state = TERM;
-        // }catch(std::exception& ex){
-        //     cur->m_state = EXCEPT;
-        //     MYHTTP_LOG_ERROR(g_logger) << "Fiber Except:" << ex.what(); 
-        // }catch(...){
-        //     cur->m_state = EXCEPT;
-        //     MYHTTP_LOG_ERROR(g_logger) << "Fiber Except:";
-        // }
+        }catch(std::exception& ex){
+            cur->m_state = EXCEPT;
+            MYHTTP_LOG_ERROR(g_logger) << "Fiber Except:" << ex.what(); 
+        }catch(...){
+            cur->m_state = EXCEPT;
+            MYHTTP_LOG_ERROR(g_logger) << "Fiber Except:";
+        }
 
         // 本来uc_link就是执行调用协程的上一个协程的，可以用该变量完成协程的自动跳转；
         // 但是这里，使用了自己控制跳转的策略，为了能够正确析构，必须释放智能指针；

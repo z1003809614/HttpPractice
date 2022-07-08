@@ -278,6 +278,11 @@ int http_parser_init(http_parser *parser) {
 size_t http_parser_execute(http_parser *parser, const char *buffer, size_t len, size_t off)  
 {
   if(len == 0) return 0;
+  // 为了解决报文分段存储，而不能解析的问题；
+  parser->nread = 0;
+  parser->mark = 0;
+  parser->field_len = 0; // 该成len可以输出，但也有问题；
+  parser->field_start = 0;
 
   const char *p, *pe;
   int cs = parser->cs;

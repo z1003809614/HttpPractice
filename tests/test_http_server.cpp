@@ -15,7 +15,7 @@ void run(){
 }
 
 int main(){
-    myhttp::IOManager iom(2);
+    myhttp::IOManager iom(1);
     iom.schedule(run);
     return 0;
 }
