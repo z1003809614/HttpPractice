@@ -11,6 +11,21 @@ void run(){
     while(!server->bind(addr)){
         sleep(2);
     }
+    auto sd = server->getServletDispath();
+    sd->addServlet("/myhttp/xx", [](myhttp::http::HttpRequest::ptr req
+                                ,myhttp::http::HttpResponse::ptr rsp
+                                ,myhttp::http::HttpSession::ptr session)->int32_t{
+        rsp->setBody(req->toString());
+        return 0;
+    });
+
+    sd->addGlobServlet("/myhttp/*", [](myhttp::http::HttpRequest::ptr req
+                                ,myhttp::http::HttpResponse::ptr rsp
+                                ,myhttp::http::HttpSession::ptr session)->int32_t{
+        rsp->setBody("Glob:\r\n" + req->toString());
+        return 0;
+    });
+    
     server->start();
 }
 

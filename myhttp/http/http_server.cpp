@@ -14,6 +14,7 @@ namespace myhttp
             :TcpServer(worker, accept_worker),
             m_isKeepalive(keepalive)
         {
+            m_dispatch.reset(new ServletDispatch);
         }
 
         void HttpServer::handleClient(Socket::ptr client){
@@ -28,13 +29,17 @@ namespace myhttp
                     break;
                 }
                 HttpResponse::ptr rsp(new HttpResponse(req->getVersion(), req->isClose() || !m_isKeepalive));
-                rsp->setBody("hello myhttp");
+                
+                // 使用servlet来处理request并设置好response;
+                m_dispatch->handle(req, rsp, session);
 
-                MYHTTP_LOG_INFO(g_logger) << "request: " << std::endl
-                    << *req;
+                // rsp->setBody("hello myhttp");
 
-                MYHTTP_LOG_INFO(g_logger) << "response: " << std::endl
-                    << *rsp;
+                // MYHTTP_LOG_INFO(g_logger) << "request: " << std::endl
+                //     << *req;
+
+                // MYHTTP_LOG_INFO(g_logger) << "response: " << std::endl
+                //     << *rsp;
 
                 session->sendResponse(rsp);
             }while(m_isKeepalive);

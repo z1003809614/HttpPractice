@@ -685,6 +685,33 @@ myhttp/http/httpclient_parser.rl.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/httpclient_parser.rl.cpp.s
 .PHONY : myhttp/http/httpclient_parser.rl.cpp.s
 
+myhttp/http/servlet.o: myhttp/http/servlet.cpp.o
+
+.PHONY : myhttp/http/servlet.o
+
+# target to build an object file
+myhttp/http/servlet.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/servlet.cpp.o
+.PHONY : myhttp/http/servlet.cpp.o
+
+myhttp/http/servlet.i: myhttp/http/servlet.cpp.i
+
+.PHONY : myhttp/http/servlet.i
+
+# target to preprocess a source file
+myhttp/http/servlet.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/servlet.cpp.i
+.PHONY : myhttp/http/servlet.cpp.i
+
+myhttp/http/servlet.s: myhttp/http/servlet.cpp.s
+
+.PHONY : myhttp/http/servlet.s
+
+# target to generate assembly for a file
+myhttp/http/servlet.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/servlet.cpp.s
+.PHONY : myhttp/http/servlet.cpp.s
+
 myhttp/iomanager.o: myhttp/iomanager.cpp.o
 
 .PHONY : myhttp/iomanager.o
@@ -1424,6 +1451,9 @@ help:
 	@echo "... myhttp/http/httpclient_parser.rl.o"
 	@echo "... myhttp/http/httpclient_parser.rl.i"
 	@echo "... myhttp/http/httpclient_parser.rl.s"
+	@echo "... myhttp/http/servlet.o"
+	@echo "... myhttp/http/servlet.i"
+	@echo "... myhttp/http/servlet.s"
 	@echo "... myhttp/iomanager.o"
 	@echo "... myhttp/iomanager.i"
 	@echo "... myhttp/iomanager.s"

@@ -26,8 +26,8 @@ namespace myhttp
              *      当出现无法进行完整解析的情况的时候，http_parser.cpp中on_request_http_field()
              *      会设置m_error = 1002, 触发hasError()函数，return nullptr;
              */
-            // uint64_t buff_size = HttpRequestParser::GetHttpRequestBufferSize();
-            uint64_t buff_size = 100; 
+            uint64_t buff_size = HttpRequestParser::GetHttpRequestBufferSize();
+            // uint64_t buff_size = 100; 
             
             std::shared_ptr<char> buffer(new char[buff_size], [](char* ptr){
                 delete[] ptr;

@@ -34,6 +34,7 @@ set(LIB_SRC
     myhttp/socket_stream.cpp
     myhttp/http/http_session.cpp
     myhttp/http/http_server.cpp
+    myhttp/http/servlet.cpp
     )
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
