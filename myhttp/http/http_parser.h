@@ -30,6 +30,7 @@ namespace myhttp
                 // 获取报文中body的长度；
                 uint64_t getContentLength();
             
+                const http_parser& getParser() const { return m_parser; }
             public:
                 static uint64_t GetHttpRequestBufferSize();
                 static uint64_t GetHttpRequestMaxBodySize();
@@ -47,7 +48,7 @@ namespace myhttp
                 typedef std::shared_ptr<HttpResponseParser> ptr;
                 HttpResponseParser();
         
-                size_t execute(char* data, size_t len);
+                size_t execute(char* data, size_t len, bool chunck);
                 int isFinished();
                 int hasError(); 
 
@@ -55,6 +56,12 @@ namespace myhttp
                 void setError(int v) { m_error = v; }
 
                 uint64_t getContentLength();
+
+                const httpclient_parser& getParser() const { return m_parser; }
+            public:
+                static uint64_t GetHttpResponseBufferSize();
+                static uint64_t GetHttpResponseMaxBodySize();
+             
             private:
                 httpclient_parser m_parser;
                 HttpResponse::ptr m_data;

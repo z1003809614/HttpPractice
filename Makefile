@@ -114,6 +114,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named test_http_connection
+
+# Build rule for target.
+test_http_connection: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_http_connection
+.PHONY : test_http_connection
+
+# fast build rule for target.
+test_http_connection/fast:
+	$(MAKE) -f CMakeFiles/test_http_connection.dir/build.make CMakeFiles/test_http_connection.dir/build
+.PHONY : test_http_connection/fast
+
+#=============================================================================
 # Target rules for targets named echo_server
 
 # Build rule for target.
@@ -576,6 +589,33 @@ myhttp/http/http11_parser.rl.s: myhttp/http/http11_parser.rl.cpp.s
 myhttp/http/http11_parser.rl.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/http11_parser.rl.cpp.s
 .PHONY : myhttp/http/http11_parser.rl.cpp.s
+
+myhttp/http/http_connection.o: myhttp/http/http_connection.cpp.o
+
+.PHONY : myhttp/http/http_connection.o
+
+# target to build an object file
+myhttp/http/http_connection.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/http_connection.cpp.o
+.PHONY : myhttp/http/http_connection.cpp.o
+
+myhttp/http/http_connection.i: myhttp/http/http_connection.cpp.i
+
+.PHONY : myhttp/http/http_connection.i
+
+# target to preprocess a source file
+myhttp/http/http_connection.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/http_connection.cpp.i
+.PHONY : myhttp/http/http_connection.cpp.i
+
+myhttp/http/http_connection.s: myhttp/http/http_connection.cpp.s
+
+.PHONY : myhttp/http/http_connection.s
+
+# target to generate assembly for a file
+myhttp/http/http_connection.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/http/http_connection.cpp.s
+.PHONY : myhttp/http/http_connection.cpp.s
 
 myhttp/http/http_parser.o: myhttp/http/http_parser.cpp.o
 
@@ -1171,6 +1211,33 @@ tests/test_http.cpp.s:
 	$(MAKE) -f CMakeFiles/test_http.dir/build.make CMakeFiles/test_http.dir/tests/test_http.cpp.s
 .PHONY : tests/test_http.cpp.s
 
+tests/test_http_connection.o: tests/test_http_connection.cpp.o
+
+.PHONY : tests/test_http_connection.o
+
+# target to build an object file
+tests/test_http_connection.cpp.o:
+	$(MAKE) -f CMakeFiles/test_http_connection.dir/build.make CMakeFiles/test_http_connection.dir/tests/test_http_connection.cpp.o
+.PHONY : tests/test_http_connection.cpp.o
+
+tests/test_http_connection.i: tests/test_http_connection.cpp.i
+
+.PHONY : tests/test_http_connection.i
+
+# target to preprocess a source file
+tests/test_http_connection.cpp.i:
+	$(MAKE) -f CMakeFiles/test_http_connection.dir/build.make CMakeFiles/test_http_connection.dir/tests/test_http_connection.cpp.i
+.PHONY : tests/test_http_connection.cpp.i
+
+tests/test_http_connection.s: tests/test_http_connection.cpp.s
+
+.PHONY : tests/test_http_connection.s
+
+# target to generate assembly for a file
+tests/test_http_connection.cpp.s:
+	$(MAKE) -f CMakeFiles/test_http_connection.dir/build.make CMakeFiles/test_http_connection.dir/tests/test_http_connection.cpp.s
+.PHONY : tests/test_http_connection.cpp.s
+
 tests/test_http_parser.o: tests/test_http_parser.cpp.o
 
 .PHONY : tests/test_http_parser.o
@@ -1395,6 +1462,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... test_http_connection"
 	@echo "... echo_server"
 	@echo "... test_http_parser"
 	@echo "... myhttp"
@@ -1439,6 +1507,9 @@ help:
 	@echo "... myhttp/http/http11_parser.rl.o"
 	@echo "... myhttp/http/http11_parser.rl.i"
 	@echo "... myhttp/http/http11_parser.rl.s"
+	@echo "... myhttp/http/http_connection.o"
+	@echo "... myhttp/http/http_connection.i"
+	@echo "... myhttp/http/http_connection.s"
 	@echo "... myhttp/http/http_parser.o"
 	@echo "... myhttp/http/http_parser.i"
 	@echo "... myhttp/http/http_parser.s"
@@ -1505,6 +1576,9 @@ help:
 	@echo "... tests/test_http.o"
 	@echo "... tests/test_http.i"
 	@echo "... tests/test_http.s"
+	@echo "... tests/test_http_connection.o"
+	@echo "... tests/test_http_connection.i"
+	@echo "... tests/test_http_connection.s"
 	@echo "... tests/test_http_parser.o"
 	@echo "... tests/test_http_parser.i"
 	@echo "... tests/test_http_parser.s"
