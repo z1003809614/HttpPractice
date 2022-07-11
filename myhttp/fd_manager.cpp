@@ -80,6 +80,10 @@ namespace myhttp
     }
 
     FdCtx::ptr FdManager::get(int fd, bool auto_create){
+        // 之前没做fd为-1的校验，导致出错；
+        if(fd == -1){
+            return nullptr;
+        }
         RWMutexType::ReadLock lock(m_mutex);
         if((int)m_datas.size() <= fd){
             if(auto_create == false){

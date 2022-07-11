@@ -26,8 +26,6 @@ set(LIB_SRC
     myhttp/socket.cpp
     myhttp/bytearray.cpp
     myhttp/http/http.cpp
-    myhttp/http/http11_parser.rl.cpp
-    myhttp/http/httpclient_parser.rl.cpp
     myhttp/http/http_parser.cpp
     myhttp/tcp_server.cpp
     myhttp/stream.cpp
@@ -37,6 +35,11 @@ set(LIB_SRC
     myhttp/http/servlet.cpp
     myhttp/http/http_connection.cpp
     )
+
+ragelmaker(myhttp/http/http11_parser.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/myhttp/http)
+ragelmaker(myhttp/http/httpclient_parser.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/myhttp/http)
+ragelmaker(myhttp/uri.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/myhttp)
+
 
 # 源文件.c -> 预处理文件.i -> 汇编文件.s -> 机器码文件.o -> 可执行文件；
 # 生成 动态库文件；静态库用 STATIC关键字；
@@ -143,6 +146,11 @@ add_executable(test_http_connection tests/test_http_connection.cpp)
 add_dependencies(test_http_connection myhttp)
 force_redefine_file_macro_for_sources(test_http_connection) #__FILE__
 target_link_libraries(test_http_connection myhttp)
+
+add_executable(test_uri tests/test_uri.cpp)
+add_dependencies(test_uri myhttp)
+force_redefine_file_macro_for_sources(test_uri) #__FILE__
+target_link_libraries(test_uri myhttp)
 
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
