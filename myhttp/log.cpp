@@ -14,9 +14,9 @@ namespace myhttp
         , m_threadId(thread_id)
         , m_fiberId(fiber_id)
         , m_time(time)
+        , m_threadName(thread_name)
         , m_logger(logger)
         , m_level(level)
-        , m_threadName(thread_name)
     {
     }
 

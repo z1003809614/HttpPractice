@@ -1,6 +1,7 @@
 #ifndef __MYHTTP_SINGLETON_H__
 #define __MYHTTP_SINGLETON_H__
 
+#include <memory>
 namespace myhttp
 {
     template<class T, class X = void, int N = 0>

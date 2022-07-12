@@ -34,6 +34,7 @@ set(LIB_SRC
     myhttp/http/http_server.cpp
     myhttp/http/servlet.cpp
     myhttp/http/http_connection.cpp
+    myhttp/daemon.cpp
     )
 
 ragelmaker(myhttp/http/http11_parser.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/myhttp/http)
@@ -152,6 +153,10 @@ add_dependencies(test_uri myhttp)
 force_redefine_file_macro_for_sources(test_uri) #__FILE__
 target_link_libraries(test_uri myhttp)
 
+add_executable(test_daemon tests/test_daemon.cpp)
+add_dependencies(test_daemon myhttp)
+force_redefine_file_macro_for_sources(test_daemon) #__FILE__
+target_link_libraries(test_daemon myhttp)
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

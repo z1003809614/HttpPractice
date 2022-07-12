@@ -114,6 +114,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named test_daemon
+
+# Build rule for target.
+test_daemon: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_daemon
+.PHONY : test_daemon
+
+# fast build rule for target.
+test_daemon/fast:
+	$(MAKE) -f CMakeFiles/test_daemon.dir/build.make CMakeFiles/test_daemon.dir/build
+.PHONY : test_daemon/fast
+
+#=============================================================================
 # Target rules for targets named test_uri
 
 # Build rule for target.
@@ -467,6 +480,33 @@ myhttp/config.s: myhttp/config.cpp.s
 myhttp/config.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/config.cpp.s
 .PHONY : myhttp/config.cpp.s
+
+myhttp/daemon.o: myhttp/daemon.cpp.o
+
+.PHONY : myhttp/daemon.o
+
+# target to build an object file
+myhttp/daemon.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/daemon.cpp.o
+.PHONY : myhttp/daemon.cpp.o
+
+myhttp/daemon.i: myhttp/daemon.cpp.i
+
+.PHONY : myhttp/daemon.i
+
+# target to preprocess a source file
+myhttp/daemon.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/daemon.cpp.i
+.PHONY : myhttp/daemon.cpp.i
+
+myhttp/daemon.s: myhttp/daemon.cpp.s
+
+.PHONY : myhttp/daemon.s
+
+# target to generate assembly for a file
+myhttp/daemon.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/daemon.cpp.s
+.PHONY : myhttp/daemon.cpp.s
 
 myhttp/fd_manager.o: myhttp/fd_manager.cpp.o
 
@@ -1170,6 +1210,33 @@ tests/test_config.cpp.s:
 	$(MAKE) -f CMakeFiles/test_config.dir/build.make CMakeFiles/test_config.dir/tests/test_config.cpp.s
 .PHONY : tests/test_config.cpp.s
 
+tests/test_daemon.o: tests/test_daemon.cpp.o
+
+.PHONY : tests/test_daemon.o
+
+# target to build an object file
+tests/test_daemon.cpp.o:
+	$(MAKE) -f CMakeFiles/test_daemon.dir/build.make CMakeFiles/test_daemon.dir/tests/test_daemon.cpp.o
+.PHONY : tests/test_daemon.cpp.o
+
+tests/test_daemon.i: tests/test_daemon.cpp.i
+
+.PHONY : tests/test_daemon.i
+
+# target to preprocess a source file
+tests/test_daemon.cpp.i:
+	$(MAKE) -f CMakeFiles/test_daemon.dir/build.make CMakeFiles/test_daemon.dir/tests/test_daemon.cpp.i
+.PHONY : tests/test_daemon.cpp.i
+
+tests/test_daemon.s: tests/test_daemon.cpp.s
+
+.PHONY : tests/test_daemon.s
+
+# target to generate assembly for a file
+tests/test_daemon.cpp.s:
+	$(MAKE) -f CMakeFiles/test_daemon.dir/build.make CMakeFiles/test_daemon.dir/tests/test_daemon.cpp.s
+.PHONY : tests/test_daemon.cpp.s
+
 tests/test_fiber.o: tests/test_fiber.cpp.o
 
 .PHONY : tests/test_fiber.o
@@ -1527,6 +1594,7 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... test_daemon"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test_uri"
@@ -1560,6 +1628,9 @@ help:
 	@echo "... myhttp/config.o"
 	@echo "... myhttp/config.i"
 	@echo "... myhttp/config.s"
+	@echo "... myhttp/daemon.o"
+	@echo "... myhttp/daemon.i"
+	@echo "... myhttp/daemon.s"
 	@echo "... myhttp/fd_manager.o"
 	@echo "... myhttp/fd_manager.i"
 	@echo "... myhttp/fd_manager.s"
@@ -1638,6 +1709,9 @@ help:
 	@echo "... tests/test_config.o"
 	@echo "... tests/test_config.i"
 	@echo "... tests/test_config.s"
+	@echo "... tests/test_daemon.o"
+	@echo "... tests/test_daemon.i"
+	@echo "... tests/test_daemon.s"
 	@echo "... tests/test_fiber.o"
 	@echo "... tests/test_fiber.i"
 	@echo "... tests/test_fiber.s"
