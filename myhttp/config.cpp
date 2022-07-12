@@ -15,25 +15,6 @@ namespace myhttp{
         return it == GetDatas().end() ? nullptr : it->second;
     }
 
-    // 把yaml结点的属性构造成（一级.二级.三级：value）的样式；使用了深度优先的一种遍历思路；并且其存储(key,node)，
-    // 其中有些key是中间值，如(sytem,node)这样数据，我们是不会用到的；所以可以进行优化；
-    // 筛选有用数据的过程交给了 LoadFromYaml 函数来处理；
-    static void ListAllMember(const std::string& prefix,
-                            const YAML::Node& node,
-                            std::list<std::pair<std::string,const YAML::Node> >& output){
-        if(prefix.find_first_not_of("abcdefghikjlmnopqrstuvwxyz._0123456789")
-                != std::string::npos){
-                    MYHTTP_LOG_ERROR(MYHTTP_LOG_ROOT()) << "Config invalid name: " << prefix << " : " << node;
-                    return;
-        }
-        output.push_back(std::make_pair(prefix, node));
-        if(node.IsMap()){
-            for(auto it = node.begin(); it != node.end(); ++it){
-                ListAllMember(prefix.empty() ? (it->first.Scalar()) : (prefix + "." + (it->first.Scalar())), it->second, output);
-            }
-        }                                
-    }
-
     // 加载yaml文件，并根据内容，更新s_data中已经存储的值；
     // 只修改已经约定过的数据，所以其 类型 是已知的；只需要将配置文件的字符串，转换为对应的类型即可；
     void Config::LoadFromYaml(const YAML::Node& root){
@@ -71,5 +52,27 @@ namespace myhttp{
             cb(it->second);
         }
     }
+
+    // 辅助函数，用于LoadFromYaml
+
+    // 把yaml结点的属性构造成（一级.二级.三级：value）的样式；使用了深度优先的一种遍历思路；并且其存储(key,node)，
+    // 其中有些key是中间值，如(sytem,node)这样数据，我们是不会用到的；所以可以进行优化；
+    // 筛选有用数据的过程交给了 LoadFromYaml 函数来处理；
+    static void ListAllMember(const std::string& prefix,
+                              const YAML::Node& node,
+                              std::list<std::pair<std::string,const YAML::Node> >& output){
+        if(prefix.find_first_not_of("abcdefghikjlmnopqrstuvwxyz._0123456789")
+                != std::string::npos){
+                    MYHTTP_LOG_ERROR(MYHTTP_LOG_ROOT()) << "Config invalid name: " << prefix << " : " << node;
+                    return;
+        }
+        output.push_back(std::make_pair(prefix, node));
+        if(node.IsMap()){
+            for(auto it = node.begin(); it != node.end(); ++it){
+                ListAllMember(prefix.empty() ? (it->first.Scalar()) : (prefix + "." + (it->first.Scalar())), it->second, output);
+            }
+        }                                
+    }
+
 
 }

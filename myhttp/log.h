@@ -152,6 +152,7 @@ namespace myhttp
 
     /**
      * @brief 日志事件
+     * 实际的日志内容是存储在该类中的；
      */
     class LogEvent
     {
@@ -233,11 +234,13 @@ namespace myhttp
 
         /**
          * @brief 格式化写入日志内容
+         * 在宏定义的格式化输出的时候用到了
          */
         void format(const char* fmt, ...);
         
         /**
          * @brief 格式化写入日志内容
+         * 在宏定义的格式化输出的时候用到了
          */
         void format(const char* fmt, va_list al);
 
@@ -268,6 +271,8 @@ namespace myhttp
 
     /**
      * @brief 日志事件包装器
+     * 关键点：析构函数中，调用logger->log()函数，进行打印；
+     * 这样利用了局部变量析构的操作自动打印，而避免了显示调用log;
      */
     class LogEventWrap{
     public:
@@ -280,6 +285,7 @@ namespace myhttp
         
         /**
          * @brief 析构函数
+         * 内部调用了logger->log()函数；
          */
         ~LogEventWrap();
 
@@ -387,7 +393,7 @@ namespace myhttp
         /// 日志格式模板
         std::string m_pattern;
         
-        /// 日志格式解析后格式
+        /// 日志格式解析后，对应的实际执行体
         std::vector<FormatItem::ptr> m_items;
         
         /// 是否有错误

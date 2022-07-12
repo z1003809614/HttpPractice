@@ -29,6 +29,8 @@ namespace myhttp
 
     void LogEvent::format(const char* fmt,va_list al){
         char* buf = nullptr;
+        
+        // C 库函数 int vsprintf(char *str, const char *format, va_list arg) 使用参数列表发送格式化输出到字符串。
         int len = vasprintf(&buf, fmt, al);
         if(len != -1){
             m_ss << std::string(buf, len);
@@ -161,7 +163,8 @@ namespace myhttp
                 {
                     i->log(self, level, event);
                 }
-            }else if(m_root){
+            // m_root会默认添加一个StdoutLogAppender,如果不加的话，这里会造成无限递归
+            }else if(m_root){ 
                 m_root->log(level, event);
             }
         }
@@ -787,17 +790,22 @@ namespace myhttp
 
                     myhttp::Logger::ptr logger;
 
+                    // 在已有logDefine中没有找到新的loggdefin信息，则赋予logger新值
                     if(it == old_value.end()){
                         //新增Logger；
                         // 这种写法，会导致新logger没有注册到logMgr中；
                         // logger.reset(new myhttp::Logger(i.name)); 
                         logger = MYHTTP_LOG_NAME(i.name);
                     }else {
-                        if(!( i == *it)){
+                    // 在已有LogDefine中找到新的LoggDefin信息
+                        if(!( i == *it)){ // 这两个不一致，需要修改
                             // 修改的logger
                             logger = MYHTTP_LOG_NAME(i.name);
                         }
+                        // 如果一致的话，这里感觉需要加一个continue;
                     }
+                    
+                    // 根据LogDefine对Logger进行配置；
                     logger->setLevel(i.level);
                     if(! i.formatter.empty()){
                         logger->setFormatter(i.formatter);
