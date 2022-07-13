@@ -7,6 +7,9 @@ volatile int count = 0;
 myhttp::Mutex s_mutex;
 
 void fun1(){
+
+    myhttp::Thread::GetThis()->SetName("son thread set selfname");
+
     MYHTTP_LOG_INFO(g_logger) << "name: " << myhttp::Thread::GetName()
                             << " this.name: " << myhttp::Thread::GetThis()->getName()
                             << " id: " << myhttp::GetThreadId()
@@ -32,13 +35,16 @@ void fun3(){
 
 int main(int argc, char** argv){
 
-    YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/test_thread.yml");
-    myhttp::Config::LoadFromYaml(root);
+    // YAML::Node root = YAML::LoadFile("/home/ubuntu/HttpPractice/bin/conf/test_thread.yml");
+    // myhttp::Config::LoadFromYaml(root);
 
     std::vector<myhttp::Thread::ptr> thrs;
     for(int i = 0; i < 1; ++i){
-        myhttp::Thread::ptr thr(new myhttp::Thread(&fun2, "name_" + std::to_string(i * 2)));
+        myhttp::Thread::ptr thr(new myhttp::Thread(&fun1, "name_" + std::to_string(i * 2)));
         // myhttp::Thread::ptr thr2(new myhttp::Thread(&fun3, "name_" + std::to_string(i * 2 + 1)));
+
+        thr->SetName("father thread set son thread Name");
+
         thrs.push_back(thr);
         // thrs.push_back(thr2);
     }

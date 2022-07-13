@@ -3,31 +3,39 @@
 #include "util.h"
 namespace myhttp{
 
+    // 线程局部静态全局变量，记录创建该线程的对象地址；
     static thread_local Thread* t_thread = nullptr;
+    // 这个信息其实用上面的指针就可完成，这里是为了方便使用；
     static thread_local std::string t_thread_name = "UNKNOW";
 
     static myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
 
     Semaphore::Semaphore(uint32_t count){
+        // 信号量初始化
         if(sem_init(&m_semaphore, 0, count)){
             throw std::logic_error("sem_init error");
         }
     }
     Semaphore::~Semaphore(){
+        // 信号量销毁
         sem_destroy(&m_semaphore);
     }
 
     void Semaphore::wait(){
+        // 请求信号量，如果无效，则阻塞
         if(sem_wait(&m_semaphore)){
             throw std::logic_error("sem_wait error");
         }
     }
     void Semaphore::notify(){
+        // 释放信号量
         if(sem_post(&m_semaphore)){
             throw std::logic_error("sem_post error");
         }
     }
 
+// ================================Thread=======================================
+    
     Thread* Thread::GetThis(){
         return t_thread;
     }
@@ -50,13 +58,13 @@ namespace myhttp{
             m_name = "UNKNOW";
         }
 
+        // 创建新线程的时候，将当前线程类的指针传递给内核生成的线程；
         int rt = pthread_create(&m_thread, nullptr, &Thread::run, this);
         if(rt){
             MYHTTP_LOG_ERROR(g_logger) << "pthread_create thread fail, rt=" << rt
                 << " name=" << name;
             throw std::logic_error("pthread_create error");
         }
-
         m_semaphore.wait();
     }
     Thread::~Thread(){
@@ -80,8 +88,9 @@ namespace myhttp{
     }
 
     void* Thread::run(void* arg){
-        // 将自己封装的线程类的信息赋予内核线程；
+        // 将传递过来的this指针，转换为Thread*类型指针；
         Thread* thread = (Thread*)arg;
+        // 将自己封装的线程类的信息赋予内核线程；
         t_thread = thread;
         t_thread_name = thread->m_name;
         thread->m_id = myhttp::GetThreadId();
