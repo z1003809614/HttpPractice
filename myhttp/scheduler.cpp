@@ -35,10 +35,11 @@ namespace myhttp
             // t_fiber = m_rootFiber.get();
             
             // 在调度器类内记录当前线程；
-            m_rootThreadId = myhttp::GetThreadId();
-            m_threadIds.push_back(m_rootThreadId);
+            m_rootThread = myhttp::GetThreadId();
+            
+            m_threadIds.push_back(m_rootThread);
         }else{
-            m_rootThreadId = -1;
+            m_rootThread = -1;
         }
         t_scheduler = this;
         m_threadCount = threads;
@@ -99,6 +100,7 @@ namespace myhttp
         // }
 
         m_stopping = true;
+        // 唤醒未完成任务的线程
         for(size_t i = 0; i < m_threadCount; ++i){
             tickle();
         }
@@ -107,6 +109,7 @@ namespace myhttp
         //     tickle();
         // }
 
+        // 循环等待所有子线程结束；
         while(true){
             if(stopping()){
                 std::vector<Thread::ptr> thrs;
@@ -135,8 +138,9 @@ namespace myhttp
 
         // 让每个线程的调度器都指向主线程调度器；
         setThis();
+        
         // 初始化子线程的主协程；
-        if(myhttp::GetThreadId() != m_rootThreadId){
+        if(myhttp::GetThreadId() != m_rootThread){
            // t_fiber = Fiber::GetThis().get();
            Fiber::GetThis();
         }

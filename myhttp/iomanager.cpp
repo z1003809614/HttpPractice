@@ -32,7 +32,7 @@ namespace myhttp
     }
     void IOManager::FdContext::triggerEvent(Event event){
         MYHTTP_ASSERT(events & event);
-        events = (Event)(events & ~event);
+        events = (Event)(events & ~event);  // 把event在events中清除了；
         EventContext& ctx = getContext(event);
         if(ctx.cb){
             // 如果有回调，执行回调；
@@ -70,6 +70,7 @@ namespace myhttp
 
         contextResize(32);
 
+        // 启动调度器scheduler;
         start();
     }
     IOManager::~IOManager(){
@@ -100,7 +101,7 @@ namespace myhttp
     int IOManager::addEvent(int fd, Event event, std::function<void()> cb){
         FdContext* fd_ctx = nullptr;
         RWMutexType::ReadLock lock(m_mutex);
-        // 判断当前添加的任务是否在任务池内部；
+        // 判断文件描述符池能否容纳fd；
         if( (int)m_fdContexts.size() > fd){
             fd_ctx = m_fdContexts[fd];
             lock.unlock();
@@ -149,6 +150,7 @@ namespace myhttp
         if(cb){
             event_ctx.cb.swap(cb);
         }else{
+            // 这里其实意义不大，感觉没什么实际用处
             event_ctx.fiber = Fiber::GetThis();
             MYHTTP_ASSERT(event_ctx.fiber->getState() == Fiber::EXEC);
         }
@@ -279,6 +281,7 @@ namespace myhttp
             return;
         }
         // MYHTTP_LOG_DEBUG(g_logger) << "tickle";
+        // 向管道写入一个T字符；
         int rt = write(m_tickleFds[1], "T", 1);
         MYHTTP_ASSERT(rt == 1);
     }
@@ -322,8 +325,10 @@ namespace myhttp
                     next_timeout = MAX_TIMEOUT;
                 }
                 
-                
+                // 三秒唤醒一次
                 rt = epoll_wait(m_epfd, events, 64, (int)next_timeout);
+
+                MYHTTP_LOG_INFO(g_logger) << "sink in epoll-wait";
 
                 if(rt < 0 && errno == EINTR){
                 }else{
@@ -358,6 +363,7 @@ namespace myhttp
                 FdContext* fd_ctx = (FdContext*) event.data.ptr;
                 FdContext::MutexType::Lock lock(fd_ctx->mutex);
 
+                // 返回了某种错误事件，就将其转换为读写事件；
                 if(event.events & (EPOLLERR | EPOLLHUP)){
                     event.events |= EPOLLIN | EPOLLOUT;
                 }
@@ -374,6 +380,7 @@ namespace myhttp
                     continue;
                 }
 
+                // 把监听到的事件取消掉；
                 int left_events = (fd_ctx->events & ~real_events);
                 int op = left_events ? EPOLL_CTL_MOD : EPOLL_CTL_DEL;
                 event.events = EPOLLET | left_events;
@@ -396,7 +403,7 @@ namespace myhttp
                     --m_pendingEventCount;
                 }
             }
-            // 该线程也中idle中切换到主协程中，去查看是否有该线程执行的任务；
+            // 切换到主协程中，去查看是否有 该线程执行的任务；
             Fiber::ptr cur = Fiber::GetThis();
             auto raw_ptr = cur.get();
             cur.reset();

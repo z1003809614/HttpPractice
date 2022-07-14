@@ -13,7 +13,6 @@ int sock = 0;
 void test_fiber(){
     MYHTTP_LOG_INFO(g_logger) << "test_fiber sock=";
 
-
     sock = socket(AF_INET, SOCK_STREAM, 0);
     fcntl(sock, F_SETFL, O_NONBLOCK);
 
@@ -41,6 +40,7 @@ void test_fiber(){
     }
 }
 
+
 void test1(){  
     myhttp::IOManager iom(2);
     iom.schedule(&test_fiber);
@@ -63,8 +63,15 @@ void test_timer(){
     },true);
 }
 
+void test(){
+    MYHTTP_LOG_INFO(g_logger) << " error";
+}
+
 int main(int argc, char** argv){
-    test1();
+    //test1();
     //test_timer();
+    
+    myhttp::IOManager iom(2);
+    iom.addEvent(0, myhttp::IOManager::Event::READ, &test);
     return 0;
 }

@@ -13,6 +13,7 @@ namespace myhttp{
 
     // 记录当前执行的协程；
     static thread_local Fiber* t_fiber = nullptr; 
+    
     // 记录主协程的地址；
     static thread_local Fiber::ptr t_threadFiber = nullptr;
 
@@ -48,6 +49,7 @@ namespace myhttp{
         ++s_fiber_count;
         MYHTTP_LOG_DEBUG(g_logger) << "Fiber::Fiber";
     }
+    
     Fiber::Fiber(std::function<void()> cb, size_t stacksize)
         :m_id(++s_fiber_id)
         ,m_cb(cb){
@@ -59,7 +61,9 @@ namespace myhttp{
             MYHTTP_ASSERT2(false, "getcontext");
         }
         m_ctx.uc_link = nullptr;
+        
         m_ctx.uc_stack.ss_sp = m_stack;
+        
         m_ctx.uc_stack.ss_size = m_stacksize;
 
         makecontext(&m_ctx, &Fiber::MainFunc, 0);
@@ -69,6 +73,7 @@ namespace myhttp{
 
     Fiber::~Fiber(){
         --s_fiber_count;
+        
         if(m_stack){
             MYHTTP_ASSERT(m_state == TERM || m_state == EXCEPT || m_state == INIT);
 
@@ -78,6 +83,7 @@ namespace myhttp{
             MYHTTP_ASSERT(m_state == EXEC);
 
             Fiber* cur = t_fiber;
+            // 析构的时当前正在运行的fiber，那么就要将线程共享变量t_fiber置空
             if(cur == this){
                 SetThis(nullptr);
             }
@@ -108,6 +114,7 @@ namespace myhttp{
         SetThis(this);
         MYHTTP_ASSERT(m_state != EXEC);
         m_state = EXEC;
+        // 协程切换的核心函数；
         if(swapcontext(&(t_threadFiber->m_ctx), &m_ctx)){
             MYHTTP_ASSERT2(false, "swapInContext");
         }
@@ -124,22 +131,26 @@ namespace myhttp{
     void Fiber::SetThis(Fiber* f){
         t_fiber = f;
     }
+
     // 返回当前协程；
     Fiber::ptr Fiber::GetThis(){
         if(t_fiber){
             return t_fiber->shared_from_this();
         }
+        // 当t_fiber为空的时候，证明该线程的协程配置还未初始化，下面进行初始化配置；
         Fiber::ptr main_fiber(new Fiber);
         MYHTTP_ASSERT(t_fiber == main_fiber.get());
         t_threadFiber = main_fiber;
         return t_fiber->shared_from_this();
     }
+    
     //协程切换到后台，并且设置为Ready状态
     void Fiber::YieldToReady(){
         Fiber::ptr cur = GetThis();
         cur->m_state = READY;
         cur->swapOut();
     }
+    
     //协程切换到后台，并且设置为Hold状态
     void Fiber::YieldToHold(){
         Fiber::ptr cur = GetThis();
