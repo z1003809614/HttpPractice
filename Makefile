@@ -114,6 +114,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named test_env
+
+# Build rule for target.
+test_env: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_env
+.PHONY : test_env
+
+# fast build rule for target.
+test_env/fast:
+	$(MAKE) -f CMakeFiles/test_env.dir/build.make CMakeFiles/test_env.dir/build
+.PHONY : test_env/fast
+
+#=============================================================================
 # Target rules for targets named test_daemon
 
 # Build rule for target.
@@ -507,6 +520,33 @@ myhttp/daemon.s: myhttp/daemon.cpp.s
 myhttp/daemon.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/daemon.cpp.s
 .PHONY : myhttp/daemon.cpp.s
+
+myhttp/env.o: myhttp/env.cpp.o
+
+.PHONY : myhttp/env.o
+
+# target to build an object file
+myhttp/env.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/env.cpp.o
+.PHONY : myhttp/env.cpp.o
+
+myhttp/env.i: myhttp/env.cpp.i
+
+.PHONY : myhttp/env.i
+
+# target to preprocess a source file
+myhttp/env.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/env.cpp.i
+.PHONY : myhttp/env.cpp.i
+
+myhttp/env.s: myhttp/env.cpp.s
+
+.PHONY : myhttp/env.s
+
+# target to generate assembly for a file
+myhttp/env.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/env.cpp.s
+.PHONY : myhttp/env.cpp.s
 
 myhttp/fd_manager.o: myhttp/fd_manager.cpp.o
 
@@ -1237,6 +1277,33 @@ tests/test_daemon.cpp.s:
 	$(MAKE) -f CMakeFiles/test_daemon.dir/build.make CMakeFiles/test_daemon.dir/tests/test_daemon.cpp.s
 .PHONY : tests/test_daemon.cpp.s
 
+tests/test_env.o: tests/test_env.cpp.o
+
+.PHONY : tests/test_env.o
+
+# target to build an object file
+tests/test_env.cpp.o:
+	$(MAKE) -f CMakeFiles/test_env.dir/build.make CMakeFiles/test_env.dir/tests/test_env.cpp.o
+.PHONY : tests/test_env.cpp.o
+
+tests/test_env.i: tests/test_env.cpp.i
+
+.PHONY : tests/test_env.i
+
+# target to preprocess a source file
+tests/test_env.cpp.i:
+	$(MAKE) -f CMakeFiles/test_env.dir/build.make CMakeFiles/test_env.dir/tests/test_env.cpp.i
+.PHONY : tests/test_env.cpp.i
+
+tests/test_env.s: tests/test_env.cpp.s
+
+.PHONY : tests/test_env.s
+
+# target to generate assembly for a file
+tests/test_env.cpp.s:
+	$(MAKE) -f CMakeFiles/test_env.dir/build.make CMakeFiles/test_env.dir/tests/test_env.cpp.s
+.PHONY : tests/test_env.cpp.s
+
 tests/test_fiber.o: tests/test_fiber.cpp.o
 
 .PHONY : tests/test_fiber.o
@@ -1594,6 +1661,7 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... test_env"
 	@echo "... test_daemon"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
@@ -1631,6 +1699,9 @@ help:
 	@echo "... myhttp/daemon.o"
 	@echo "... myhttp/daemon.i"
 	@echo "... myhttp/daemon.s"
+	@echo "... myhttp/env.o"
+	@echo "... myhttp/env.i"
+	@echo "... myhttp/env.s"
 	@echo "... myhttp/fd_manager.o"
 	@echo "... myhttp/fd_manager.i"
 	@echo "... myhttp/fd_manager.s"
@@ -1712,6 +1783,9 @@ help:
 	@echo "... tests/test_daemon.o"
 	@echo "... tests/test_daemon.i"
 	@echo "... tests/test_daemon.s"
+	@echo "... tests/test_env.o"
+	@echo "... tests/test_env.i"
+	@echo "... tests/test_env.s"
 	@echo "... tests/test_fiber.o"
 	@echo "... tests/test_fiber.i"
 	@echo "... tests/test_fiber.s"

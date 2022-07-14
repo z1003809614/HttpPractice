@@ -34,6 +34,8 @@ namespace myhttp
     static int real_daemon(int argc, char** argv,
                           std::function<int(int argc, char** argv)> main_cb)
     {
+        int rt = daemon(1, 0); // 后续添加的，第一个参数：是否将上下文路径指向根路径；第二个参数：是否关闭控制台输入出流
+        if(rt < 0) return rt;
         ProcessInfoMgr::GetInstance()->parent_id = getpid();
         ProcessInfoMgr::GetInstance()->parent_start_time = time(0);
         while (true)
