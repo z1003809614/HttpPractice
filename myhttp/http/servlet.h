@@ -105,11 +105,17 @@ namespace myhttp
             public:
                 typedef std::shared_ptr<NotFoundServlet> ptr;
                 
+                
+                NotFoundServlet(const std::string& server_name = "myhttp");
+                
                 virtual int32_t handle(myhttp::http::HttpRequest::ptr request,
                                        myhttp::http::HttpResponse::ptr response,
                                        myhttp::http::HttpSession::ptr session) override;
                 
-                NotFoundServlet();
+                
+            
+            private:
+                std::string m_serverName;
 
         };
          

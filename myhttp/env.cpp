@@ -86,6 +86,16 @@ namespace myhttp
         return v;
     }    
 
+    std::string Env::getAbsolutePath(const std::string& path){
+        if(path.empty()){
+            return "/";
+        }
+        if(path[0] == '/'){
+            return path;
+        }
+        return m_cwd + path;
+    }
+
     void Env::addHelp(const std::string& key, const std::string& desc){
         removeHelp(key);
         RWMutexType::WriteLock lock(m_mutex);

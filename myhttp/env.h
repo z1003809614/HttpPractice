@@ -29,6 +29,8 @@ namespace myhttp
 
             bool setEnv(const std::string& key, const std::string& val);
             std::string getEnv(const std::string& key, const std::string& default_value = "");
+
+            std::string getAbsolutePath(const std::string& path);
         private:
             RWMutexType m_mutex;
             

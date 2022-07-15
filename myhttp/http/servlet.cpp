@@ -112,8 +112,10 @@ namespace myhttp
 
         //========================NotFound=================================================
                 
-        NotFoundServlet::NotFoundServlet()
-            :Servlet("NotFoundServlet"){}
+        NotFoundServlet::NotFoundServlet(const std::string& server_name)
+            :Servlet("NotFoundServlet")
+            ,m_serverName(server_name)
+            {}
 
         int32_t NotFoundServlet::handle(myhttp::http::HttpRequest::ptr request,
                                        myhttp::http::HttpResponse::ptr response,

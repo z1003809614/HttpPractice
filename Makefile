@@ -114,6 +114,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named test_application
+
+# Build rule for target.
+test_application: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_application
+.PHONY : test_application
+
+# fast build rule for target.
+test_application/fast:
+	$(MAKE) -f CMakeFiles/test_application.dir/build.make CMakeFiles/test_application.dir/build
+.PHONY : test_application/fast
+
+#=============================================================================
 # Target rules for targets named test_env
 
 # Build rule for target.
@@ -439,6 +452,33 @@ myhttp/address.s: myhttp/address.cpp.s
 myhttp/address.cpp.s:
 	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/address.cpp.s
 .PHONY : myhttp/address.cpp.s
+
+myhttp/application.o: myhttp/application.cpp.o
+
+.PHONY : myhttp/application.o
+
+# target to build an object file
+myhttp/application.cpp.o:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/application.cpp.o
+.PHONY : myhttp/application.cpp.o
+
+myhttp/application.i: myhttp/application.cpp.i
+
+.PHONY : myhttp/application.i
+
+# target to preprocess a source file
+myhttp/application.cpp.i:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/application.cpp.i
+.PHONY : myhttp/application.cpp.i
+
+myhttp/application.s: myhttp/application.cpp.s
+
+.PHONY : myhttp/application.s
+
+# target to generate assembly for a file
+myhttp/application.cpp.s:
+	$(MAKE) -f CMakeFiles/myhttp.dir/build.make CMakeFiles/myhttp.dir/myhttp/application.cpp.s
+.PHONY : myhttp/application.cpp.s
 
 myhttp/bytearray.o: myhttp/bytearray.cpp.o
 
@@ -1196,6 +1236,33 @@ tests/test_address.cpp.s:
 	$(MAKE) -f CMakeFiles/test_address.dir/build.make CMakeFiles/test_address.dir/tests/test_address.cpp.s
 .PHONY : tests/test_address.cpp.s
 
+tests/test_application.o: tests/test_application.cpp.o
+
+.PHONY : tests/test_application.o
+
+# target to build an object file
+tests/test_application.cpp.o:
+	$(MAKE) -f CMakeFiles/test_application.dir/build.make CMakeFiles/test_application.dir/tests/test_application.cpp.o
+.PHONY : tests/test_application.cpp.o
+
+tests/test_application.i: tests/test_application.cpp.i
+
+.PHONY : tests/test_application.i
+
+# target to preprocess a source file
+tests/test_application.cpp.i:
+	$(MAKE) -f CMakeFiles/test_application.dir/build.make CMakeFiles/test_application.dir/tests/test_application.cpp.i
+.PHONY : tests/test_application.cpp.i
+
+tests/test_application.s: tests/test_application.cpp.s
+
+.PHONY : tests/test_application.s
+
+# target to generate assembly for a file
+tests/test_application.cpp.s:
+	$(MAKE) -f CMakeFiles/test_application.dir/build.make CMakeFiles/test_application.dir/tests/test_application.cpp.s
+.PHONY : tests/test_application.cpp.s
+
 tests/test_bytearray.o: tests/test_bytearray.cpp.o
 
 .PHONY : tests/test_bytearray.o
@@ -1661,6 +1728,7 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
+	@echo "... test_application"
 	@echo "... test_env"
 	@echo "... test_daemon"
 	@echo "... rebuild_cache"
@@ -1690,6 +1758,9 @@ help:
 	@echo "... myhttp/address.o"
 	@echo "... myhttp/address.i"
 	@echo "... myhttp/address.s"
+	@echo "... myhttp/application.o"
+	@echo "... myhttp/application.i"
+	@echo "... myhttp/application.s"
 	@echo "... myhttp/bytearray.o"
 	@echo "... myhttp/bytearray.i"
 	@echo "... myhttp/bytearray.s"
@@ -1774,6 +1845,9 @@ help:
 	@echo "... tests/test_address.o"
 	@echo "... tests/test_address.i"
 	@echo "... tests/test_address.s"
+	@echo "... tests/test_application.o"
+	@echo "... tests/test_application.i"
+	@echo "... tests/test_application.s"
 	@echo "... tests/test_bytearray.o"
 	@echo "... tests/test_bytearray.i"
 	@echo "... tests/test_bytearray.s"

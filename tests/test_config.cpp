@@ -1,11 +1,12 @@
 #include "../myhttp/config.h"
+#include "../myhttp/env.h"
 
 // 全局变量 g_int_value_config;
 myhttp::ConfigVar<int>::ptr g_int_value_config = 
     myhttp::Config::Lookup("system.port", (int)8080, "system port");
 
-myhttp::ConfigVar<float>::ptr g_int_valuex_config = 
-    myhttp::Config::Lookup("system.port", (float)8080, "system port");
+// myhttp::ConfigVar<float>::ptr g_int_valuex_config = 
+//     myhttp::Config::Lookup("system.port", (float)8080, "system port");
 
 myhttp::ConfigVar<float>::ptr g_float_value_config = 
     myhttp::Config::Lookup("system.value", (float)10.2f, "system value");
@@ -223,20 +224,27 @@ void test_log_config(){
     MYHTTP_LOG_INFO(system_log) << "hello system" << std::endl;
 }
 
+void test_loadconf(){
+    myhttp::Config::LoadFromConfDir("conf");
+}
+
 int main(int argc, char** argv){
     
-    std::cout << std::endl << "this test_yaml " << std::endl;
+    // std::cout << std::endl << "this test_yaml " << std::endl;
     // test_yaml();
     // test_config();
     // test_class();
-    test_log_config();
+    // test_log_config();
 
-    myhttp::Config::visit([](myhttp::ConfigVarBase::ptr var){
-        MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << " name=" << var->getName()
-            <<" description=" << var->getDescription()
-            <<" tyename=" << var->getTypeName()
-            << " value=" << var->toString();
-    });
+    myhttp::EnvMgr::GetInstance()->init(argc, argv);
+    test_loadconf();
+
+    // myhttp::Config::visit([](myhttp::ConfigVarBase::ptr var){
+    //     MYHTTP_LOG_INFO(MYHTTP_LOG_ROOT()) << " name=" << var->getName()
+    //         <<" description=" << var->getDescription()
+    //         <<" tyename=" << var->getTypeName()
+    //         << " value=" << var->toString();
+    // });
     
     return 0;
 }

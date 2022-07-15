@@ -1,4 +1,9 @@
 #include "config.h"
+#include "env.h"
+#include "util.h"
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 namespace myhttp{
 
@@ -7,6 +12,8 @@ namespace myhttp{
     // 将下面的语句转至 .h 文件中 在使用共享库中，会导致两次对静态变量的析构问题，猜测原因是，congfig.cpp和test_congfig.cpp都引用了config.h，
     // 导致在程序执行完毕后，执行程序就析构了静态变量，然后释放 共享库的时候又 析构了一次该静态变量，即出现上面的问题；
     // Config::ConfigVarMap Config::s_datas();
+
+    static myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
 
     // 查询key是否已经存在；
     ConfigVarBase::ptr Config::LookupBase(const std::string& name){
@@ -66,6 +73,41 @@ namespace myhttp{
                     var->fromString(ss.str());
                 }
             }
+        }
+    }
+
+
+    static std::map<std::string, uint64_t> s_file2modifytime;
+    static myhttp::Mutex s_mutex;
+
+    void Config::LoadFromConfDir(const std::string& path){
+        std::string absoulte_path = myhttp::EnvMgr::GetInstance()->getAbsolutePath(path);
+        std::vector<std::string> files;
+        FSUtil::ListAllFile(files, absoulte_path, ".yml");
+
+        for(auto& i : files){
+            // 如果文件没有被修改，就不会再次加载
+            {
+                struct stat st;
+                lstat(i.c_str(), &st);
+                myhttp::Mutex::Lock lock(s_mutex);
+                if(s_file2modifytime[i] == (uint64_t)st.st_mtime){
+                    continue;
+                }
+            }
+
+            try
+            {
+                YAML::Node root = YAML::LoadFile(i);
+                LoadFromYaml(root);
+                
+                MYHTTP_LOG_INFO(g_logger) << " LoadConfFile file=" << i << " ok";
+            }
+            catch(...)
+            {
+                MYHTTP_LOG_ERROR(g_logger) << "LoadConfFile file = " << i << " failed";
+            }
+            
         }
     }
 

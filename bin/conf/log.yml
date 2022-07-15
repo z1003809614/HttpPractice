@@ -1,7 +1,6 @@
 logs:
     - name: root
       level: info
-      formatter: "%d%T%m%n"
       appenders:
           - type: FileLogAppender
             file: log_root.txt
@@ -9,9 +8,7 @@ logs:
             level: info
     - name: system
       level: debug
-      formatter: "%d%T%m%n"
       appenders:
           - type: FileLogAppender
             file: log_system.txt
-            formatter: "%d%T[%p]%T%m%n"
           - type: StdoutLogAppender
