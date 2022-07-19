@@ -99,9 +99,11 @@ namespace myhttp
         Servlet::ptr ServletDispatch::getMatchedServlet(const std::string& uri){
             RWMutexType::ReadLock lock(m_mutex);
             auto mit = m_datas.find(uri);
+            
             if(mit != m_datas.end()){
                 return mit->second;
             }
+            
             for(auto it = m_globs.begin(); it != m_globs.end(); ++it){
                 if(!fnmatch(it->first.c_str(), uri.c_str(), 0)){
                     return it->second;

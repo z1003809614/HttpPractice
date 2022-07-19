@@ -39,6 +39,7 @@ namespace myhttp
         ,m_root(new Node(base_size))
         ,m_cur(m_root){
     }
+
     ByteArray::~ByteArray(){
         Node* tmp = m_root;
         while(tmp){
@@ -51,6 +52,7 @@ namespace myhttp
     bool ByteArray::isLittleEndian() const{
         return m_endian == MYHTTP_LITTLE_ENDIAN;
     }
+
     void ByteArray::setIsLittlEndian(bool val){
         if(val){
             m_endian = MYHTTP_LITTLE_ENDIAN;
@@ -58,19 +60,23 @@ namespace myhttp
             m_endian = MYHTTP_BIG_ENDIAN;
         }
     }
+
     // write
     void ByteArray::writeFint8( int8_t value){
         write(&value, sizeof(value));
     }
+
     void ByteArray::writeFuint8( uint8_t value){
         write(&value, sizeof(value));
     }
+
     void ByteArray::writeFint16( int16_t value){
         if(m_endian != MYHTTP_BYTE_ORDER){
             value = byteswap(value);
         }    
         write(&value, sizeof(value));
     }
+
     void ByteArray::writeFuint16( uint16_t value){
         if(m_endian != MYHTTP_BYTE_ORDER){
             value = byteswap(value);
@@ -134,9 +140,11 @@ namespace myhttp
         writeUint32(EncodeZigzag32(value));
     }
     void ByteArray::writeUint32( uint32_t value){
+        // 这里取5是因为经过zigzag编码后，4byte字节数据最大会到5byte;
         uint8_t tmp[5];
         uint8_t i = 0;
         while(value >= 0x80){
+            // 取得每个字节的后7位，然后置第一个bit为1；
             tmp[i++] = (value & 0x7F) | 0x80;
             value >>= 7;
         }
@@ -157,6 +165,7 @@ namespace myhttp
         write(tmp, i);
     }
 
+    // 以4字节无符号整数来存储；
     void ByteArray::writeFloat( float value){
         uint32_t v;
         memcpy(&v, &value, sizeof(value));
@@ -234,23 +243,29 @@ namespace myhttp
     int32_t ByteArray::readInt32(){
         return DecodeZigzag32(readUint32());
     }
+
     uint32_t ByteArray::readUint32(){
         // 7Bit压缩法的解码过程；
         uint32_t result = 0;
         for(int i = 0; i < 32; i += 7){
+            
             uint8_t b = readFuint8();
+            
             if(b < 0x80){
                 result |= ((uint32_t)b) << i;
                 break;
             }else{
+                // 第一位是标记位，不需要记录
                 result |= (((uint32_t)(b & 0x7F)) << i); 
             }
         }
         return result;
     }
+
     int64_t ByteArray::readInt64(){
         return DecodeZigzag64(readUint64());
     }
+
     uint64_t ByteArray::readUint64(){
         uint64_t result = 0;
         for(int i = 0; i < 64; i += 7){
@@ -285,6 +300,7 @@ namespace myhttp
         read(&buff[0], len);
         return buff;
     }
+
     std::string ByteArray::readStringF32(){
         uint32_t len = readFuint32();
         std::string buff;
@@ -292,6 +308,7 @@ namespace myhttp
         read(&buff[0], len);
         return buff;
     }
+
     std::string ByteArray::readStringF64(){
         uint64_t len = readFuint64();
         std::string buff;
@@ -299,6 +316,7 @@ namespace myhttp
         read(&buff[0], len);
         return buff;
     }
+
     std::string ByteArray::readStringVint(){
         uint64_t len = readFuint64();
         std::string buff;
@@ -321,10 +339,12 @@ namespace myhttp
         m_root->next = NULL;
     }
 
+
     void ByteArray::write(const void* buf, size_t size){
         if(size == 0){
             return;
         }
+        
         // 首先扩容，保证能够容纳size个字节数据；
         addCapacity(size);
 
@@ -358,6 +378,7 @@ namespace myhttp
             m_size = m_position;
         }
     }
+    
     void ByteArray::read(void* buf, size_t size){
         // 当请求需要读取的数据超过可读长度就抛出异常
         if(size > getReadSize()){

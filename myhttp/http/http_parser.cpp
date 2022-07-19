@@ -12,6 +12,7 @@ namespace myhttp
         // 请求报文的头部最大缓冲区的配置信息，防止其他恶意请求；
         static myhttp::ConfigVar<uint64_t>::ptr g_http_request_buffer_size = 
             myhttp::Config::Lookup("http.request.buffer_size", (uint64_t)(4 * 1024ull), "http request buffer size");
+        
         // 请求报文的body最大缓存区的配置信息
         static myhttp::ConfigVar<uint64_t>::ptr g_http_request_max_body_size = 
             myhttp::Config::Lookup("http.request.max_body_size", (uint64_t)(64 * 1024 * 1024ull), "http request max body size");
@@ -21,6 +22,7 @@ namespace myhttp
 
         static myhttp::ConfigVar<uint64_t>::ptr g_http_response_max_body_size = 
             myhttp::Config::Lookup("http.response.max_body_size", (uint64_t)(64 * 1024 * 1024ull), "http response max body size");
+        
         // config对象获取配置信息，需要加锁，为了效率这里定义一个内部变量，用于快速获得配置信息；
         static uint64_t s_http_request_buffer_size = 0;
         static uint64_t s_http_request_max_body_size = 0;
@@ -67,9 +69,11 @@ namespace myhttp
         
 
         // ===============================解析对应属性成功后的回调函数=====================================
+        
         // 这里的data其实是自己定义的HttpRequestParser对象的指针
         void on_request_method(void *data, const char *at, size_t length){
             HttpRequestParser* parser = static_cast<HttpRequestParser*>(data);
+            
             HttpMethod m = CharsToHttpMethod(at);
 
             if(m == HttpMethod::HTT_INVALID_METHOD){
@@ -78,6 +82,7 @@ namespace myhttp
                 parser->setError(1000);
                 return;
             }
+
             parser->getData()->setMethod(m);
         }
 
@@ -115,9 +120,11 @@ namespace myhttp
             }
             parser->getData()->setVersion(v);
         }
+        
         void on_request_header_done(void *data, const char *at, size_t length){
             // HttpRequestParser* parser = static_cast<HttpRequestParser*>(data);
         }
+
         void on_request_http_field(void *data, const char* field, size_t flen
                                     ,const char *value, size_t vlen)
         {
@@ -150,6 +157,7 @@ namespace myhttp
         uint64_t HttpRequestParser::GetHttpRequestBufferSize(){
             return s_http_request_buffer_size;
         }
+       
         uint64_t HttpRequestParser::GetHttpRequestMaxBodySize(){
             return s_http_request_max_body_size;
         }
@@ -161,12 +169,15 @@ namespace myhttp
             memmove(data, data + offset, (len - offset));
             return offset;
         }
+
         int HttpRequestParser::isFinished(){
             return http_parser_finish(&m_parser);
         }
+
         int HttpRequestParser::hasError(){
             return m_error || http_parser_has_error(&m_parser);
         } 
+        
         // 获取body信息
         uint64_t HttpRequestParser::getContentLength(){
             return m_data->getHeaderAs<uint64_t>("content-length", 0);

@@ -11,7 +11,7 @@ namespace myhttp
 
     TcpServer::TcpServer(myhttp::IOManager* woker, myhttp::IOManager* accept_woker)
         :m_worker(woker)
-        ,m_acceptworker(accept_woker)
+        ,m_acceptWorker(accept_woker)
         ,m_recvTimeout(g_tcp_server_read_timeout->getValue())
         ,m_name("sylar/1.0.0")
         ,m_isStop(true)
@@ -82,7 +82,7 @@ namespace myhttp
         }
         m_isStop = false;
         for(auto& sock : m_socks){
-            m_acceptworker->schedule(std::bind(&TcpServer::startAccept,
+            m_acceptWorker->schedule(std::bind(&TcpServer::startAccept,
                             shared_from_this(), sock));
         }
         return true;
@@ -91,7 +91,7 @@ namespace myhttp
     void TcpServer::stop(){
         m_isStop = true;
         auto self = shared_from_this();
-        m_acceptworker->schedule([this, self](){
+        m_acceptWorker->schedule([this, self](){
             for(auto& sock : m_socks){
                 sock->cancelAll();
                 sock->close();

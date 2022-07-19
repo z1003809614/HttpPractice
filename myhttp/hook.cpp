@@ -58,6 +58,7 @@ namespace myhttp
     }
 
     static uint64_t s_connect_timeout = -1;
+    
     struct _HookIniter
     {
         _HookIniter(){
@@ -72,6 +73,7 @@ namespace myhttp
             });
         }
     };
+
     // 保证其在正式程序执行之前能够初始化；
     static _HookIniter s_hook_initer;
 
@@ -280,12 +282,17 @@ extern "C"{
 
         // 如果connect中存在超时时间时，添加一个条件定时任务，定时唤醒线程进行处理，保证异步性能；
         if(timeout_ms != (uint64_t)-1){
+            // timer_info主要保存了，该定时器是否取消的信息；
             timer = iom->addConditiaonTimer(timeout_ms, [winfo, fd, iom](){
+                // 获取winfo的智能指针
                 auto t = winfo.lock();
+                // 没有正常获取到t,或者t->cancelled>0，表示该事件已经取消过了，不需要重复处理，直接返回；
                 if(!t || t->cancelled){
                     return;
                 }
+                // 设置超时任务信息，表示已经删除fd的事件
                 t->cancelled = ETIMEDOUT;
+                // 取消事件
                 iom->cancelEvent(fd, myhttp::IOManager::WRITE);
             }, winfo);
         }
@@ -294,15 +301,17 @@ extern "C"{
         int rt = iom->addEvent(fd, myhttp::IOManager::WRITE);
         if(rt == 0){
             myhttp::Fiber::YieldToHold();
-            // 当fiber被唤醒的时候
+            // 当fiber被唤醒的时候，表示正常connect到，取消之前设置的timer;
             if(timer){
                 timer->cancel();
             }
+            // 异常的情况，正常connect了，但是包含了取消信息，是一种异常情况；
             if(tinfo->cancelled){
                 errno = tinfo->cancelled;
                 return -1;
             }
         }else{
+            // 事件没有添加成功，报告异常；
             if(timer){
                 timer->cancel();
             }
@@ -397,6 +406,7 @@ extern "C"{
 
 
     int fcntl(int fd, int cmd, .../*arg*/){
+        // 使用可变参数来模拟类似模板的功能；
         va_list va;
         va_start(va, cmd);
         switch (cmd)
@@ -409,12 +419,16 @@ extern "C"{
                     if(!ctx || ctx->isClose() || !ctx->isSocket()){
                         return fcntl_f(fd, cmd, arg);
                     }
+                    
+                    // 特殊处理阻塞情况
                     ctx->setUserNonblock(arg & O_NONBLOCK);
+                    
                     if(ctx->getSysNonblock()){
                         arg |= O_NONBLOCK;
                     }else{
                         arg &= ~O_NONBLOCK;
                     }
+                    
                     return fcntl_f(fd, cmd, arg);
                 }
                 break;
@@ -486,6 +500,7 @@ extern "C"{
         void* arg = va_arg(va, void*);
         va_end(va);
 
+        // 特殊处理的非阻塞的情况
         if(FIONBIO == request){
             bool user_nonblock = !!*(int*)arg;
             myhttp::FdCtx::ptr ctx = myhttp::FdMgr::GetInstance()->get(fd);
@@ -494,14 +509,17 @@ extern "C"{
             }
             ctx->setUserNonblock(user_nonblock);
         }
+        
         return ioctl_f(fd, request, arg);
     }
+
 
     int getsockopt(int sockfd, int level, int optname,
                     void *optval, socklen_t *optlen)
     {
         return getsockopt_f(sockfd, level, optname, optval, optlen);
     }
+
 
     int setsockopt(int sockfd, int level, int optname,
                     const void *optval, socklen_t optlen)
@@ -510,8 +528,11 @@ extern "C"{
             return setsockopt_f(sockfd, level, optname, optval, optlen);
         }
         if(level == SOL_SOCKET){
+            // 主要处理了一下超时事件的设置，给自己定义的fdctx设置了超时时间，代替了给内核的fd设置超时时间
             if(optname == SO_RCVTIMEO || optname == SO_SNDTIMEO){
+                
                 myhttp::FdCtx::ptr ctx = myhttp::FdMgr::GetInstance()->get(sockfd);
+                
                 if(ctx){
                     const timeval* v = (const timeval*) optval;
                     ctx->setTimeout(optname, v->tv_sec * 1000 + v->tv_usec / 1000);

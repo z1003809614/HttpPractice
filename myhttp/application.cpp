@@ -12,16 +12,16 @@ namespace myhttp
     static myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
 
     // 工作目录配置项
-    static myhttp::ConfigVar<std::string>::ptr g_server_work_path =
-        myhttp::Config::Lookup("server.work_path"
-                ,std::string("/home/apps/work/myhttp")
-                , "server work path");
+    static myhttp::ConfigVar<std::string>::ptr g_server_work_path = 
+            myhttp::Config::Lookup("server.work_path"
+                                    ,std::string("/home/apps/work/myhttp")
+                                    , "server work path");
     
     // 进程pidfile的名称配置项 
     static myhttp::ConfigVar<std::string>::ptr g_server_pid_file =
-        myhttp::Config::Lookup("server.pid_file"
-                ,std::string("myhttp.pid")
-                , "server pid file");
+            myhttp::Config::Lookup("server.pid_file"
+                                    ,std::string("myhttp.pid")
+                                    , "server pid file");
 
     // 保存http配置项
     struct HttpServerConf{
@@ -239,6 +239,7 @@ namespace myhttp
             }
 
             // server内部就使用了iomanager，即用到了协程
+            // 由于这里的构造函数使用IOManager的GetThis，所以需要上层进程iom的调度，或者主动传参iom来完成；
             myhttp::http::HttpServer::ptr server(new myhttp::http::HttpServer(i.keepalive));
             
             std::vector<Address::ptr> fails;

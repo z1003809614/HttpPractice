@@ -367,16 +367,22 @@ namespace myhttp
                 static void ReleasePtr(HttpConnection* ptr, HttpConnectionPool* pool);
 
             private:
+                
                 /// 主host，即当前connection直接通信的host；
                 std::string m_host;
+                
                 /// 备用host，其实含义与m_host一致；
                 std::string m_vhost;
+                
                 /// 端口号
                 uint32_t m_port;
+                
                 /// 连接池的最大容量
                 uint32_t m_maxSize;
+                
                 /// 一个连接的最长存活时间
                 uint32_t m_maxAliveTime;
+                
                 /// 一个连接的最多使用次数
                 uint32_t m_maxRequest;
 

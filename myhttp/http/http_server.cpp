@@ -18,8 +18,8 @@ namespace myhttp
         }
 
         void HttpServer::handleClient(Socket::ptr client){
+            
             HttpSession::ptr session(new HttpSession(client));
-
             do{
                 auto req = session->recvRequest();
                 if(!req){
@@ -42,6 +42,7 @@ namespace myhttp
                 //     << *rsp;
 
                 session->sendResponse(rsp);
+            
             }while(m_isKeepalive);
 
             session->close();

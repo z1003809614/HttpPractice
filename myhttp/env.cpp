@@ -11,8 +11,16 @@ namespace myhttp
         char link[1024] = {0};
         char path[1024] = {0};
         
+        // C 库函数 int sprintf(char *str, const char *format, ...) 
+        // 发送格式化输出到 str 所指向的字符串。
         sprintf(link, "/proc/%d/exe", getpid());
+
+        // readlink()会将参数path 的符号连接内容存到参数buf 所指的内存空间, 
+        // 返回的内容不是以NULL作字符串结尾, 但会将字符串的字符数返回. 
+        // 若参数bufsiz 小于符号连接的内容长度, 过长的内容会被截断
         int rt = readlink(link, path, sizeof(path));
+        
+        
         if(rt < 0) return false;
         // /path/xxx/exe
         m_exe = path;
@@ -22,7 +30,9 @@ namespace myhttp
         
         // -config /path/to/config -file xxxx
         m_program = argv[0];
+        
         const char* now_key = nullptr;
+        
         for(int i = 1; i < argc; ++i){
             if(argv[i][0] == '-'){
                 if(strlen(argv[i]) > 1){
@@ -57,6 +67,7 @@ namespace myhttp
         RWMutexType::WriteLock lock(m_mutex);
         m_args[key] = val;
     }
+    
     bool Env::has(const std::string& key){
         RWMutexType::ReadLock lock(m_mutex);
         auto it = m_args.find(key);
@@ -86,6 +97,7 @@ namespace myhttp
         return v;
     }    
 
+
     std::string Env::getAbsolutePath(const std::string& path){
         if(path.empty()){
             return "/";
@@ -102,6 +114,7 @@ namespace myhttp
         m_helps.push_back(std::make_pair(key, desc));
         
     }
+
     void Env::removeHelp(const std::string& key){
         RWMutexType::WriteLock lock(m_mutex);
         for(auto it = m_helps.begin(); it != m_helps.end();){

@@ -169,6 +169,7 @@ add_executable(test_application tests/test_application.cpp)
 add_dependencies(test_application myhttp)
 force_redefine_file_macro_for_sources(test_application) #__FILE__
 target_link_libraries(test_application myhttp)
+
 # 设置输出文件的路径；
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)

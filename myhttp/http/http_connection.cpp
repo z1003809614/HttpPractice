@@ -30,6 +30,7 @@ namespace myhttp
         }
 
         HttpResponse::ptr HttpConnection::recvResponse(){
+            
             HttpResponseParser::ptr parser(new HttpResponseParser);
             
             uint64_t buff_size = HttpResponseParser::GetHttpResponseBufferSize();
@@ -75,12 +76,15 @@ namespace myhttp
             // 解析body部分,如果头部解析得到body使用chunck模式，则需要额外进行处理；
             // chunck编码：[content-length]\r\n[data]\r\n;
             auto& client_parser = parser->getParser();
+            
             if(client_parser.chunked){
                 std::string body;
                 int len = offset;
+                
                 do{ // 每次执行读取一行chunck；
                     do{ // 每次循环结束能够解析一个chunck的头部信息，即content-length;
                         int rt = read(data + len, buff_size - len);
+                        
                         if(rt <= 0){
                             return nullptr;
                         }
@@ -106,9 +110,11 @@ namespace myhttp
                         
                         len -= client_parser.content_len;
 
-                    }else{  // body数据还未读取到data中；
+                    }else{  // body数据还未完全读取到data中；
                         body.append(data, len);
+                        
                         int left = client_parser.content_len - len;
+                        
                         while(left > 0){
                             int rt = read(data, left > (int)buff_size ? (int)buff_size : left);
                             if(rt <= 0){
@@ -125,6 +131,7 @@ namespace myhttp
 
             }else{
                 int64_t length = parser->getContentLength();
+                
                 if(length > 0){
                     std::string body;
                     body.resize(length);
@@ -227,6 +234,7 @@ namespace myhttp
             req->setFragment(uri->getFragment());
             req->setMethod(method);
             bool has_host = false;
+            
             for(auto& i : headers){
                 if(strcasecmp(i.first.c_str(), "connection") == 0){
                     if(strcasecmp(i.second.c_str(), "keep-alive") == 0){
@@ -250,12 +258,13 @@ namespace myhttp
         }
 
         HttpResult::ptr HttpConnection::DoRequest(HttpRequest::ptr req
-                                        ,Uri::ptr uri
-                                        ,uint64_t timeout_ms)
+                                                    ,Uri::ptr uri
+                                                    ,uint64_t timeout_ms)
         {
             // uri，存储的host是要直接访问的host，而req中的host则是我实际需要请求的host；
             // 由于存在代理转发的情况，所以uri->host和req的host是可能不一致的；
             Address::ptr addr = uri->createAddress();
+            
             if(!addr){
                 return std::make_shared<HttpResult>((int)HttpResult::Error::INVALID_HOST
                         ,nullptr, "invalid host: " + uri->getHost());
@@ -275,9 +284,11 @@ namespace myhttp
             }
 
             sock->setRecvTimeout(timeout_ms);
+            
             HttpConnection::ptr conn = std::make_shared<HttpConnection>(sock);
             
             int rt = conn->sendRequest(req);
+            
             if(rt == 0){
                 return std::make_shared<HttpResult>((int)HttpResult::Error::SEND_CLOSE_BY_PEER
                         ,nullptr, "send request closed by peer: " + addr->toString());
@@ -457,6 +468,7 @@ namespace myhttp
             req->setClose(true);
             // 用于标识header中是否存在host字段；
             bool has_host = false;
+            
             for(auto& i : headers){
                 // strcasecmp,若参数s1 和s2 字符串相同则返回0；s1 长度大于s2 长度则返回大于0 的值，s1 长度若小于s2 长度则返回小于0 的值
                 // 进一步判断是否应为长连接；

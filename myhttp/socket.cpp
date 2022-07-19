@@ -12,13 +12,16 @@ namespace myhttp
 
     static myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system"); 
 
-
     Socket::ptr Socket::CreateTCP(myhttp::Address::ptr address){
         Socket::ptr sock(new Socket(address->getFamily(), TCP, 0));
         return sock;
     }
+
     Socket::ptr Socket::CreateUDP(myhttp::Address::ptr address){
         Socket::ptr sock(new Socket(address->getFamily(), UDP, 0));
+        // 测试
+        sock->newSock();
+        sock->m_isConnected = true;
         return sock;
     }
 
@@ -69,6 +72,7 @@ namespace myhttp
         }
         return -1;
     }
+
     void Socket::setSendTimeout(int64_t v){
         struct timeval tv{int(v / 1000), int(v % 1000 * 1000)};
         setOption(SOL_SOCKET, SO_SNDTIMEO, tv);
@@ -81,13 +85,21 @@ namespace myhttp
         }
         return -1;
     }
+
     void Socket::setRecvTimeout(int64_t v){
         struct timeval tv{int(v / 1000), int(v % 1000 * 1000)};
         setOption(SOL_SOCKET, SO_RCVTIMEO, tv);
     }
 
     bool Socket::getOption(int level, int option, void* result, size_t* len){
-        // getsockopt获取m_sock,在level层级上，option属性的值，存储到长度为len的result中；
+        /**
+         * @brief getsockopt获取m_sock,在level层级上，option属性的值，存储到长度为len的result中；
+         * sock：将要被设置或者获取选项的套接字。
+         * level：选项所在的协议层。
+         * optname：需要访问的选项名。
+         * optval：对于getsockopt()，指向返回选项值的缓冲。对于setsockopt()，指向包含新选项值的缓冲。
+         * optlen：对于getsockopt()，作为入口参数时，选项值的最大长度。作为出口参数时，选项值的实际长度。对于setsockopt()，现选项的长度。
+         */
         int rt = getsockopt(m_sock, level, option, result, (socklen_t*)len);
         if(rt){
             MYHTTP_LOG_DEBUG(g_logger) << "getOption sock=" << m_sock
@@ -135,6 +147,7 @@ namespace myhttp
         }
         return false;
     }
+
     bool Socket::bind(const Address::ptr addr){
         if(MYHTTP_UNLICKLY(!isValid())){
             newSock();
@@ -158,6 +171,7 @@ namespace myhttp
         getLocalAddress();
         return true;
     }
+
     bool Socket::connect(const Address::ptr addr, uint64_t timeout_ms){
         if(!isValid()){
             newSock();
@@ -212,7 +226,9 @@ namespace myhttp
         if(!m_isConnected && m_sock == -1){
             return true;
         }
+
         m_isConnected = false;
+        
         if(m_sock != -1){
             ::close(m_sock);
             m_sock = -1;
@@ -226,6 +242,7 @@ namespace myhttp
         }
         return -1;
     }
+
     int Socket::send(const iovec* buffers, size_t length, int flags){
         if(isConnected()){
             msghdr msg;
@@ -236,12 +253,14 @@ namespace myhttp
         }
         return -1;
     }
+
     int Socket::sendTo(const void* buffer, size_t length, const Address::ptr to, int flags){
         if(isConnected()){
             return ::sendto(m_sock, buffer, length, flags, to->getAddr(), to->getAddrLen());
         }
         return -1;
     }
+
     int Socket::sendTo(const iovec* buffers, size_t length, const Address::ptr to, int flags){
         if(isConnected()){
             msghdr msg;
@@ -261,6 +280,7 @@ namespace myhttp
         }
         return -1;
     }
+
     int Socket::recv(iovec* buffers, size_t length, int flags){
         if(isConnected()){
             msghdr msg;
@@ -312,18 +332,22 @@ namespace myhttp
             result.reset(new UnknownAddress(m_family));
             break;
         }
+
         socklen_t addrlen = result->getAddrLen();
+        
         if(getpeername(m_sock, const_cast<sockaddr*>(result->getAddr()), &addrlen)){
             MYHTTP_LOG_ERROR(g_logger) << "getpeername error sock=" << m_sock
                 << " errno=" << errno << " errstr=" << strerror(errno);
             return Address::ptr(new UnknownAddress(m_family));
         }
+
         if(m_family == AF_UNIX){
             UnixAddress::ptr addr = std::dynamic_pointer_cast<UnixAddress>(result);
             addr->setAddrLen(addrlen);
         }
 
         m_remoteAddress = result;
+        
         return m_remoteAddress;
     }
     Address::ptr Socket::getLocalAddress(){
@@ -347,8 +371,9 @@ namespace myhttp
             break;
         }
         socklen_t addrlen = result->getAddrLen();
-        if(getpeername(m_sock, const_cast<sockaddr*>(result->getAddr()), &addrlen)){
-            MYHTTP_LOG_ERROR(g_logger) << "getpeername error sock=" << m_sock
+        
+        if(getsockname(m_sock, const_cast<sockaddr*>(result->getAddr()), &addrlen)){
+            MYHTTP_LOG_ERROR(g_logger) << "getsockname error sock=" << m_sock
                 << " errno=" << errno << " errstr=" << strerror(errno);
             return Address::ptr(new UnknownAddress(m_family));
         }
@@ -360,7 +385,6 @@ namespace myhttp
 
         m_localAddress = result;
         return m_localAddress;
-
     }
 
     bool Socket::isValid() const{
@@ -382,9 +406,11 @@ namespace myhttp
            << " family=" << m_family
            << " type=" << m_type
            << " protocol=" << m_protocol;
+        
         if(m_localAddress){
             os << " local_address=" << m_localAddress->toString();
         }
+        
         if(m_remoteAddress){
             os << " remote_address=" << m_remoteAddress->toString();
         }
@@ -415,6 +441,7 @@ namespace myhttp
 
     void Socket::newSock(){
         m_sock = socket(m_family, m_type, m_protocol);
+        
         if(MYHTTP_LICKLY(m_sock != -1)){
             initSock();
         }

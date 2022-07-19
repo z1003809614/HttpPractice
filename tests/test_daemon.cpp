@@ -5,6 +5,7 @@
 static myhttp::Logger::ptr g_logger = MYHTTP_LOG_ROOT();
 
 myhttp::Timer::ptr timer;
+
 int server_main(int argc, char** argv){
     MYHTTP_LOG_INFO(g_logger) << myhttp::ProcessInfoMgr::GetInstance()->toString();
     myhttp::IOManager iom(1);

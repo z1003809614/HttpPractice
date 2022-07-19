@@ -7,6 +7,7 @@ namespace myhttp
 
     static myhttp::Logger::ptr g_logger = MYHTTP_LOG_NAME("system");
 
+
     bool Timer::Comparator::operator()(const Timer::ptr& lhs, const Timer::ptr& rhs) const{
         if(!lhs && !rhs){
             return false;
@@ -50,47 +51,71 @@ namespace myhttp
         }
         return false;
     }
+
     bool Timer::refresh(){
         TimerManager::RWMutexType::WriteLock lock(m_manager->m_mutex);
         if(!m_cb){
             return false;
         } 
+
+        // 找到当前的这个定时器；
         auto it = m_manager->m_timers.find(shared_from_this());
         
         if(it == m_manager->m_timers.end()){
             return false;
         }
+        
+        // 先删除
         m_manager->m_timers.erase(it);
+        
+        // 重新设定该timer的下次执行时间
         m_next = myhttp::GetCurrentMS() + m_ms;
+        
+        // 然后再添加到manager中
         m_manager->m_timers.insert(shared_from_this()); 
         return true;
     }
+
     bool Timer::reset(uint64_t ms, bool from_now){
+        
         if(ms == m_ms && !from_now){
             return true;
         }
+
         TimerManager::RWMutexType::WriteLock lock(m_manager->m_mutex);
+
+        // 没有回调函数        
         if(!m_cb){
             return false;
         } 
+
+
         auto it = m_manager->m_timers.find(shared_from_this());
         
         if(it == m_manager->m_timers.end()){
             return false;
         }
+        
         m_manager->m_timers.erase(it);
+        
         uint64_t start = 0;
+        
         if(from_now){
             start = myhttp::GetCurrentMS();
         }else{
             start = m_next - m_ms;
         }
+        
         m_ms = ms;
+        
         m_next = start + m_ms;
+        
         m_manager->addTimer(shared_from_this(), lock);
+        
         return true;
     }
 
+// ======================================TimerManager===========================================
     TimerManager::TimerManager(){
         m_previouseTime = myhttp::GetCurrentMS();
     }
@@ -107,6 +132,7 @@ namespace myhttp
         return timer;
     }
 
+    // 辅助条件定时器的执行
     static void OnTimer(std::weak_ptr<void> weak_cond, std::function<void()> cb){
         std::shared_ptr<void> tmp = weak_cond.lock();
         if(tmp){
@@ -130,6 +156,7 @@ namespace myhttp
             return ~0ull;
         }
 
+        // 获得定时器队列中的首元素
         const Timer::ptr& next = *m_timers.begin();
         uint64_t now_ms = myhttp::GetCurrentMS();
         if(now_ms >= next->m_next){
@@ -142,6 +169,7 @@ namespace myhttp
     // 返回已经超过时间的定时器；
     void TimerManager::listExpiredCb(std::vector<std::function<void()> >& cbs){
         uint64_t now_ms = myhttp::GetCurrentMS();
+        
         std::vector<Timer::ptr> expired;
         {
             RWMutexType::ReadLock lock(m_mutex);
@@ -152,6 +180,9 @@ namespace myhttp
         RWMutexType::WriteLock lock(m_mutex);
 
         bool rollover = detectClockRollover(now_ms);
+
+        // 如果未检测到系统时间发生变化，并且首元素的下次执行时间还未到，证明没有需要执行的定时器；
+        // PS：不知道为啥不使用getNextTimer()
         if(!rollover && ((*m_timers.begin())->m_next > now_ms)){
             return;
         }
@@ -159,6 +190,8 @@ namespace myhttp
         // MYHTTP_LOG_DEBUG(g_logger) << "rollover: " << rollover;
 
         Timer::ptr now_timer(new Timer(now_ms));
+        
+        // 如果系统时间变化，处理全部定时器，否则 只处理超过时间的定时器
         auto it = rollover ? m_timers.end() : m_timers.upper_bound(now_timer);
 
         // for(auto& t : m_timers){
@@ -169,10 +202,15 @@ namespace myhttp
         //     ++it;
         // }
 
+        // 把超时的定时器，添加到expired中；
         expired.insert(expired.begin(), m_timers.begin(), it);
+        
+        // 删除manager中的超时定时器；
         m_timers.erase(m_timers.begin(), it);
+        
         cbs.reserve(expired.size());
 
+        // 处理超时定时器，主要是处理某些需要定时执行的定时器；
         for(auto& timer : expired){
             cbs.push_back(timer->m_cb);
             if(timer->m_recurring){
@@ -197,6 +235,7 @@ namespace myhttp
         }
         lock.unlock();
 
+        // 如果插入的定时器已经小于当前执行时间
         if(at_front){
             // MYHTTP_LOG_DEBUG(g_logger) << "come in addTimer at_front";
             onTimerInsertedAtFront();

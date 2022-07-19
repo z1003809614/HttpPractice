@@ -53,7 +53,7 @@ namespace myhttp
     }
 
     Address::ptr Address::LookupAny(const std::string& host,
-            int family, int type, int protocol)
+                                    int family, int type, int protocol)
     {
         std::vector<Address::ptr> result;
         if(Lookup(result, host, family, type, protocol)){
@@ -61,8 +61,9 @@ namespace myhttp
         }
         return nullptr;
     }
+
     IPAddress::ptr Address::LookupAnyIPAddress(const std::string& host,
-            int family, int type, int protocol)
+                                                int family, int type, int protocol)
     {
         std::vector<Address::ptr> result;
         if(Lookup(result, host, family, type, protocol)){
@@ -90,7 +91,7 @@ namespace myhttp
         hints.ai_next = NULL;
 
         std::string node;
-        // service应该指的时http,ftp等不同的应用服务
+        // service应该指的时http,ftp等不同的应用服务(端口号)
         const char* service = NULL;
 
         // 检查host是ipv6address的情况 serivce
@@ -132,6 +133,7 @@ namespace myhttp
         }
 
         next = results;
+        
         while(next){
             result.push_back(Create(next->ai_addr, (socklen_t)next->ai_addrlen));
             next = next->ai_next;
@@ -141,9 +143,9 @@ namespace myhttp
         return true;
     }
 
-    bool Address::GetInterfaceAddresses(std::multimap<std::string, 
-                    std::pair<Address::ptr, uint32_t> >& result,
-                    int family)
+    bool Address::GetInterfaceAddresses(
+                        std::multimap<std::string, std::pair<Address::ptr, uint32_t> >& result,
+                        int family)
     {
         // 记录网卡接口的链表结构
         struct ifaddrs *next, *results;
@@ -156,10 +158,13 @@ namespace myhttp
         try{
             for(next = results; next; next = next->ifa_next){
                 Address::ptr addr;
+                
                 uint32_t prefix_length = ~0u;
+                
                 if(family != AF_UNSPEC && family != next->ifa_addr->sa_family){
                     continue;
                 }
+
                 switch (next->ifa_addr->sa_family)
                 {
                 case AF_INET:
@@ -203,6 +208,7 @@ namespace myhttp
     bool Address::GetInterfaceAddresses(std::vector<std::pair<Address::ptr, uint32_t> >& result
                 ,const std::string& iface, int family)
     {
+        // 特殊情况，即使没有指定iface,也返回空的对应地址
         if(iface.empty() || iface == "*"){
             if(family == AF_INET || family == AF_UNSPEC) {
                 result.push_back(std::make_pair(Address::ptr(new IPv4Address()), 0u));
@@ -215,10 +221,12 @@ namespace myhttp
 
         std::multimap<std::string, 
                     std::pair<Address::ptr, uint32_t> > results;
+
         
         if(!GetInterfaceAddresses(results, family)){
             return false;
         }
+
         auto its = results.equal_range(iface);
 
         for(; its.first != its.second; ++its.first){
@@ -230,9 +238,12 @@ namespace myhttp
     int Address::getFamily() const{
         return getAddr()->sa_family;
     }
+    
     std::string Address::toString(){
         std::stringstream ss;
+        
         insert(ss);
+        
         return ss.str();
     }
 
@@ -248,10 +259,12 @@ namespace myhttp
         }
         return false;
     }
+
     bool Address::operator==(const Address& rhs) const{
         return getAddrLen() == rhs.getAddrLen()
             && memcmp(getAddr(), rhs.getAddr(), getAddrLen()) == 0;
     }
+
     bool Address::operator!=(const Address& rhs) const{
         return !(*this == rhs);
     }
@@ -304,6 +317,7 @@ namespace myhttp
     IPv4Address::IPv4Address(const sockaddr_in& address){
         m_addr = address;
     }
+
     IPv4Address::IPv4Address(uint32_t address, uint16_t port){
         memset(&m_addr, 0, sizeof(m_addr));
         m_addr.sin_family = AF_INET;
@@ -314,9 +328,11 @@ namespace myhttp
     const sockaddr* IPv4Address::getAddr() const{
         return (sockaddr*)&m_addr;
     }
+
     socklen_t IPv4Address::getAddrLen() const{
         return sizeof(m_addr);
     }
+
     std::ostream& IPv4Address::insert(std::ostream& os) const{
         uint32_t addr = byteswapOnLittleEndian(m_addr.sin_addr.s_addr);
         os << ((addr >> 24) & 0xff) << "."
@@ -333,22 +349,22 @@ namespace myhttp
         }
 
         sockaddr_in baddr(m_addr);
-        baddr.sin_addr.s_addr |= byteswapOnLittleEndian(
-            CreateMask<uint32_t>(prefix_len));
+        baddr.sin_addr.s_addr |= byteswapOnLittleEndian(CreateMask<uint32_t>(prefix_len));
         IPv4Address::ptr rt(new IPv4Address(baddr));
         return rt;
     }
+
     IPAddress::ptr IPv4Address::networdAddress(uint32_t prefix_len){
         if(prefix_len > 32){
             return nullptr;
         }
 
         sockaddr_in baddr(m_addr);
-        baddr.sin_addr.s_addr &= byteswapOnLittleEndian(
-            CreateMask<uint32_t>(prefix_len));
+        baddr.sin_addr.s_addr &= byteswapOnLittleEndian(CreateMask<uint32_t>(prefix_len));
         IPv4Address::ptr rt(new IPv4Address(baddr));
         return rt;
     }
+
     IPAddress::ptr IPv4Address::subnetMast(uint32_t prefix_len) {
         sockaddr_in subnet;
         memset(&subnet, 0, sizeof(subnet));
@@ -443,6 +459,7 @@ namespace myhttp
         }
         return IPv6Address::ptr(new IPv6Address(baddr));
     }
+
     IPAddress::ptr IPv6Address::networdAddress(uint32_t prefix_len){
         sockaddr_in6 baddr(m_addr);
         baddr.sin6_addr.s6_addr[prefix_len / 8] &= 
@@ -452,6 +469,7 @@ namespace myhttp
         // }
         return IPv6Address::ptr(new IPv6Address(baddr));
     }
+    
     IPAddress::ptr IPv6Address::subnetMast(uint32_t prefix_len) {
         sockaddr_in6 subnet;
         memset(&subnet, 0, sizeof(subnet));

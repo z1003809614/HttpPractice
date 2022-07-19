@@ -21,6 +21,7 @@ namespace myhttp
     }
     FdCtx::~FdCtx(){
     }
+    
     bool FdCtx::init(){
         if(m_isInit){
             return true;
@@ -54,6 +55,7 @@ namespace myhttp
         m_isClosed = false;
         return m_isInit;
     }
+    
     bool FdCtx::close(){
         return true;
     }
@@ -66,6 +68,7 @@ namespace myhttp
             m_sendTimeout = v;
         }
     }
+
     uint64_t FdCtx::getTimeout(int type){
         if(type == SO_RCVTIMEO){
             return m_recvTimeout; 
@@ -86,23 +89,26 @@ namespace myhttp
         }
         RWMutexType::ReadLock lock(m_mutex);
         if((int)m_datas.size() <= fd){
+            // fd >= 文件描述符的池，且不自动创建，就返回空
             if(auto_create == false){
                 return nullptr;
             }
         }
         else{
+            // fd存在 返回该fd 或者 fd没有初始化，且不自动创建也返回，因为内部是nullptr
             if(m_datas[fd] || !auto_create){
                 return m_datas[fd];
             }
-            
         }
         lock.unlock();
 
+        // 需要创建，且fd为空的情况
         RWMutexType::WriteLock lock2(m_mutex);
         FdCtx::ptr ctx(new FdCtx(fd));
         m_datas[fd] = ctx;
         return ctx;
     }
+    
     void FdManager::del(int fd){
         RWMutexType::WriteLock lock(m_mutex);
         if((int)m_datas.size() <= fd){

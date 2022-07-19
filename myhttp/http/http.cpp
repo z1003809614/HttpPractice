@@ -13,6 +13,7 @@ namespace myhttp
             #undef XX
                 return HttpMethod::HTT_INVALID_METHOD;
         }
+
         HttpMethod CharsToHttpMethod(const char* m){
             #define XX(num, name, string) \
                 if(strncmp(#string, m, strlen(#string)) == 0){ \
@@ -55,7 +56,6 @@ namespace myhttp
             return strcasecmp(lhs.c_str(), rhs.c_str()) < 0;
         }
         
-
         HttpRequest::HttpRequest(uint8_t version, bool close)
             :m_method(HttpMethod::GET)
             ,m_version(version)
@@ -68,10 +68,12 @@ namespace myhttp
             auto it = m_headers.find(key);
             return it == m_headers.end() ? def : it->second;
         }
+
         std::string HttpRequest::getParam(const std::string& key, const std::string& def) const{
             auto it = m_params.find(key);
             return it == m_params.end() ? def : it->second;
         }
+
         std::string HttpRequest::getCookie(const std::string& key, const std::string& def) const{
             auto it = m_cookies.find(key);
             return it == m_cookies.end() ? def : it->second;
@@ -107,6 +109,7 @@ namespace myhttp
             }
             return true;
         }
+
         bool HttpRequest::hasParam(const std::string& key, std::string* val){
             auto it = m_params.find(key);
             if(it == m_params.end()){
@@ -117,6 +120,7 @@ namespace myhttp
             }
             return true;
         }
+        
         bool HttpRequest::hasCookie(const std::string& key, std::string* val){
             auto it = m_cookies.find(key);
             if(it == m_cookies.end()){

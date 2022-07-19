@@ -14,8 +14,8 @@ namespace myhttp
         }
 
         HttpRequest::ptr HttpSession::recvRequest(){
-            HttpRequestParser::ptr parser(new HttpRequestParser);
             
+            HttpRequestParser::ptr parser(new HttpRequestParser);
             /**
              * @brief 测试 小buff_size的解析情况
              * 正常：
