@@ -1,0 +1,11 @@
+digraph "/home/ubuntu/HttpPractice/myhttp" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_b0548858ce53c595d2b0ae9aa647089e {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_b0548858ce53c595d2b0ae9aa647089e.html"];
+    dir_b0548858ce53c595d2b0ae9aa647089e [shape=plaintext label="myhttp"];
+    dir_bb3296b614672f31f8ba7f5ac1cf82d5 [shape=box label="http" color="black" fillcolor="white" style="filled" URL="dir_bb3296b614672f31f8ba7f5ac1cf82d5.html"];
+  }
+  dir_b0548858ce53c595d2b0ae9aa647089e->dir_bb3296b614672f31f8ba7f5ac1cf82d5 [headlabel="1", labeldistance=1.5 headhref="dir_000000_000001.html"];
+}

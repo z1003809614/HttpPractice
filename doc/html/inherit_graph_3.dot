@@ -1,0 +1,18 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="myhttp::Address",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1Address.html",tooltip="网络地址的基类,抽象类"];
+  Node0 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 [label="myhttp::IPAddress",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1IPAddress.html",tooltip="IP地址的基类"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="myhttp::IPv4Address",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1IPv4Address.html",tooltip="IPv4地址"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="myhttp::IPv6Address",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1IPv6Address.html",tooltip=" "];
+  Node0 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="myhttp::UnixAddress",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1UnixAddress.html",tooltip="UnixSocket地址"];
+  Node0 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="myhttp::UnknownAddress",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1UnknownAddress.html",tooltip="未知地址"];
+}

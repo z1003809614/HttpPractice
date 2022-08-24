@@ -1,0 +1,8 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="myhttp::ByteArray",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1ByteArray.html",tooltip="序列化与反序列化的类， 主要实现了读写int float double, string等类型的变量； 使得后续解析http的内容的时候，能够快速的调用其中的方法，达到内容的快速解析； 设计思路：使用节点..."];
+}

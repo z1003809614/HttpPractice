@@ -1,0 +1,8 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="myhttp::LexicalCast\l\< F, T \>",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1LexicalCast.html",tooltip="类型转换模板类(F 源类型, T 目标类型) 内部使用boost::lexical_cast<T>来进行转换，因此受限于boost的实现； 目前该模板只能支持基础类型的互相转换 – 5/25；"];
+}

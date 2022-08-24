@@ -1,0 +1,8 @@
+digraph "Graphical Class Hierarchy"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node0 [label="myhttp::LogEventWrap",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1LogEventWrap.html",tooltip="日志事件包装器 关键点：析构函数中，调用logger->log()函数，进行打印； 这样利用了局部变量析构的操作自动打印，而避免了显示调用log;"];
+}

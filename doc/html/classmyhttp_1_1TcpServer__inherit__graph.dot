@@ -1,0 +1,13 @@
+digraph "myhttp::TcpServer"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="myhttp::TcpServer",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="封装了TcpServer的启动与运行相关函数 server类的核心是封装 socket的地址绑定bind，和listen函数，接受发起请求的sock；"];
+  Node2 -> Node1 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="std::enable_shared\l_from_this\< TcpServer \>",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled",tooltip=" "];
+  Node3 -> Node1 [dir="back",color="firebrick4",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="myhttp::Noncopyable",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1Noncopyable.html",tooltip=" "];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="myhttp::http::HttpServer",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1http_1_1HttpServer.html",tooltip="HTTP服务器类"];
+}

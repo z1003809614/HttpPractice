@@ -1,0 +1,11 @@
+digraph "myhttp::LogAppender"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="myhttp::LogAppender",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="日志输出目标"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="myhttp::FileLogAppender",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1FileLogAppender.html",tooltip="输出到文件的Appender"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="myhttp::StdoutLogAppender",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1StdoutLogAppender.html",tooltip="输出到控制台的Appender"];
+}

@@ -1,0 +1,17 @@
+digraph "myhttp::Address"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="myhttp::Address",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="网络地址的基类,抽象类"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="myhttp::IPAddress",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1IPAddress.html",tooltip="IP地址的基类"];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="myhttp::IPv4Address",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1IPv4Address.html",tooltip="IPv4地址"];
+  Node2 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="myhttp::IPv6Address",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1IPv6Address.html",tooltip=" "];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="myhttp::UnixAddress",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1UnixAddress.html",tooltip="UnixSocket地址"];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="myhttp::UnknownAddress",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1UnknownAddress.html",tooltip="未知地址"];
+}

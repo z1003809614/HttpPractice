@@ -1,0 +1,34 @@
+digraph "myhttp::LogFormatter::FormatItem"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="myhttp::LogFormatter\l::FormatItem",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="日志内容项格式化"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="myhttp::DateTimeFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1DateTimeFormatItem.html",tooltip=" "];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="myhttp::ElapseFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1ElapseFormatItem.html",tooltip=" "];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="myhttp::FiberIdFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1FiberIdFormatItem.html",tooltip=" "];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="myhttp::FilenameFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1FilenameFormatItem.html",tooltip=" "];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="myhttp::LevelFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1LevelFormatItem.html",tooltip=" "];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="myhttp::LineFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1LineFormatItem.html",tooltip=" "];
+  Node1 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="myhttp::MessageFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1MessageFormatItem.html",tooltip=" "];
+  Node1 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="myhttp::NameFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1NameFormatItem.html",tooltip=" "];
+  Node1 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="myhttp::NewLineFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1NewLineFormatItem.html",tooltip=" "];
+  Node1 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="myhttp::StringFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1StringFormatItem.html",tooltip=" "];
+  Node1 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 [label="myhttp::TabFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1TabFormatItem.html",tooltip=" "];
+  Node1 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 [label="myhttp::ThreadIdFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1ThreadIdFormatItem.html",tooltip=" "];
+  Node1 -> Node14 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node14 [label="myhttp::ThreadNameFormatItem",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$classmyhttp_1_1ThreadNameFormatItem.html",tooltip=" "];
+}
